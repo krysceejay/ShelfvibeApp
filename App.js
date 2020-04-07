@@ -5,6 +5,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Drawer1 from './src/screens/drawer/Drawer1';
 import Drawer2 from './src/screens/drawer/Drawer2';
 import Tab1 from './src/screens/tabs/Tab1';
@@ -14,6 +15,8 @@ import Tab4 from './src/screens/tabs/Tab4';
 import Tab5 from './src/screens/tabs/Tab5';
 import Feed from './src/screens/Feed';
 import Details from './src/screens/Details';
+
+Icon.loadFont();
 
 function ContactScreen() {
   return (
@@ -64,7 +67,35 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={({route}) => ({
+            tabBarIcon: ({focused, color, size}) => {
+              let iconName;
+
+              if (route.name === 'Tab1') {
+                iconName = focused ? 'home' : 'home';
+              }
+              if (route.name === 'Tab2') {
+                iconName = focused ? 'book' : 'book';
+              }
+              if (route.name === 'Tab3') {
+                iconName = focused ? 'phone' : 'phone';
+              }
+              if (route.name === 'Tab4') {
+                iconName = focused ? 'user' : 'user';
+              }
+              if (route.name === 'Tab5') {
+                iconName = focused ? 'dashboard' : 'dashboard';
+              }
+
+              // You can return any component that you like here!
+              return <Icon name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: '#f53ba3',
+            inactiveTintColor: 'gray',
+          }}>
           <Tab.Screen name="Tab1" component={Tab1} />
           <Tab.Screen name="Tab2" component={Tab2} />
           <Tab.Screen name="Tab3" component={Tab3} />
