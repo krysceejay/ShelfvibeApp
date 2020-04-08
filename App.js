@@ -70,6 +70,7 @@ export default class App extends Component {
         <Tab.Navigator
           screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
+              size = 30;
               let iconName;
 
               if (route.name === 'Tab1') {
@@ -95,6 +96,10 @@ export default class App extends Component {
           tabBarOptions={{
             activeTintColor: '#f53ba3',
             inactiveTintColor: 'gray',
+            style: {
+              backgroundColor: '#242c42',
+            },
+            showLabel: false,
           }}>
           <Tab.Screen name="Tab1" component={Tab1} />
           <Tab.Screen name="Tab2" component={Tab2} />
