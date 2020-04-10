@@ -15,6 +15,7 @@ import Tab4 from './src/screens/tabs/Tab4';
 import Tab5 from './src/screens/tabs/Tab5';
 import Feed from './src/screens/Feed';
 import Details from './src/screens/Details';
+import DrawerContent from './src/components/DrawerContent';
 
 Icon.loadFont();
 
@@ -58,7 +59,10 @@ export default class App extends Component {
   };
   createDrawer = () => {
     return (
-      <Drawer.Navigator initialRouteName="Drawer1">
+      <Drawer.Navigator
+        initialRouteName="Drawer1"
+        drawerType="slide"
+        drawerContent={props => <DrawerContent {...props} />}>
         <Drawer.Screen name="Drawer1" component={Drawer1} />
         <Drawer.Screen name="Drawer2" component={Drawer2} />
       </Drawer.Navigator>
