@@ -13,6 +13,7 @@ import Tab2 from './src/screens/tabs/Tab2';
 import Tab3 from './src/screens/tabs/Tab3';
 import Tab4 from './src/screens/tabs/Tab4';
 import Tab5 from './src/screens/tabs/Tab5';
+import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
 import Details from './src/screens/Details';
 import DrawerContent from './src/components/DrawerContent';
@@ -39,21 +40,57 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-  createHomeStack = () => {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Feed" component={Feed} />
-        <Stack.Screen name="Details" component={Details} />
-        <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
-      </Stack.Navigator>
-    );
-  };
+  // createHomeStack = () => {
+  //   return (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name="Feed" component={Feed} />
+  //       <Stack.Screen name="Details" component={Details} />
+  //       <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
+  //     </Stack.Navigator>
+  //   );
+  // };
 
   createBottomTabs = () => {
     return (
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            size = 30;
+            let iconName;
+
+            if (route.name === 'Tab1') {
+              iconName = focused ? 'home' : 'home';
+            }
+            if (route.name === 'Tab2') {
+              iconName = focused ? 'book' : 'book';
+            }
+            if (route.name === 'Tab3') {
+              iconName = focused ? 'phone' : 'phone';
+            }
+            if (route.name === 'Tab4') {
+              iconName = focused ? 'user' : 'user';
+            }
+            if (route.name === 'Tab5') {
+              iconName = focused ? 'dashboard' : 'dashboard';
+            }
+
+            // You can return any component that you like here!
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: '#f53ba3',
+          inactiveTintColor: 'gray',
+          style: {
+            //backgroundColor: '#242c42',
+          },
+          showLabel: false,
+        }}>
         <Tab.Screen name="Tab1" component={Tab1} />
         <Tab.Screen name="Tab2" component={Tab2} />
+        <Tab.Screen name="Tab3" component={Tab3} />
+        <Tab.Screen name="Tab4" component={Tab4} />
+        <Tab.Screen name="Tab5" children={this.createDrawer} />
       </Tab.Navigator>
     );
   };
@@ -71,46 +108,22 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({route}) => ({
-            tabBarIcon: ({focused, color, size}) => {
-              size = 30;
-              let iconName;
-
-              if (route.name === 'Tab1') {
-                iconName = focused ? 'home' : 'home';
-              }
-              if (route.name === 'Tab2') {
-                iconName = focused ? 'book' : 'book';
-              }
-              if (route.name === 'Tab3') {
-                iconName = focused ? 'phone' : 'phone';
-              }
-              if (route.name === 'Tab4') {
-                iconName = focused ? 'user' : 'user';
-              }
-              if (route.name === 'Tab5') {
-                iconName = focused ? 'dashboard' : 'dashboard';
-              }
-
-              // You can return any component that you like here!
-              return <Icon name={iconName} size={size} color={color} />;
-            },
-          })}
-          tabBarOptions={{
-            activeTintColor: '#f53ba3',
-            inactiveTintColor: 'gray',
-            style: {
-              backgroundColor: '#242c42',
-            },
-            showLabel: false,
-          }}>
-          <Tab.Screen name="Tab1" component={Tab1} />
-          <Tab.Screen name="Tab2" component={Tab2} />
-          <Tab.Screen name="Tab3" component={Tab3} />
-          <Tab.Screen name="Tab4" component={Tab4} />
-          <Tab.Screen name="Tab5" children={this.createDrawer} />
-        </Tab.Navigator>
+        <Stack.Navigator initialRouteName="Loading">
+          <Stack.Screen
+            name="Loading"
+            component={LoadingScene}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Bottom Tabs"
+            children={this.createBottomTabs}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     );
   }
