@@ -1,13 +1,14 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {Component} from 'react';
+import {Text, StyleSheet, View, SafeAreaView} from 'react-native';
 import {styles} from '../../assets/styles';
+import Header from '../../components/Header';
 
-const Tab1 = () => {
-  return (
-    <View style={styles.center}>
-      <Text style={styles.title}>Tab1</Text>
-    </View>
-  );
-};
-
-export default Tab1;
+export default class Tab1 extends Component {
+  render() {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.title}> Tab1 </Text>
+      </View>
+    );
+  }
+}

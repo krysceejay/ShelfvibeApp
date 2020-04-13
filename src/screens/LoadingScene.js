@@ -116,8 +116,9 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 25,
-    fontWeight: '700',
+    fontWeight: '600',
     marginTop: 20,
+    fontFamily: 'Nunito-BoldItalic',
   },
   textPrimary: {
     color: '#f53ba3',

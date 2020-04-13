@@ -1,11 +1,16 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Button} from 'react-native';
+import {Text, StyleSheet, View, Button, TouchableOpacity} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigation,
+  DrawerActions,
+} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Drawer1 from './src/screens/drawer/Drawer1';
 import Drawer2 from './src/screens/drawer/Drawer2';
 import Tab1 from './src/screens/tabs/Tab1';
@@ -17,14 +22,24 @@ import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
 import Details from './src/screens/Details';
 import DrawerContent from './src/components/DrawerContent';
+import Header from './src/components/Header';
 
 Icon.loadFont();
+Ionicons.loadFont();
 
-function ContactScreen() {
+function DashboardheaderRight() {
+  const navigation = useNavigation();
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Contact Screen</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.dispatch(DrawerActions.toggleDrawer());
+      }}>
+      <Ionicons
+        name="md-menu"
+        size={30}
+        style={{paddingRight: 20, color: '#fff', fontFamily: 'Nunito-Regular'}}
+      />
+    </TouchableOpacity>
   );
 }
 function AboutScreen() {
@@ -105,10 +120,62 @@ export default class App extends Component {
       </Drawer.Navigator>
     );
   };
+
+  // getHeaderTitle = route => {
+  //   const routeName = route.state
+  //     ? route.state.routes[route.state.index].name
+  //     : 'Tab1';
+  //   switch (routeName) {
+  //     case 'Tab1':
+  //       return 'Tab1';
+  //     case 'Tab2':
+  //       return 'Tab2';
+  //     case 'Tab3':
+  //       return 'Tab3';
+  //     case 'Tab4':
+  //       return 'Tab4';
+  //     case 'Tab5':
+  //       return 'Tab5';
+  //   }
+  // };
+  // HeaderRight = () => {
+  //   const navigation = useNavigation();
+  //   return (
+  //     <TouchableOpacity
+  //       onPress={() => {
+  //         navigation.dispatch(DrawerActions.openDrawer());
+  //       }}>
+  //       <Text>Open</Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  getTabTitle = route => {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : 'Tab1';
+
+    if (routeName === 'Tab5') {
+      return <DashboardheaderRight />;
+    } else {
+      return (
+        <Ionicons
+          name="md-search"
+          size={30}
+          style={{paddingRight: 20, color: '#fff'}}
+        />
+      );
+    }
+  };
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Loading">
+        <Stack.Navigator
+          initialRouteName="Loading"
+          headerMode="screen"
+          screenOptions={{
+            gestureEnabled: false,
+          }}>
           <Stack.Screen
             name="Loading"
             component={LoadingScene}
@@ -119,9 +186,17 @@ export default class App extends Component {
           <Stack.Screen
             name="Bottom Tabs"
             children={this.createBottomTabs}
-            options={{
-              headerShown: false,
-            }}
+            options={({route}) => ({
+              headerTitle: () => <Header />,
+              headerStyle: {
+                backgroundColor: '#242c42',
+              },
+              headerTitleAlign: 'left',
+              headerRight: () => {
+                return this.getTabTitle(route);
+              },
+              headerLeft: null,
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

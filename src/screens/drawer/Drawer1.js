@@ -7,12 +7,12 @@ export default class Drawer1 extends Component {
   render() {
     return (
       <View style={styles.center}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             this.props.navigation.openDrawer();
           }}>
           <Icon name="bars" size={30} color="red" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={styles.title}>Drawer1 </Text>
       </View>
     );
