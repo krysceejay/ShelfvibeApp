@@ -8,5 +8,6 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     margin: 16,
+    fontFamily: 'Nunito-Regular',
   },
 });
