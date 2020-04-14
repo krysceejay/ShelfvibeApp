@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Button, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -21,7 +21,8 @@ import Tab5 from './src/screens/tabs/Tab5';
 import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
 import Details from './src/screens/Details';
-import DrawerContent from './src/components/DrawerContent';
+//import DrawerContent from './src/components/DrawerContent';
+import DashboardSidebar from './src/components/DashboardSidebar';
 import Header from './src/components/Header';
 
 Icon.loadFont();
@@ -55,15 +56,90 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-  // createHomeStack = () => {
-  //   return (
-  //     <Stack.Navigator>
-  //       <Stack.Screen name="Feed" component={Feed} />
-  //       <Stack.Screen name="Details" component={Details} />
-  //       <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
-  //     </Stack.Navigator>
-  //   );
-  // };
+  createHomeStack = () => {
+    return (
+      <Stack.Navigator
+        screenOptions={({route}) => ({
+          headerStyle: {
+            backgroundColor: '#242c42',
+          },
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            color: '#fff',
+            fontSize: 20,
+          },
+          headerTitleAlign: 'left',
+          headerBackTitleVisible: false,
+          headerTintColor: '#fff',
+          headerRight: () => {
+            return this.getTabTitle(route);
+          },
+          //headerLeft: null,
+        })}>
+        <Stack.Screen
+          name="Feed"
+          component={Feed}
+          options={{
+            headerTitle: () => <Header />,
+          }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={{
+            title: 'Details',
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
+  createDrawerHomeStack = () => {
+    const navigation = useNavigation();
+    return (
+      <Stack.Navigator
+        screenOptions={() => ({
+          //headerTitle: () => <Header />,
+          headerStyle: {
+            backgroundColor: '#242c42',
+          },
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            color: '#fff',
+            fontSize: 20,
+          },
+          headerTintColor: 'red',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.dispatch(DrawerActions.toggleDrawer());
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    color: '#fff',
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+          //headerLeft: null,
+        })}>
+        <Stack.Screen
+          name="Dashboard"
+          component={this.createDrawer}
+          options={{
+            title: 'Dashboard',
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
 
   createBottomTabs = () => {
     return (
@@ -101,11 +177,11 @@ export default class App extends Component {
           },
           showLabel: false,
         }}>
-        <Tab.Screen name="Tab1" component={Tab1} />
+        <Tab.Screen name="Tab1" children={this.createHomeStack} />
         <Tab.Screen name="Tab2" component={Tab2} />
         <Tab.Screen name="Tab3" component={Tab3} />
         <Tab.Screen name="Tab4" component={Tab4} />
-        <Tab.Screen name="Tab5" children={this.createDrawer} />
+        <Tab.Screen name="Tab5" children={this.createDrawerHomeStack} />
       </Tab.Navigator>
     );
   };
@@ -114,7 +190,12 @@ export default class App extends Component {
       <Drawer.Navigator
         initialRouteName="Drawer1"
         drawerType="slide"
-        drawerContent={props => <DrawerContent {...props} />}>
+        drawerPosition="right"
+        drawerContent={props => <DashboardSidebar {...props} />}
+        drawerContentOptions={{
+          activeTintColor: 'red',
+          itemStyle: {marginVertical: 30},
+        }}>
         <Drawer.Screen name="Drawer1" component={Drawer1} />
         <Drawer.Screen name="Drawer2" component={Drawer2} />
       </Drawer.Navigator>
@@ -186,17 +267,9 @@ export default class App extends Component {
           <Stack.Screen
             name="Bottom Tabs"
             children={this.createBottomTabs}
-            options={({route}) => ({
-              headerTitle: () => <Header />,
-              headerStyle: {
-                backgroundColor: '#242c42',
-              },
-              headerTitleAlign: 'left',
-              headerRight: () => {
-                return this.getTabTitle(route);
-              },
-              headerLeft: null,
-            })}
+            options={{
+              headerShown: false,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

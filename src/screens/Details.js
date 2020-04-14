@@ -7,7 +7,7 @@ export default class Details extends Component {
     return (
       <View style={styles.center}>
         <Text style={styles.title}> Details </Text>
-        <Button
+        {/* <Button
           title="Go to Feed"
           onPress={() => {
             this.props.navigation.navigate('Feed');
@@ -18,7 +18,7 @@ export default class Details extends Component {
           onPress={() => {
             this.props.navigation.navigate('Bottom Tabs');
           }}
-        />
+        /> */}
       </View>
     );
   }
