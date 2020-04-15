@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -43,6 +43,13 @@ function DashboardheaderRight() {
     </TouchableOpacity>
   );
 }
+
+// function DispatchAction () {
+//   return(
+//     DrawerActions.openDrawer()
+//   )
+// }
+
 function AboutScreen() {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -56,6 +63,15 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default class App extends Component {
+  state = {
+    isOpen: false,
+  };
+  onPress = () => {
+    return this.setState((prevState, prevProp) => ({
+      isOpen: !prevState.isOpen,
+    }));
+  };
+
   createHomeStack = () => {
     return (
       <Stack.Navigator
@@ -96,6 +112,8 @@ export default class App extends Component {
 
   createDrawerHomeStack = () => {
     const navigation = useNavigation();
+    const {isOpen} = this.state;
+
     return (
       <Stack.Navigator
         screenOptions={() => ({
@@ -115,9 +133,10 @@ export default class App extends Component {
               <TouchableOpacity
                 onPress={() => {
                   navigation.dispatch(DrawerActions.toggleDrawer());
+                  this.onPress();
                 }}>
                 <Ionicons
-                  name="md-menu"
+                  name={isOpen ? 'md-close' : 'md-menu'}
                   size={30}
                   style={{
                     paddingRight: 20,
@@ -128,14 +147,15 @@ export default class App extends Component {
               </TouchableOpacity>
             );
           },
-          //headerLeft: null,
         })}>
         <Stack.Screen
           name="Dashboard"
           component={this.createDrawer}
-          options={{
-            title: 'Dashboard',
-          }}
+          options={({route}) => ({
+            headerTitle: () => {
+              return <Text>{this.getHeaderTitle(route)}</Text>;
+            },
+          })}
         />
       </Stack.Navigator>
     );
@@ -195,30 +215,27 @@ export default class App extends Component {
         drawerContentOptions={{
           activeTintColor: 'red',
           itemStyle: {marginVertical: 30},
-        }}>
+        }}
+        screenOptions={() => ({
+          swipeEnabled: false,
+        })}>
         <Drawer.Screen name="Drawer1" component={Drawer1} />
         <Drawer.Screen name="Drawer2" component={Drawer2} />
       </Drawer.Navigator>
     );
   };
 
-  // getHeaderTitle = route => {
-  //   const routeName = route.state
-  //     ? route.state.routes[route.state.index].name
-  //     : 'Tab1';
-  //   switch (routeName) {
-  //     case 'Tab1':
-  //       return 'Tab1';
-  //     case 'Tab2':
-  //       return 'Tab2';
-  //     case 'Tab3':
-  //       return 'Tab3';
-  //     case 'Tab4':
-  //       return 'Tab4';
-  //     case 'Tab5':
-  //       return 'Tab5';
-  //   }
-  // };
+  getHeaderTitle = route => {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : 'Drawer1';
+    switch (routeName) {
+      case 'Drawer1':
+        return 'Drawer1';
+      case 'Drawer2':
+        return 'Drawer2';
+    }
+  };
   // HeaderRight = () => {
   //   const navigation = useNavigation();
   //   return (

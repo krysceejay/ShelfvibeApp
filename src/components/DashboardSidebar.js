@@ -30,20 +30,61 @@ const DashboardSidebar = props => {
           <View style={styles.drawerSection}>
             <DrawerItem
               label="Dashboard"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
               icon={() => <Icon color="#f53ba3" size={20} name="dashboard" />}
               onPress={() => {
                 props.navigation.navigate('Drawer1');
               }}
             />
-            <DrawerItem
+            {/* <DrawerItem
               label={() => <SidebarDropDown />}
+              icon={() => <Icon color="#f53ba3" size={20} name="book" />}
+              onPress={() => {
+                props.navigation.navigate('Drawer1');
+              }}
+            /> */}
+            <DrawerItem
+              label="Manage Shelf"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
               icon={() => <Icon color="#f53ba3" size={20} name="book" />}
               onPress={() => {
                 props.navigation.navigate('Drawer1');
               }}
             />
             <DrawerItem
+              label="Add To Shelf"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
+              icon={() => <Icon color="#f53ba3" size={20} name="plus-square" />}
+              onPress={() => {
+                props.navigation.navigate('Drawer1');
+              }}
+            />
+            <DrawerItem
+              label="Joined List"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
+              icon={() => <Icon color="#f53ba3" size={20} name="handshake-o" />}
+              onPress={() => {
+                props.navigation.navigate('Drawer1');
+              }}
+            />
+            <DrawerItem
               label="Profile"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
               icon={() => <Icon color="#f53ba3" size={20} name="id-card" />}
               onPress={() => {
                 props.navigation.navigate('Drawer2');
@@ -52,6 +93,17 @@ const DashboardSidebar = props => {
           </View>
         </View>
       </DrawerContentScrollView>
+      <View style={styles.bottomDrawerSection}>
+        <DrawerItem
+          label="Sign Out"
+          labelStyle={{
+            fontSize: 16,
+            fontFamily: 'Nunito-Regular',
+          }}
+          icon={() => <Icon color="#f53ba3" size={20} name="sign-out" />}
+          onPress={() => {}}
+        />
+      </View>
     </View>
   );
 };
@@ -74,6 +126,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginTop: 3,
+    marginBottom: 3,
     //fontWeight: 'bold',
     fontFamily: 'Nunito-Bold',
   },
@@ -84,5 +137,10 @@ const styles = StyleSheet.create({
   },
   drawerSection: {
     marginTop: 15,
+  },
+  bottomDrawerSection: {
+    marginBottom: 15,
+    borderTopColor: '#f4f4f4',
+    borderTopWidth: 1,
   },
 });
