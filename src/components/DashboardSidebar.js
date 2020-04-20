@@ -1,12 +1,29 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import SidebarDropDown from './SidebarDropDown';
 
 const DashboardSidebar = props => {
   return (
     <View style={{flex: 1}}>
+      <View style={styles.closeBtn}>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.closeDrawer();
+          }}>
+          <Ionicons
+            name="md-close"
+            size={30}
+            style={{
+              paddingRight: 20,
+              color: '#f53ba3',
+              fontFamily: 'Nunito-BoldItalic',
+            }}
+          />
+        </TouchableOpacity>
+      </View>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -113,6 +130,11 @@ export default DashboardSidebar;
 const styles = StyleSheet.create({
   drawerContent: {
     flex: 1,
+  },
+  closeBtn: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 10,
   },
   userInfoSection: {
     paddingLeft: 20,

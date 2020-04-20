@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
+
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -63,15 +64,6 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default class App extends Component {
-  state = {
-    isOpen: false,
-  };
-  onPress = () => {
-    return this.setState((prevState, prevProp) => ({
-      isOpen: !prevState.isOpen,
-    }));
-  };
-
   createHomeStack = () => {
     return (
       <Stack.Navigator
@@ -83,6 +75,10 @@ export default class App extends Component {
             fontFamily: 'Nunito-Regular',
             color: '#fff',
             fontSize: 20,
+          },
+          headerTitleContainerStyle: {
+            height: '100%',
+            width: 80,
           },
           headerTitleAlign: 'left',
           headerBackTitleVisible: false,
@@ -112,7 +108,6 @@ export default class App extends Component {
 
   createDrawerHomeStack = () => {
     const navigation = useNavigation();
-    const {isOpen} = this.state;
 
     return (
       <Stack.Navigator
@@ -121,39 +116,43 @@ export default class App extends Component {
           headerStyle: {
             backgroundColor: '#242c42',
           },
-          headerTitleStyle: {
-            fontFamily: 'Nunito-Regular',
-            color: '#fff',
-            fontSize: 20,
-          },
-          headerTintColor: 'red',
+
+          //headerTintColor: 'red',
           headerTitleAlign: 'left',
-          headerRight: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.dispatch(DrawerActions.toggleDrawer());
-                  this.onPress();
-                }}>
-                <Ionicons
-                  name={isOpen ? 'md-close' : 'md-menu'}
-                  size={30}
-                  style={{
-                    paddingRight: 20,
-                    color: '#fff',
-                    fontFamily: 'Nunito-BoldItalic',
-                  }}
-                />
-              </TouchableOpacity>
-            );
-          },
         })}>
         <Stack.Screen
           name="Dashboard"
           component={this.createDrawer}
           options={({route}) => ({
             headerTitle: () => {
-              return <Text>{this.getHeaderTitle(route)}</Text>;
+              return (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: '#fff',
+                    fontFamily: 'Nunito-Regular',
+                  }}>
+                  {this.getHeaderTitle(route)}
+                </Text>
+              );
+            },
+            headerRight: () => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.dispatch(DrawerActions.openDrawer());
+                  }}>
+                  <Ionicons
+                    name="md-menu"
+                    size={30}
+                    style={{
+                      paddingRight: 20,
+                      color: '#fff',
+                      fontFamily: 'Nunito-BoldItalic',
+                    }}
+                  />
+                </TouchableOpacity>
+              );
             },
           })}
         />
@@ -166,7 +165,7 @@ export default class App extends Component {
       <Tab.Navigator
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
-            size = 30;
+            size = 25;
             let iconName;
 
             if (route.name === 'Tab1') {
@@ -218,6 +217,7 @@ export default class App extends Component {
         }}
         screenOptions={() => ({
           swipeEnabled: false,
+          gestureEnabled: false,
         })}>
         <Drawer.Screen name="Drawer1" component={Drawer1} />
         <Drawer.Screen name="Drawer2" component={Drawer2} />
@@ -229,12 +229,8 @@ export default class App extends Component {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
       : 'Drawer1';
-    switch (routeName) {
-      case 'Drawer1':
-        return 'Drawer1';
-      case 'Drawer2':
-        return 'Drawer2';
-    }
+
+    return routeName;
   };
   // HeaderRight = () => {
   //   const navigation = useNavigation();

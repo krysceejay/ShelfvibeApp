@@ -1,13 +1,69 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, Button} from 'react-native';
-import {styles} from '../assets/styles';
-import List from '../components/List';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Button,
+  FlatList,
+  Dimensions,
+} from 'react-native';
+
+const dataList = [
+  {key: 1},
+  {key: 2},
+  {key: 3},
+  {key: 4},
+  {key: 5},
+  {key: 6},
+  {key: 7},
+  {key: 8},
+  {key: 9},
+  {key: 10},
+  {key: 11},
+  {key: 12},
+  {key: 13},
+  {key: 14},
+  {key: 15},
+  {key: 16},
+  {key: 17},
+  {key: 18},
+  {key: 19},
+  {key: 20},
+  {key: 21},
+];
+const numColumns = 2;
+const WIDTH = Dimensions.get('window').width;
 
 export default class Feed extends Component {
+  formatData = (dataList, numColumns) => {
+    const totalRows = Math.floor(dataList.length / numColumns);
+    let totalLastRow = dataList.length - totalRows * numColumns;
+    while (totalLastRow !== 0 && totalLastRow !== numColumns) {
+      dataList.push({key: 'blank', empty: true});
+      totalLastRow++;
+    }
+    return dataList;
+  };
+  _renderItem = ({item, index}) => {
+    if (item.empty) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
+    return (
+      <View style={styles.item}>
+        <Text style={styles.itemText}>{item.key}</Text>
+      </View>
+    );
+  };
   render() {
     return (
-      <View style={{flex: 1}}>
-        <View style={styles.center}>
+      <View style={styles.container}>
+        <FlatList
+          data={this.formatData(dataList, numColumns)}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={numColumns}
+        />
+        {/* <View style={styles.center}>
           <Text style={styles.title}> Feeds </Text>
           <Button
             title="Go to Details"
@@ -15,9 +71,31 @@ export default class Feed extends Component {
               this.props.navigation.navigate('Details');
             }}
           />
-        </View>
-        {/* <List /> */}
+        </View> */}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    //paddingHorizontal: 10,
+    //paddingTop: 5,
+  },
+  item: {
+    flex: 1,
+    margin: 10,
+    backgroundColor: '#3232ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: WIDTH / numColumns,
+  },
+  itemText: {
+    color: '#fff',
+    fontSize: 30,
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
+});

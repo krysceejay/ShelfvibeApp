@@ -70,14 +70,16 @@ export default class LoadingScene extends Component {
               outputRange: [80, 0],
             }),
           }}>
-          <Image
-            style={styles.logo}
-            source={require('../assets/img/booklogo.png')}
-          />
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              source={require('../assets/img/logo.png')}
+            />
+          </View>
           {this.state.loadingSpinner ? (
             <ActivityIndicator
               size="large"
-              color="#242c42"
+              color="#fff"
               style={{
                 position: 'absolute',
                 left: 0,
@@ -91,11 +93,11 @@ export default class LoadingScene extends Component {
           ) : null}
         </Animated.View>
 
-        <Animated.View style={{opacity: this.state.LogoText}}>
+        {/* <Animated.View style={{opacity: this.state.LogoText}}>
           <Text style={styles.text}>
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
-        </Animated.View>
+        </Animated.View> */}
       </View>
     );
   }
@@ -108,9 +110,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#242c42',
   },
+  logoContainer: {
+    width: 120,
+    height: 120,
+  },
   logo: {
-    width: 80,
-    height: 80,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
     marginBottom: 10,
   },
   text: {
