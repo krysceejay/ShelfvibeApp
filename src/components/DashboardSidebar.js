@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   closeBtn: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 10,
+    marginTop: 5,
   },
   userInfoSection: {
     paddingLeft: 20,

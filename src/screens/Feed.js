@@ -6,6 +6,7 @@ import {
   Button,
   FlatList,
   Dimensions,
+  Image,
 } from 'react-native';
 
 const dataList = [
@@ -50,7 +51,20 @@ export default class Feed extends Component {
     }
     return (
       <View style={styles.item}>
-        <Text style={styles.itemText}>{item.key}</Text>
+        {/* <Text style={styles.itemText}>{item.key}</Text> */}
+        <View style={styles.bookCoverContain}>
+          <Image
+            style={styles.bookCover}
+            source={require('../assets/img/13465.jpg')}
+          />
+        </View>
+        <View style={styles.bookDetails}>
+          <Text style={styles.bookTitle}>Think Big</Text>
+          <Text style={styles.bookAuthor}>Ben Carson, Phil James</Text>
+          <Text>
+            Added By<Text style={styles.bookAddedBy}> Diadem</Text>
+          </Text>
+        </View>
       </View>
     );
   };
@@ -86,10 +100,45 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     margin: 10,
-    backgroundColor: '#3232ff',
+
+    //backgroundColor: '#3232ff',
     alignItems: 'center',
     justifyContent: 'center',
-    height: WIDTH / numColumns,
+    height: WIDTH / 1.4,
+    textAlign: 'center',
+  },
+  bookCoverContain: {
+    //backgroundColor: 'green',
+    flex: 1,
+    width: '100%',
+  },
+  bookCover: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+  },
+  bookDetails: {
+    //flex: 1,
+    //backgroundColor: 'red',
+    alignItems: 'center',
+    padding: 5,
+  },
+  bookTitle: {
+    fontFamily: 'Nunito-Bold',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  bookAuthor: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 16,
+    color: '#444444',
+    textAlign: 'center',
+  },
+  bookAddedBy: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 14,
+    color: '#444444',
+    textAlign: 'center',
   },
   itemText: {
     color: '#fff',
