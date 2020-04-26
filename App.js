@@ -25,6 +25,8 @@ import Details from './src/screens/Details';
 //import DrawerContent from './src/components/DrawerContent';
 import DashboardSidebar from './src/components/DashboardSidebar';
 import Header from './src/components/Header';
+import Login from './src/screens/account/Login';
+import Signup from './src/screens/account/Signup';
 
 Icon.loadFont();
 Ionicons.loadFont();
@@ -69,20 +71,17 @@ export default class App extends Component {
       <Stack.Navigator
         screenOptions={({route}) => ({
           headerStyle: {
-            backgroundColor: '#242c42',
+            //backgroundColor: '#242c42',
           },
           headerTitleStyle: {
             fontFamily: 'Nunito-Regular',
-            color: '#fff',
+            //color: '#fff',
             fontSize: 20,
           },
-          headerTitleContainerStyle: {
-            height: '100%',
-            width: 80,
-          },
+
           headerTitleAlign: 'left',
           headerBackTitleVisible: false,
-          headerTintColor: '#fff',
+          headerTintColor: '#000',
           headerRight: () => {
             return this.getTabTitle(route);
           },
@@ -93,6 +92,11 @@ export default class App extends Component {
           component={Feed}
           options={{
             headerTitle: () => <Header />,
+            headerTitleContainerStyle: {
+              height: '100%',
+              width: '35%',
+              //paddingVertical: 7,
+            },
           }}
         />
         <Stack.Screen
@@ -106,6 +110,26 @@ export default class App extends Component {
     );
   };
 
+  createAccountStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={({route}) => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          //headerLeft: null,
+        })}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
+      </Stack.Navigator>
+    );
+  };
+
   createDrawerHomeStack = () => {
     const navigation = useNavigation();
 
@@ -114,7 +138,7 @@ export default class App extends Component {
         screenOptions={() => ({
           //headerTitle: () => <Header />,
           headerStyle: {
-            backgroundColor: '#242c42',
+            //backgroundColor: '#242c42',
           },
 
           //headerTintColor: 'red',
@@ -129,7 +153,6 @@ export default class App extends Component {
                 <Text
                   style={{
                     fontSize: 20,
-                    color: '#fff',
                     fontFamily: 'Nunito-Regular',
                   }}>
                   {this.getHeaderTitle(route)}
@@ -147,7 +170,6 @@ export default class App extends Component {
                     size={30}
                     style={{
                       paddingRight: 20,
-                      color: '#fff',
                       fontFamily: 'Nunito-BoldItalic',
                     }}
                   />
@@ -199,7 +221,7 @@ export default class App extends Component {
         <Tab.Screen name="Tab1" children={this.createHomeStack} />
         <Tab.Screen name="Tab2" component={Tab2} />
         <Tab.Screen name="Tab3" component={Tab3} />
-        <Tab.Screen name="Tab4" component={Tab4} />
+        <Tab.Screen name="Tab4" children={this.createAccountStack} />
         <Tab.Screen name="Tab5" children={this.createDrawerHomeStack} />
       </Tab.Navigator>
     );
@@ -256,7 +278,7 @@ export default class App extends Component {
         <Ionicons
           name="md-search"
           size={30}
-          style={{paddingRight: 20, color: '#fff'}}
+          style={{paddingRight: 20, color: '#000'}}
         />
       );
     }

@@ -16,7 +16,10 @@ const Header = () => {
         <Text style={styles.textPrimary}>SHELF</Text>VIBE
       </Text> */}
 
-      <Image style={styles.logo} source={require('../assets/img/logo.png')} />
+      <Image
+        style={styles.logo}
+        source={require('../assets/img/logodark.png')}
+      />
 
       {/* <TouchableOpacity>
         <Icon style={styles.icon} name="search" size={22} />

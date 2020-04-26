@@ -93,11 +93,11 @@ export default class LoadingScene extends Component {
           ) : null}
         </Animated.View>
 
-        {/* <Animated.View style={{opacity: this.state.LogoText}}>
+        <Animated.View style={{opacity: this.state.LogoText}}>
           <Text style={styles.text}>
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
-        </Animated.View> */}
+        </Animated.View>
       </View>
     );
   }
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#242c42',
   },
   logoContainer: {
-    width: 120,
-    height: 120,
+    width: 90,
+    height: 90,
   },
   logo: {
     width: '100%',
