@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SidebarDropDown from './SidebarDropDown';
+//import SidebarDropDown from './SidebarDropDown';
 
 const DashboardSidebar = props => {
   return (
@@ -27,21 +27,14 @@ const DashboardSidebar = props => {
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 15,
-                alignItems: 'center',
-              }}>
-              <Image
-                style={styles.avatar}
-                source={require('../assets/img/avatar.jpg')}
-                size={50}
-              />
-              <View style={{marginLeft: 15}}>
-                <Text style={styles.title}>Krys Diadem</Text>
-                <Text style={styles.caption}>@krysceejay</Text>
-              </View>
+            <Image
+              style={styles.avatar}
+              source={require('../assets/img/avatar.jpg')}
+              size={50}
+            />
+            <View style={{marginLeft: 15}}>
+              <Text style={styles.title}>Krys Diadem</Text>
+              <Text style={styles.caption}>@krysceejay</Text>
             </View>
           </View>
           <View style={styles.drawerSection}>
@@ -53,7 +46,7 @@ const DashboardSidebar = props => {
               }}
               icon={() => <Icon color="#f53ba3" size={20} name="dashboard" />}
               onPress={() => {
-                props.navigation.navigate('Drawer1');
+                props.navigation.navigate('Dashboard');
               }}
             />
             {/* <DrawerItem
@@ -71,7 +64,7 @@ const DashboardSidebar = props => {
               }}
               icon={() => <Icon color="#f53ba3" size={20} name="book" />}
               onPress={() => {
-                props.navigation.navigate('Drawer1');
+                props.navigation.navigate('ManageShelf');
               }}
             />
             <DrawerItem
@@ -82,7 +75,7 @@ const DashboardSidebar = props => {
               }}
               icon={() => <Icon color="#f53ba3" size={20} name="plus-square" />}
               onPress={() => {
-                props.navigation.navigate('Drawer1');
+                props.navigation.navigate('AddShelf');
               }}
             />
             <DrawerItem
@@ -93,7 +86,7 @@ const DashboardSidebar = props => {
               }}
               icon={() => <Icon color="#f53ba3" size={20} name="handshake-o" />}
               onPress={() => {
-                props.navigation.navigate('Drawer1');
+                props.navigation.navigate('JoinedList');
               }}
             />
             <DrawerItem
@@ -104,7 +97,7 @@ const DashboardSidebar = props => {
               }}
               icon={() => <Icon color="#f53ba3" size={20} name="id-card" />}
               onPress={() => {
-                props.navigation.navigate('Drawer2');
+                props.navigation.navigate('Profile');
               }}
             />
           </View>
@@ -129,7 +122,7 @@ export default DashboardSidebar;
 
 const styles = StyleSheet.create({
   drawerContent: {
-    flex: 1,
+    //flex: 1,
   },
   closeBtn: {
     flexDirection: 'row',
@@ -138,7 +131,9 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingLeft: 20,
-    //backgroundColor: 'red',
+    flexDirection: 'row',
+    marginTop: 10,
+    alignItems: 'center',
   },
   avatar: {
     height: 60,

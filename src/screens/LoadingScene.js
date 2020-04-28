@@ -8,6 +8,7 @@ import {
   Animated,
   ActivityIndicator,
 } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 export default class LoadingScene extends Component {
   state = {
@@ -62,42 +63,38 @@ export default class LoadingScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Animated.View
-          style={{
-            opacity: this.state.LogoAnime,
-            top: this.state.LogoAnime.interpolate({
-              inputRange: [0, 1],
-              outputRange: [80, 0],
-            }),
-          }}>
-          <View style={styles.logoContainer}>
-            <Image
-              style={styles.logo}
-              source={require('../assets/img/logo.png')}
-            />
-          </View>
-          {this.state.loadingSpinner ? (
-            <ActivityIndicator
-              size="large"
-              color="#fff"
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                top: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            />
-          ) : null}
-        </Animated.View>
+        <View style={styles.logoContainer}>
+          <Animatable.Image
+            animation="bounceInDown"
+            duration={2000}
+            style={styles.logo}
+            source={require('../assets/img/logo.png')}
+          />
+        </View>
+        {this.state.loadingSpinner ? (
+          <ActivityIndicator
+            size="large"
+            color="#f53ba3"
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          />
+        ) : null}
 
-        <Animated.View style={{opacity: this.state.LogoText}}>
+        {/* <Animated.View style={{opacity: this.state.LogoText}}>
           <Text style={styles.text}>
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
-        </Animated.View>
+        </Animated.View> */}
+        <Animatable.Text animation="tada" duration={2500} style={styles.text}>
+          <Text style={styles.textPrimary}>SHELF</Text>VIBE
+        </Animatable.Text>
       </View>
     );
   }

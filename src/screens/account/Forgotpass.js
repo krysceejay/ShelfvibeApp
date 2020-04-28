@@ -10,13 +10,11 @@ import {
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default class Login extends Component {
+export default class Forgotpass extends Component {
   constructor(props) {
     super(props);
     this.state = {
       check_textInputChange: false,
-      password: '',
-      secureTextEntry: true,
     };
   }
   textInputChange = value => {
@@ -31,21 +29,13 @@ export default class Login extends Component {
     }
   };
 
-  secureTextEntry = () => {
-    this.setState({
-      secureTextEntry: !this.state.secureTextEntry,
-    });
-  };
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.textHeader}>
-            Please enter your credentials to login.
-          </Text>
+          <Text style={styles.textHeader}>Please enter your email.</Text>
         </View>
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-          {/* <Text style={styles.textFooter}>E-Mail</Text> */}
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.action}>
               <Ionicons name="ios-mail" color="#f53ba3" size={25} />
@@ -55,52 +45,12 @@ export default class Login extends Component {
                 onChangeText={text => this.textInputChange(text)}
               />
             </View>
-
-            {/* <Text style={styles.textFooter}>Password</Text> */}
-            <View style={styles.action}>
-              <Ionicons name="ios-lock" color="#f53ba3" size={25} />
-              <TextInput
-                placeholder="Your password..."
-                secureTextEntry={this.state.secureTextEntry}
-                style={styles.textInput}
-                value={this.state.password}
-                onChangeText={text =>
-                  this.setState({
-                    password: text,
-                  })
-                }
-              />
-
-              <TouchableOpacity onPress={() => this.secureTextEntry()}>
-                {this.state.secureTextEntry ? (
-                  <Ionicons name="md-eye-off" color="#000" size={25} />
-                ) : (
-                  <Ionicons name="md-eye" color="#000" size={25} />
-                )}
-              </TouchableOpacity>
-            </View>
           </KeyboardAvoidingView>
 
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Forgotpass');
-            }}>
-            <Text style={styles.forgotPass}> Forgot password ?</Text>
-          </TouchableOpacity>
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn}>
-              <Text style={styles.textSign}>Sign In</Text>
+              <Text style={styles.textSign}>Submit</Text>
             </TouchableOpacity>
-            <View style={styles.signUp}>
-              <Text style={styles.textSignUp}> Don't have account ?</Text>
-              <TouchableOpacity
-                style={styles.signUpBtn}
-                onPress={() => {
-                  this.props.navigation.navigate('Signup');
-                }}>
-                <Text style={styles.signUpBtnText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </Animatable.View>
       </View>
@@ -157,7 +107,7 @@ const styles = StyleSheet.create({
 
   button: {
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 18,
   },
   forgotPass: {
     paddingVertical: 10,

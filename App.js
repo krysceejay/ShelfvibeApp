@@ -12,8 +12,11 @@ import {
 } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Drawer1 from './src/screens/drawer/Drawer1';
-import Drawer2 from './src/screens/drawer/Drawer2';
+import Dashboard from './src/screens/dashboard/Dashboard';
+import ManageShelf from './src/screens/dashboard/ManageShelf';
+import AddShelf from './src/screens/dashboard/AddShelf';
+import JoinedList from './src/screens/dashboard/JoinedList';
+import Profile from './src/screens/dashboard/Profile';
 import Tab1 from './src/screens/tabs/Tab1';
 import Tab2 from './src/screens/tabs/Tab2';
 import Tab3 from './src/screens/tabs/Tab3';
@@ -27,6 +30,7 @@ import DashboardSidebar from './src/components/DashboardSidebar';
 import Header from './src/components/Header';
 import Login from './src/screens/account/Login';
 import Signup from './src/screens/account/Signup';
+import Forgotpass from './src/screens/account/Forgotpass';
 
 Icon.loadFont();
 Ionicons.loadFont();
@@ -126,6 +130,13 @@ export default class App extends Component {
         })}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen
+          name="Forgotpass"
+          component={Forgotpass}
+          options={() => ({
+            title: 'Forgot Password',
+          })}
+        />
       </Stack.Navigator>
     );
   };
@@ -217,6 +228,7 @@ export default class App extends Component {
             //backgroundColor: '#242c42',
           },
           showLabel: false,
+          keyboardHidesTabBar: true,
         }}>
         <Tab.Screen name="Tab1" children={this.createHomeStack} />
         <Tab.Screen name="Tab2" component={Tab2} />
@@ -229,7 +241,7 @@ export default class App extends Component {
   createDrawer = () => {
     return (
       <Drawer.Navigator
-        initialRouteName="Drawer1"
+        initialRouteName="Dashboard"
         drawerType="slide"
         drawerPosition="right"
         drawerContent={props => <DashboardSidebar {...props} />}
@@ -239,10 +251,12 @@ export default class App extends Component {
         }}
         screenOptions={() => ({
           swipeEnabled: false,
-          gestureEnabled: false,
         })}>
-        <Drawer.Screen name="Drawer1" component={Drawer1} />
-        <Drawer.Screen name="Drawer2" component={Drawer2} />
+        <Drawer.Screen name="Dashboard" component={Dashboard} />
+        <Drawer.Screen name="ManageShelf" component={ManageShelf} />
+        <Drawer.Screen name="AddShelf" component={AddShelf} />
+        <Drawer.Screen name="JoinedList" component={JoinedList} />
+        <Drawer.Screen name="Profile" component={Profile} />
       </Drawer.Navigator>
     );
   };
@@ -250,7 +264,7 @@ export default class App extends Component {
   getHeaderTitle = route => {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
-      : 'Drawer1';
+      : 'Dashboard';
 
     return routeName;
   };
