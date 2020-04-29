@@ -38,24 +38,40 @@ export default class Dashboard extends Component {
         </View>
 
         <View style={styles.rowView}>
-          <View style={styles.addShelf}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('AddShelf');
+            }}
+            style={styles.addShelf}>
             <FontAwesome name="plus-square-o" size={35} color="#fff" />
             <Text style={styles.text}>Add To Shelf</Text>
-          </View>
-          <View style={styles.profle}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Profile');
+            }}
+            style={styles.profle}>
             <FontAwesome name="id-card-o" size={35} color="#fff" />
             <Text style={styles.text}>Profile</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.rowView}>
-          <View style={styles.uploadPix}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Profile');
+            }}
+            style={styles.uploadPix}>
             <FontAwesome name="upload" size={35} color="#fff" />
             <Text style={styles.text}>Upload Picture</Text>
-          </View>
-          <View style={styles.contact}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Contact');
+            }}
+            style={styles.contact}>
             <FontAwesome name="user-circle-o" size={35} color="#fff" />
             <Text style={styles.text}>Contact Admin</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );

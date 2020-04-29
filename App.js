@@ -257,6 +257,7 @@ export default class App extends Component {
         <Drawer.Screen name="AddShelf" component={AddShelf} />
         <Drawer.Screen name="JoinedList" component={JoinedList} />
         <Drawer.Screen name="Profile" component={Profile} />
+        <Drawer.Screen name="Contact" component={Tab3} />
       </Drawer.Navigator>
     );
   };
