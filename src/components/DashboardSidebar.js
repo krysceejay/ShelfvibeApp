@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,7 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const DashboardSidebar = props => {
   return (
     <View style={{flex: 1}}>
-      <View style={styles.closeBtn}>
+      <SafeAreaView style={styles.closeBtn}>
         <TouchableOpacity
           onPress={() => {
             props.navigation.closeDrawer();
@@ -23,7 +30,7 @@ const DashboardSidebar = props => {
             }}
           />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -127,12 +134,12 @@ const styles = StyleSheet.create({
   closeBtn: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 5,
+    marginTop: 10,
   },
   userInfoSection: {
     paddingLeft: 20,
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 5,
     alignItems: 'center',
   },
   avatar: {

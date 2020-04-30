@@ -140,10 +140,6 @@ const styles = StyleSheet.create({
     color: '#444444',
     textAlign: 'center',
   },
-  itemText: {
-    color: '#fff',
-    fontSize: 30,
-  },
   itemInvisible: {
     backgroundColor: 'transparent',
   },

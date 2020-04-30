@@ -17,6 +17,8 @@ import ManageShelf from './src/screens/dashboard/ManageShelf';
 import AddShelf from './src/screens/dashboard/AddShelf';
 import JoinedList from './src/screens/dashboard/JoinedList';
 import Profile from './src/screens/dashboard/Profile';
+import BookTopic from './src/screens/dashboard/BookTopic';
+import Members from './src/screens/dashboard/Members';
 import Tab1 from './src/screens/tabs/Tab1';
 import Tab2 from './src/screens/tabs/Tab2';
 import Tab3 from './src/screens/tabs/Tab3';
@@ -141,58 +143,6 @@ export default class App extends Component {
     );
   };
 
-  createDrawerHomeStack = () => {
-    const navigation = useNavigation();
-
-    return (
-      <Stack.Navigator
-        screenOptions={() => ({
-          //headerTitle: () => <Header />,
-          headerStyle: {
-            //backgroundColor: '#242c42',
-          },
-
-          //headerTintColor: 'red',
-          headerTitleAlign: 'left',
-        })}>
-        <Stack.Screen
-          name="Dashboard"
-          component={this.createDrawer}
-          options={({route}) => ({
-            headerTitle: () => {
-              return (
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: 'Nunito-Regular',
-                  }}>
-                  {this.getHeaderTitle(route)}
-                </Text>
-              );
-            },
-            headerRight: () => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.dispatch(DrawerActions.openDrawer());
-                  }}>
-                  <Ionicons
-                    name="md-menu"
-                    size={30}
-                    style={{
-                      paddingRight: 20,
-                      fontFamily: 'Nunito-BoldItalic',
-                    }}
-                  />
-                </TouchableOpacity>
-              );
-            },
-          })}
-        />
-      </Stack.Navigator>
-    );
-  };
-
   createBottomTabs = () => {
     return (
       <Tab.Navigator
@@ -234,7 +184,7 @@ export default class App extends Component {
         <Tab.Screen name="Tab2" component={Tab2} />
         <Tab.Screen name="Tab3" component={Tab3} />
         <Tab.Screen name="Tab4" children={this.createAccountStack} />
-        <Tab.Screen name="Tab5" children={this.createDrawerHomeStack} />
+        <Tab.Screen name="Tab5" children={this.createDrawer} />
       </Tab.Navigator>
     );
   };
@@ -252,8 +202,11 @@ export default class App extends Component {
         screenOptions={() => ({
           swipeEnabled: false,
         })}>
-        <Drawer.Screen name="Dashboard" component={Dashboard} />
-        <Drawer.Screen name="ManageShelf" component={ManageShelf} />
+        <Drawer.Screen name="Dashboard" children={this.createDrawerHomeStack} />
+        <Drawer.Screen
+          name="ManageShelf"
+          children={this.createManageShelfStack}
+        />
         <Drawer.Screen name="AddShelf" component={AddShelf} />
         <Drawer.Screen name="JoinedList" component={JoinedList} />
         <Drawer.Screen name="Profile" component={Profile} />
@@ -261,6 +214,107 @@ export default class App extends Component {
       </Drawer.Navigator>
     );
   };
+
+  createDrawerHomeStack = ({navigation}) => {
+    //const navigation = useNavigation();
+
+    return (
+      <Stack.Navigator
+        screenOptions={() => ({
+          headerStyle: {
+            //backgroundColor: '#242c42',
+          },
+
+          //headerTintColor: 'red',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.openDrawer();
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}>
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{
+            headerTitle: () => {
+              return (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: 'Nunito-Regular',
+                  }}>
+                  Dashboard
+                  {/* {this.getHeaderTitle(route)} */}
+                </Text>
+              );
+            },
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
+  createManageShelfStack = ({navigation}) => {
+    return (
+      <Stack.Navigator
+        initialRouteName="ManageShelf"
+        screenOptions={() => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.openDrawer();
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}>
+        <Stack.Screen name="ManageShelf" component={ManageShelf} />
+        <Stack.Screen name="BookTopic" component={BookTopic} />
+        <Stack.Screen name="Members" component={Members} />
+      </Stack.Navigator>
+    );
+  };
+
+  // shouldHeaderBeShown = route => {
+  //   const routeName = route.state
+  //     ? route.state.routes[route.state.index].name
+  //     : 'ManageShelf';
+
+  //   switch (routeName) {
+  //     case 'ManageShelf':
+  //       return false;
+  //   }
+  // };
 
   getHeaderTitle = route => {
     const routeName = route.state

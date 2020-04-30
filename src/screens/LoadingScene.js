@@ -12,31 +12,23 @@ import * as Animatable from 'react-native-animatable';
 
 export default class LoadingScene extends Component {
   state = {
-    LogoAnime: new Animated.Value(0),
-    LogoText: new Animated.Value(0),
+    // LogoAnime: new Animated.Value(0),
+    // LogoText: new Animated.Value(0),
     loadingSpinner: false,
   };
   async componentDidMount() {
-    const {LogoAnime, LogoText} = this.state;
-    Animated.parallel([
-      Animated.spring(LogoAnime, {
-        toValue: 1,
-        tension: 40,
-        friction: 7,
-        duration: 2000,
-        useNativeDriver: false,
-      }).start(),
-
-      Animated.timing(LogoText, {
-        toValue: 1,
-        duration: 2500,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      this.setState({
-        loadingSpinner: true,
-      });
-    });
+    // const {LogoAnime, LogoText} = this.state;
+    // Animated.parallel([
+    //   Animated.timing(LogoText, {
+    //     toValue: 1,
+    //     duration: 2500,
+    //     useNativeDriver: true,
+    //   }),
+    // ]).start(() => {
+    //   this.setState({
+    //     loadingSpinner: true,
+    //   });
+    // });
 
     await this.switchToTab();
 
@@ -55,7 +47,10 @@ export default class LoadingScene extends Component {
 
   switchToTab = async () => {
     return setTimeout(
-      () => this.props.navigation.navigate('Bottom Tabs'),
+      () =>
+        // this.props.navigation.navigate('Bottom Tabs')
+        //this.props.navigation.dispatch(StackActions.replace('Bottom Tabs'))
+        this.props.navigation.replace('Bottom Tabs'),
       4000,
     );
   };
@@ -92,7 +87,15 @@ export default class LoadingScene extends Component {
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
         </Animated.View> */}
-        <Animatable.Text animation="tada" duration={2500} style={styles.text}>
+        <Animatable.Text
+          animation="tada"
+          duration={2500}
+          style={styles.text}
+          onAnimationEnd={() => {
+            this.setState({
+              loadingSpinner: true,
+            });
+          }}>
           <Text style={styles.textPrimary}>SHELF</Text>VIBE
         </Animatable.Text>
       </View>
