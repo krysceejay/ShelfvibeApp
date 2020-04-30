@@ -1,20 +1,103 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {styles} from '../../assets/styles';
 
 export default class AddShelf extends Component {
   render() {
     return (
-      <View style={styles.center}>
-        {/* <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.openDrawer();
-          }}>
-          <Icon name="bars" size={30} color="red" />
-        </TouchableOpacity> */}
-        <Text style={styles.title}>AddShelf </Text>
-      </View>
+      <ScrollView style={styles.container}>
+        <View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+          <View style={styles.singleInput}>
+            <Text style={styles.textLabel}>E-Mail</Text>
+            <TextInput
+              placeholder="Your first name..."
+              style={styles.textInput}
+            />
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    //backgroundColor: 'red',
+  },
+  singleInput: {
+    padding: 20,
+  },
+  textLabel: {
+    fontSize: 16,
+    fontFamily: 'Nunito-Regular',
+  },
+  textInput: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 18,
+    color: '#333',
+  },
+});

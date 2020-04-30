@@ -207,9 +207,12 @@ export default class App extends Component {
           name="ManageShelf"
           children={this.createManageShelfStack}
         />
-        <Drawer.Screen name="AddShelf" component={AddShelf} />
-        <Drawer.Screen name="JoinedList" component={JoinedList} />
-        <Drawer.Screen name="Profile" component={Profile} />
+        <Drawer.Screen name="AddShelf" children={this.createAddToShelfStack} />
+        <Drawer.Screen
+          name="JoinedList"
+          children={this.createJoinedListStack}
+        />
+        <Drawer.Screen name="Profile" children={this.createProfileStack} />
         <Drawer.Screen name="Contact" component={Tab3} />
       </Drawer.Navigator>
     );
@@ -305,6 +308,115 @@ export default class App extends Component {
     );
   };
 
+  createAddToShelfStack = ({navigation}) => {
+    return (
+      <Stack.Navigator
+        initialRouteName="AddShelf"
+        screenOptions={() => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          headerTitleAlign: 'left',
+          title: 'Add To Shelf',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.openDrawer();
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}>
+        <Stack.Screen name="AddShelf" component={AddShelf} />
+      </Stack.Navigator>
+    );
+  };
+
+  createJoinedListStack = ({navigation}) => {
+    return (
+      <Stack.Navigator
+        initialRouteName="JoinedList"
+        screenOptions={() => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.openDrawer();
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}>
+        <Stack.Screen name="JoinedList" component={JoinedList} />
+      </Stack.Navigator>
+    );
+  };
+
+  createProfileStack = ({navigation}) => {
+    return (
+      <Stack.Navigator
+        initialRouteName="Profile"
+        screenOptions={() => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.openDrawer();
+                }}>
+                <Ionicons
+                  name="md-menu"
+                  size={30}
+                  style={{
+                    paddingRight: 20,
+                    fontFamily: 'Nunito-BoldItalic',
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          },
+        })}>
+        <Stack.Screen name="Profile" component={Profile} />
+      </Stack.Navigator>
+    );
+  };
+
   // shouldHeaderBeShown = route => {
   //   const routeName = route.state
   //     ? route.state.routes[route.state.index].name
@@ -360,21 +472,10 @@ export default class App extends Component {
           headerMode="screen"
           screenOptions={{
             gestureEnabled: false,
+            headerShown: false,
           }}>
-          <Stack.Screen
-            name="Loading"
-            component={LoadingScene}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Bottom Tabs"
-            children={this.createBottomTabs}
-            options={{
-              headerShown: false,
-            }}
-          />
+          <Stack.Screen name="Loading" component={LoadingScene} />
+          <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     );
