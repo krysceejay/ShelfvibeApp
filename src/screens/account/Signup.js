@@ -7,10 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
-  Animated,
-  KeyboardAvoidingView,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -22,43 +20,7 @@ export default class Signup extends Component {
       password: '',
       secureTextEntry: true,
     };
-    this.keyboardHeight = new Animated.Value(0);
   }
-  componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener(
-      'keyboardWillShow',
-      this.keyboardWillShow,
-    );
-    this.keyboardWillHideSub = Keyboard.addListener(
-      'keyboardWillHide',
-      this.keyboardWillHide,
-    );
-  }
-
-  componentWillUnmount() {
-    this.keyboardWillShowSub.remove();
-    this.keyboardWillHideSub.remove();
-  }
-
-  keyboardWillShow = event => {
-    Animated.parallel([
-      Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
-        toValue: event.endCoordinates.height,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  keyboardWillHide = event => {
-    Animated.parallel([
-      Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
-        toValue: 0,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
 
   textInputChange = value => {
     if (value.length !== 0) {
@@ -84,113 +46,85 @@ export default class Signup extends Component {
           <Text style={styles.textHeader}>Create a free account.</Text>
         </View>
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-          <ScrollView>
-            {/* <Text style={styles.textFooter}>E-Mail</Text> */}
-            <KeyboardAvoidingView
-              style={{
-                flex: 1,
-              }}
-              behavior="padding">
-              <View style={styles.action}>
-                <Ionicons name="ios-person" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your first name..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
-              <View style={styles.action}>
-                <Ionicons name="ios-person" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your last name..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
+          {/* <Text style={styles.textFooter}>E-Mail</Text> */}
+          <KeyboardAwareScrollView
+            resetScrollToCoords={{x: 0, y: 0}}
+            scrollEnabled={true}>
+            <View style={styles.action}>
+              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <TextInput
+                placeholder="Your first name..."
+                style={styles.textInput}
+                onChangeText={text => this.textInputChange(text)}
+              />
+            </View>
+            <View style={styles.action}>
+              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <TextInput
+                placeholder="Your last name..."
+                style={styles.textInput}
+                onChangeText={text => this.textInputChange(text)}
+              />
+            </View>
 
-              <View style={styles.action}>
-                <Ionicons name="ios-mail" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your email..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
-              <View style={styles.action}>
-                <Ionicons name="ios-mail" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your email..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
-              <View style={styles.action}>
-                <Ionicons name="ios-mail" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your email..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
-              <View style={styles.action}>
-                <Ionicons name="ios-mail" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your email..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
+            <View style={styles.action}>
+              <Ionicons name="ios-mail" color="#f53ba3" size={25} />
+              <TextInput
+                placeholder="Your email..."
+                style={styles.textInput}
+                onChangeText={text => this.textInputChange(text)}
+              />
+            </View>
 
-              <View style={styles.action}>
-                <Ionicons name="ios-person" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your user name..."
-                  style={styles.textInput}
-                  onChangeText={text => this.textInputChange(text)}
-                />
-              </View>
+            <View style={styles.action}>
+              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <TextInput
+                placeholder="Your user name..."
+                style={styles.textInput}
+                onChangeText={text => this.textInputChange(text)}
+              />
+            </View>
 
-              {/* <Text style={styles.textFooter}>Password</Text> */}
-              <View style={styles.action}>
-                <Ionicons name="ios-lock" color="#f53ba3" size={25} />
-                <TextInput
-                  placeholder="Your password..."
-                  secureTextEntry={this.state.secureTextEntry}
-                  style={styles.textInput}
-                  value={this.state.password}
-                  onChangeText={text =>
-                    this.setState({
-                      password: text,
-                    })
-                  }
-                />
+            {/* <Text style={styles.textFooter}>Password</Text> */}
+            <View style={styles.action}>
+              <Ionicons name="ios-lock" color="#f53ba3" size={25} />
+              <TextInput
+                placeholder="Your password..."
+                secureTextEntry={this.state.secureTextEntry}
+                style={styles.textInput}
+                value={this.state.password}
+                onChangeText={text =>
+                  this.setState({
+                    password: text,
+                  })
+                }
+              />
 
-                <TouchableOpacity onPress={() => this.secureTextEntry()}>
-                  {this.state.secureTextEntry ? (
-                    <Ionicons name="md-eye-off" color="#000" size={25} />
-                  ) : (
-                    <Ionicons name="md-eye" color="#000" size={25} />
-                  )}
+              <TouchableOpacity onPress={() => this.secureTextEntry()}>
+                {this.state.secureTextEntry ? (
+                  <Ionicons name="md-eye-off" color="#000" size={25} />
+                ) : (
+                  <Ionicons name="md-eye" color="#000" size={25} />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.button}>
+              <TouchableOpacity style={styles.signIn}>
+                <Text style={styles.textSign}>Sign Up</Text>
+              </TouchableOpacity>
+              <View style={styles.signUp}>
+                <Text style={styles.textSignUp}> Already have account ?</Text>
+                <TouchableOpacity
+                  style={styles.signUpBtn}
+                  onPress={() => {
+                    this.props.navigation.navigate('Login');
+                  }}>
+                  <Text style={styles.signUpBtnText}>Login</Text>
                 </TouchableOpacity>
               </View>
-
-              <View style={styles.button}>
-                <TouchableOpacity style={styles.signIn}>
-                  <Text style={styles.textSign}>Sign Up</Text>
-                </TouchableOpacity>
-                <View style={styles.signUp}>
-                  <Text style={styles.textSignUp}> Already have account ?</Text>
-                  <TouchableOpacity
-                    style={styles.signUpBtn}
-                    onPress={() => {
-                      this.props.navigation.navigate('Login');
-                    }}>
-                    <Text style={styles.signUpBtnText}>Login</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </KeyboardAvoidingView>
-          </ScrollView>
+            </View>
+          </KeyboardAwareScrollView>
         </Animatable.View>
       </View>
     );
