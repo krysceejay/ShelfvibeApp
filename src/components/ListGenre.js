@@ -103,13 +103,13 @@ export default class ListGenre extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{flex: 1, alignSelf: 'stretch', marginHorizontal: 32}}>
+        <View style={{flex: 1, alignSelf: 'stretch', marginLeft: 20}}>
           <Text style={styles.title}>Select Genre</Text>
           <FlatList
             data={data}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
-            contentContainerStyle={{paddingHorizontal: 10, paddingVertical: 12}}
+            contentContainerStyle={{paddingLeft: 10, paddingVertical: 12}}
           />
         </View>
       </SafeAreaView>

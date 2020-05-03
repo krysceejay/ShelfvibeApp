@@ -11,9 +11,10 @@ import {
   Platform,
   Button,
   SafeAreaView,
+  Switch,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ListGenre from '../../components/ListGenre';
 import ImagePicker from 'react-native-image-picker';
@@ -29,6 +30,8 @@ export default class AddShelf extends Component {
     mode: 'date',
     show: false,
     showDate: false,
+    isPublish: false,
+    isPublic: true,
   };
 
   setModalVisible = visible => {
@@ -45,10 +48,21 @@ export default class AddShelf extends Component {
     });
   };
 
+  togglePublishSwitch = () => {
+    return this.setState((prevState, prevProp) => ({
+      isPublish: !prevState.isPublish,
+    }));
+  };
+  togglePublicSwitch = () => {
+    return this.setState((prevState, prevProp) => ({
+      isPublic: !prevState.isPublic,
+    }));
+  };
+
   handleChoosePhoto = () => {
     const options = {
-      title: 'Select Avatar',
-      customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+      title: 'Select Book Cover',
+      // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -58,9 +72,8 @@ export default class AddShelf extends Component {
       if (response.didCancel) {
         return;
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        //console.log('ImagePicker Error: ', response.error);
+        return;
       } else {
         // const source = {
         //   uri: response.uri,
@@ -209,7 +222,15 @@ export default class AddShelf extends Component {
   };
 
   render() {
-    const {modalVisible, photo, show, date, mode} = this.state;
+    const {
+      modalVisible,
+      photo,
+      show,
+      date,
+      mode,
+      isPublish,
+      isPublic,
+    } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView
@@ -259,10 +280,11 @@ export default class AddShelf extends Component {
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
-                <TouchableOpacity
-                  style={styles.uploadImage}
-                  onPress={this.handleChoosePhoto}>
-                  <Text style={styles.textStyle}>Upload</Text>
+                <TouchableOpacity onPress={this.handleChoosePhoto}>
+                  <View style={styles.iconContainer}>
+                    <Text style={styles.textStyle}>Upload</Text>
+                    <FontAwesome name="upload" size={20} color="#3a4155" />
+                  </View>
                 </TouchableOpacity>
                 <View style={styles.showImage}>
                   {photo ? (
@@ -277,19 +299,33 @@ export default class AddShelf extends Component {
             </View>
             {this.checkPlateform(show, date, mode)}
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Publish</Text>
-              <TextInput
-                placeholder="Your first name..."
-                style={styles.textInput}
-              />
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View>
+                  <Text style={styles.textLabel}>Publish</Text>
+                  <Switch
+                    trackColor={{false: '#767577', true: '#6ad83c'}}
+                    thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={this.togglePublishSwitch}
+                    value={isPublish}
+                    style={{transform: [{scaleX: 1.3}, {scaleY: 1.3}]}}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.textLabel}>Public</Text>
+                  <Switch
+                    trackColor={{false: '#767577', true: '#6ad83c'}}
+                    thumbColor={isPublic ? '#d1ecf1' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={this.togglePublicSwitch}
+                    value={isPublic}
+                    style={{transform: [{scaleX: 1.3}, {scaleY: 1.3}]}}
+                  />
+                </View>
+              </View>
             </View>
-            <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Join Status</Text>
-              <TextInput
-                placeholder="Your first name..."
-                style={styles.textInput}
-              />
-            </View>
+
             <View style={styles.singleInput}>
               <Text style={styles.textLabel}>Description</Text>
               <View
@@ -306,11 +342,16 @@ export default class AddShelf extends Component {
                     backgroundColor: '#fff',
                     paddingHorizontal: 10,
                     paddingVertical: 10,
-                    fontSize: 16,
+                    fontSize: 14,
                     color: '#333',
                   }}
                 />
               </View>
+            </View>
+            <View style={styles.singleInput}>
+              <TouchableOpacity style={styles.signIn}>
+                <Text style={styles.textSign}>Submit</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -328,13 +369,13 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   textLabel: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Nunito-Regular',
     marginBottom: 5,
   },
   textInput: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
     backgroundColor: '#fff',
     height: 50,
@@ -342,7 +383,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
     backgroundColor: '#fff',
     paddingHorizontal: 10,
@@ -372,7 +413,7 @@ const styles = StyleSheet.create({
   openButton: {
     backgroundColor: '#fff',
     //borderRadius: 20,
-    padding: 10,
+    paddingVertical: 10,
     //elevation: 2,
     //height: 80,
     minHeight: 50,
@@ -382,7 +423,7 @@ const styles = StyleSheet.create({
   textStyle: {
     //textAlign: 'center',
     fontFamily: 'Nunito-Regular',
-    fontSize: 18,
+    fontSize: 14,
     color: '#333',
     paddingHorizontal: 10,
   },
@@ -422,5 +463,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 5,
+    borderColor: '#ccc',
+    borderWidth: 2,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  signIn: {
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderColor: '#ccc',
+    borderWidth: 2,
+    alignSelf: 'center',
+  },
+  textSign: {
+    fontSize: 18,
+    fontFamily: 'Nunito-Bold',
   },
 });
