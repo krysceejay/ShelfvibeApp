@@ -49,7 +49,8 @@ export default class Signup extends Component {
           {/* <Text style={styles.textFooter}>E-Mail</Text> */}
           <KeyboardAwareScrollView
             resetScrollToCoords={{x: 0, y: 0}}
-            scrollEnabled={true}>
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}>
             <View style={styles.action}>
               <Ionicons name="ios-person" color="#f53ba3" size={25} />
               <TextInput
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 18,
+    fontSize: 16,
     color: '#333',
   },
 

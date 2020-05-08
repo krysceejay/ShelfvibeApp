@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 const dataList = [
@@ -35,7 +36,7 @@ const dataList = [
 const numColumns = 2;
 const WIDTH = Dimensions.get('window').width;
 
-export default class Feed extends Component {
+export default class Shelf extends Component {
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
     let totalLastRow = dataList.length - totalRows * numColumns;
@@ -52,12 +53,19 @@ export default class Feed extends Component {
     return (
       <View style={styles.item}>
         {/* <Text style={styles.itemText}>{item.key}</Text> */}
+
         <View style={styles.bookCoverContain}>
-          <Image
-            style={styles.bookCover}
-            source={require('../assets/img/13465.jpg')}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('Details');
+            }}>
+            <Image
+              style={styles.bookCover}
+              source={require('../../assets/img/Leanin.jpg')}
+            />
+          </TouchableOpacity>
         </View>
+
         <View style={styles.bookDetails}>
           <Text style={styles.bookTitle}>Think Big</Text>
           <Text style={styles.bookAuthor}>Ben Carson, Phil James</Text>
@@ -97,6 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //paddingHorizontal: 10,
     //paddingTop: 5,
+    //paddingVertical: 15,
   },
   item: {
     flex: 1,

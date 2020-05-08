@@ -69,7 +69,7 @@ export default class ManageShelf extends Component {
                 this.props.navigation.navigate('BookTopic');
               }}>
               <View style={styles.iconContainer}>
-                <FontAwesome name="book" size={18} color="#3a4155" />
+                <FontAwesome name="book" size={16} color="#3a4155" />
               </View>
             </TouchableOpacity>
 
@@ -78,7 +78,7 @@ export default class ManageShelf extends Component {
                 this.props.navigation.navigate('Members');
               }}>
               <View style={styles.iconContainer}>
-                <FontAwesome name="users" size={18} color="#3a4155" />
+                <FontAwesome name="users" size={16} color="#3a4155" />
               </View>
             </TouchableOpacity>
           </View>
@@ -94,6 +94,7 @@ export default class ManageShelf extends Component {
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     );
@@ -103,13 +104,14 @@ export default class ManageShelf extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingVertical: 15,
   },
   item: {
     flex: 1,
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: WIDTH / 1.3,
+    height: WIDTH / 1.45,
     textAlign: 'center',
   },
   bookCoverContain: {
@@ -128,12 +130,12 @@ const styles = StyleSheet.create({
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
-    fontSize: 18,
+    fontSize: 14,
     textAlign: 'center',
   },
   bookAuthor: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 12,
     color: '#444444',
     textAlign: 'center',
   },

@@ -9,6 +9,8 @@ import {
   NavigationContainer,
   useNavigation,
   DrawerActions,
+  DarkTheme,
+  DefaultTheme,
 } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,14 +21,12 @@ import JoinedList from './src/screens/dashboard/JoinedList';
 import Profile from './src/screens/dashboard/Profile';
 import BookTopic from './src/screens/dashboard/BookTopic';
 import Members from './src/screens/dashboard/Members';
-import Tab1 from './src/screens/tabs/Tab1';
-import Tab2 from './src/screens/tabs/Tab2';
+import Shelf from './src/screens/shelf/Shelf';
+import Details from './src/screens/shelf/Details';
 import Tab3 from './src/screens/tabs/Tab3';
-import Tab4 from './src/screens/tabs/Tab4';
-import Tab5 from './src/screens/tabs/Tab5';
 import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
-import Details from './src/screens/Details';
+//import Details from './src/screens/Details';
 //import DrawerContent from './src/components/DrawerContent';
 import DashboardSidebar from './src/components/DashboardSidebar';
 import Header from './src/components/Header';
@@ -36,6 +36,17 @@ import Forgotpass from './src/screens/account/Forgotpass';
 
 Icon.loadFont();
 Ionicons.loadFont();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    primary: 'rgb(255, 45, 85)',
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(28, 28, 30)',
+    border: 'rgb(199, 199, 204)',
+  },
+};
 
 function DashboardheaderRight() {
   const navigation = useNavigation();
@@ -143,6 +154,29 @@ export default class App extends Component {
     );
   };
 
+  createShelfStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="Shelf"
+        screenOptions={({route}) => ({
+          headerTitleStyle: {
+            fontFamily: 'Nunito-Regular',
+            fontSize: 20,
+          },
+          headerBackTitleVisible: false,
+          headerTitleAlign: 'center',
+          headerTintColor: '#000',
+          headerTitleAlign: 'left',
+          headerRight: () => {
+            return this.getTabTitle(route);
+          },
+        })}>
+        <Stack.Screen name="Shelf" component={Shelf} />
+        <Stack.Screen name="Details" component={Details} />
+      </Stack.Navigator>
+    );
+  };
+
   createBottomTabs = () => {
     return (
       <Tab.Navigator
@@ -151,19 +185,19 @@ export default class App extends Component {
             size = 25;
             let iconName;
 
-            if (route.name === 'Tab1') {
+            if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home';
             }
-            if (route.name === 'Tab2') {
+            if (route.name === 'Shelf') {
               iconName = focused ? 'book' : 'book';
             }
             if (route.name === 'Tab3') {
               iconName = focused ? 'phone' : 'phone';
             }
-            if (route.name === 'Tab4') {
+            if (route.name === 'Account') {
               iconName = focused ? 'user' : 'user';
             }
-            if (route.name === 'Tab5') {
+            if (route.name === 'Dashboard') {
               iconName = focused ? 'dashboard' : 'dashboard';
             }
 
@@ -180,11 +214,11 @@ export default class App extends Component {
           showLabel: false,
           keyboardHidesTabBar: true,
         }}>
-        <Tab.Screen name="Tab1" children={this.createHomeStack} />
-        <Tab.Screen name="Tab2" component={Tab2} />
+        <Tab.Screen name="Home" children={this.createHomeStack} />
+        <Tab.Screen name="Shelf" component={this.createShelfStack} />
         <Tab.Screen name="Tab3" component={Tab3} />
-        <Tab.Screen name="Tab4" children={this.createAccountStack} />
-        <Tab.Screen name="Tab5" children={this.createDrawer} />
+        <Tab.Screen name="Account" children={this.createAccountStack} />
+        <Tab.Screen name="Dashboard" children={this.createDrawer} />
       </Tab.Navigator>
     );
   };
@@ -301,8 +335,20 @@ export default class App extends Component {
             );
           },
         })}>
-        <Stack.Screen name="ManageShelf" component={ManageShelf} />
-        <Stack.Screen name="BookTopic" component={BookTopic} />
+        <Stack.Screen
+          name="ManageShelf"
+          component={ManageShelf}
+          options={{
+            title: 'Manage Shelf',
+          }}
+        />
+        <Stack.Screen
+          name="BookTopic"
+          component={BookTopic}
+          options={{
+            title: 'Book Topic',
+          }}
+        />
         <Stack.Screen name="Members" component={Members} />
       </Stack.Navigator>
     );
@@ -466,7 +512,7 @@ export default class App extends Component {
   };
   render() {
     return (
-      <NavigationContainer>
+      <NavigationContainer theme={DefaultTheme}>
         <Stack.Navigator
           initialRouteName="Loading"
           headerMode="screen"

@@ -110,6 +110,7 @@ export default class ListGenre extends Component {
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
             contentContainerStyle={{paddingLeft: 10, paddingVertical: 12}}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </SafeAreaView>
