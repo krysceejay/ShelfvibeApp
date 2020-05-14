@@ -23,10 +23,10 @@ import BookTopic from './src/screens/dashboard/BookTopic';
 import Members from './src/screens/dashboard/Members';
 import Shelf from './src/screens/shelf/Shelf';
 import Details from './src/screens/shelf/Details';
+import Rating from './src/screens/shelf/Rating';
 import Tab3 from './src/screens/tabs/Tab3';
 import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
-//import Details from './src/screens/Details';
 //import DrawerContent from './src/components/DrawerContent';
 import DashboardSidebar from './src/components/DashboardSidebar';
 import Header from './src/components/Header';
@@ -173,6 +173,7 @@ export default class App extends Component {
         })}>
         <Stack.Screen name="Shelf" component={Shelf} />
         <Stack.Screen name="Details" component={Details} />
+        <Stack.Screen name="Rating" component={Rating} />
       </Stack.Navigator>
     );
   };

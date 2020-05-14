@@ -7,6 +7,7 @@ import {
   Image,
   Animated,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
@@ -68,8 +69,8 @@ export default class LoadingScene extends Component {
         </View>
         {this.state.loadingSpinner ? (
           <ActivityIndicator
-            size="large"
-            color="#f53ba3"
+            size={Platform.OS === 'ios' ? 'large' : 70}
+            color="#ccc"
             style={{
               position: 'absolute',
               left: 0,

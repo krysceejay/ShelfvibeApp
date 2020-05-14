@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Star from '../../components/Star';
+import StarGroup from '../../components/StarGroup';
 
 export default class Details extends Component {
   render() {
@@ -32,51 +32,35 @@ export default class Details extends Component {
             <View style={styles.otherTopDetails}>
               <View style={styles.bookGenreView}>
                 <Text style={styles.topDetailsTitle}>Genre</Text>
-                <Text style={styles.bookGenre}>Biography, Adventure</Text>
+                <Text style={styles.bookGenre}>
+                  Biography, Adventure, Romance
+                </Text>
               </View>
               <View style={styles.bookStarRatingView}>
                 <Text style={styles.topDetailsTitle}>Stars</Text>
-                <View style={styles.starGroup}>
-                  {/* <Star color="yellow" backcol="yellow" rate={10} /> */}
-                  <View>
-                    <Star color="#ddd" />
-                    <Star color="#e2cf00" pos="absolute" rate="100%" />
-                  </View>
-                  <View>
-                    <Star color="#ddd" />
-                    <Star color="#e2cf00" pos="absolute" rate="100%" />
-                  </View>
-                  <View>
-                    <Star color="#ddd" />
-                    <Star color="#e2cf00" pos="absolute" rate="100%" />
-                  </View>
-                  <View>
-                    <Star color="#ddd" />
-                    <Star color="#e2cf00" pos="absolute" rate="100%" />
-                  </View>
-                  <View>
-                    <Star color="#ddd" />
-                    <Star color="#e2cf00" pos="absolute" rate="50%" />
-                  </View>
-                </View>
+                <StarGroup />
                 <View style={styles.starText}>
                   <Text style={styles.starRateText}>4.5 of </Text>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Rating');
+                    }}>
                     <View style={styles.iconContainer}>
-                      <Text style={styles.ratingText}>rating(s)</Text>
+                      <Text style={styles.ratingText}>400 rating(s)</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
               </View>
-
-              <View style={styles.bookMeetingView}>
-                <Text style={styles.topDetailsTitle}>Meeting Details</Text>
+            </View>
+            <View style={styles.bookMeetingView}>
+              <Text style={styles.topDetailsTitle}>Meeting Details</Text>
+              <View style={styles.detailsGroupView}>
                 <View style={styles.detailsGroup}>
-                  <FontAwesome name="calendar" size={16} color="#f53ba3" />
-                  <Text style={styles.detailsText}>Sat 26 Jun 19</Text>
+                  <FontAwesome name="calendar" size={18} color="#f53ba3" />
+                  <Text style={styles.detailsText}>Sat, 26 Jun 2019</Text>
                 </View>
                 <View style={styles.detailsGroup}>
-                  <FontAwesome name="clock-o" size={16} color="#f53ba3" />
+                  <FontAwesome name="clock-o" size={18} color="#f53ba3" />
                   <Text style={styles.detailsText}>10 am GMT</Text>
                 </View>
               </View>
@@ -100,7 +84,6 @@ export default class Details extends Component {
                 in reprehenderit in voluptate velit esse cillum dolore eu fugiat
                 nulla pariatur. Excepteur sint occaecat cupidatat non proident,
                 sunt in culpa qui officia deserunt mollit anim id est laboru.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
               </Text>
             </View>
           </View>
@@ -133,7 +116,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     resizeMode: 'contain',
-    borderRadius: 5,
+    //borderRadius: 5,
     //borderTopLeftRadius: 5,
     //borderWidth: 5,
     //borderColor: 'green',
@@ -162,11 +145,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   otherDetails: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   otherTopDetails: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginVertical: 15,
   },
   topDetailsTitle: {
@@ -177,10 +160,12 @@ const styles = StyleSheet.create({
   bookGenreView: {
     flex: 1,
     //backgroundColor: 'purple',
+    alignItems: 'center',
   },
   bookGenre: {
     fontFamily: 'Nunito-Bold',
     fontSize: 15,
+    textAlign: 'center',
     //color: '#444444',
   },
 
@@ -191,14 +176,10 @@ const styles = StyleSheet.create({
     //backgroundColor: 'green',
   },
 
-  starGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
   bookMeetingView: {
     flex: 1,
     //justifyContent: 'center',
-    alignItems: 'flex-end',
+    //alignItems: 'flex-end',
     //backgroundColor: 'red',
     //paddingHorizontal: 5,
   },
@@ -234,13 +215,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     fontSize: 13,
   },
+  detailsGroupView: {
+    flexDirection: 'row',
+    //justifyContent: 'space-around',
+  },
   detailsGroup: {
     flexDirection: 'row',
-    marginVertical: 4,
+    marginVertical: 5,
+    marginRight: 15,
   },
   detailsText: {
     fontFamily: 'Nunito-Bold',
-    fontSize: 13,
+    fontSize: 14,
     marginLeft: 5,
   },
   joinDiscussionView: {

@@ -22,7 +22,7 @@ export default class Star extends Component {
             height: 30,
             width: 150,
            }} /> */}
-        <Ionicons name="md-star" size={20} color={this.props.color} />
+        <Ionicons name="md-star" size={18} color={this.props.color} />
       </View>
     );
   }
