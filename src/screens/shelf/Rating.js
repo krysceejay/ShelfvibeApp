@@ -3,10 +3,6 @@ import {
   Text,
   StyleSheet,
   View,
-  Button,
-  FlatList,
-  Dimensions,
-  Image,
   TouchableOpacity,
   ScrollView,
   TextInput,
@@ -16,33 +12,7 @@ import ProgressBar from '../../components/ProgressBar';
 import BorderButton from '../../components/BorderButton';
 import RatingStarGroup from '../../components/RatingStarGroup';
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
-];
-const numColumns = 1;
-const WIDTH = Dimensions.get('window').width;
-
-export default class Shelf extends Component {
+export default class Rating extends Component {
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
@@ -176,7 +146,12 @@ export default class Shelf extends Component {
                 <Text style={styles.viewAllText}>View All</Text>
               </View>
             </TouchableOpacity> */}
-            <BorderButton onpress={() => {}} text="View All" />
+            <BorderButton
+              onpress={() => {
+                this.props.navigation.navigate('All Ratings');
+              }}
+              text="View All"
+            />
           </View>
         </View>
       </ScrollView>

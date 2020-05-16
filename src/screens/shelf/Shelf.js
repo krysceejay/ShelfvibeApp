@@ -103,6 +103,7 @@ export default class Shelf extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginVertical: 10,
     //paddingHorizontal: 10,
     //paddingTop: 5,
     //paddingVertical: 15,

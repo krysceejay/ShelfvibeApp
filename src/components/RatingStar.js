@@ -9,7 +9,7 @@ export default class RatingStar extends Component {
         name={this.props.filled ? 'star' : 'star-o'}
         size={32}
         color="#e2cf00"
-        style={{marginHorizontal: 6}}
+        style={{marginHorizontal: 20}}
       />
     );
   }

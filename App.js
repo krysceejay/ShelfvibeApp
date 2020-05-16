@@ -24,6 +24,7 @@ import Members from './src/screens/dashboard/Members';
 import Shelf from './src/screens/shelf/Shelf';
 import Details from './src/screens/shelf/Details';
 import Rating from './src/screens/shelf/Rating';
+import AllRatings from './src/screens/shelf/AllRatings';
 import Tab3 from './src/screens/tabs/Tab3';
 import LoadingScene from './src/screens/LoadingScene';
 import Feed from './src/screens/Feed';
@@ -143,13 +144,7 @@ export default class App extends Component {
         })}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen
-          name="Forgotpass"
-          component={Forgotpass}
-          options={() => ({
-            title: 'Forgot Password',
-          })}
-        />
+        <Stack.Screen name="Forgot Password" component={Forgotpass} />
       </Stack.Navigator>
     );
   };
@@ -174,6 +169,7 @@ export default class App extends Component {
         <Stack.Screen name="Shelf" component={Shelf} />
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="Rating" component={Rating} />
+        <Stack.Screen name="All Ratings" component={AllRatings} />
       </Stack.Navigator>
     );
   };
