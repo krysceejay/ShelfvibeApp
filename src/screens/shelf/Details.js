@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import StarGroup from '../../components/StarGroup';
+import Topics from '../../components/Topics';
 
 export default class Details extends Component {
   render() {
@@ -65,6 +66,11 @@ export default class Details extends Component {
                 </View>
               </View>
             </View>
+
+            <View>
+              <Topics />
+            </View>
+
             <View style={styles.joinDiscussionView}>
               <Text style={styles.joinDiscussionHead}>Join The Discussion</Text>
               <TouchableOpacity onPress={() => {}}>
@@ -74,6 +80,7 @@ export default class Details extends Component {
                 </View>
               </TouchableOpacity>
             </View>
+
             <View>
               <Text style={styles.descriptionHead}>Description</Text>
               <Text style={styles.descriptionBody}>

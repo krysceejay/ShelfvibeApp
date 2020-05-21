@@ -111,8 +111,13 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: WIDTH / 1.45,
+    height: WIDTH / 1.4,
     textAlign: 'center',
+
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
   },
   bookCoverContain: {
     flex: 1,
@@ -153,5 +158,6 @@ const styles = StyleSheet.create({
   },
   itemInvisible: {
     backgroundColor: 'transparent',
+    borderColor: 'transparent',
   },
 });

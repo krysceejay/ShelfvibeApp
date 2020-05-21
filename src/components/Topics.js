@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, FlatList} from 'react-native';
-import StarGroup from '../../components/StarGroup';
+import {Text, StyleSheet, View, FlatList, Dimensions} from 'react-native';
+import StarGroup from './StarGroup';
 
 const dataList = [
   {key: 1},
@@ -25,7 +25,7 @@ const dataList = [
   {key: 20},
   {key: 21},
 ];
-const numColumns = 1;
+const WIDTH = Dimensions.get('window').width;
 
 export default class AllRatings extends Component {
   _renderItem = () => {
@@ -51,11 +51,12 @@ export default class AllRatings extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.descriptionHead}>Topics</Text>
         <FlatList
           data={dataList}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
+          horizontal={true}
           //showsVerticalScrollIndicator={false}
         />
       </View>
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
-    paddingHorizontal: 20,
+    //paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
   reviewTitle: {
@@ -78,8 +79,10 @@ const styles = StyleSheet.create({
   },
   item: {
     //flex: 1,
-    marginVertical: 20,
+    marginVertical: 10,
     padding: 15,
+    width: WIDTH - 40,
+    marginRight: 20,
 
     backgroundColor: '#f4f4f4',
     borderRadius: 5,
@@ -104,5 +107,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Italic',
     fontSize: 12,
     marginTop: 5,
+  },
+  descriptionHead: {
+    fontFamily: 'Nunito-SemiBoldItalic',
+    fontSize: 18,
+    color: '#444444',
+    marginVertical: 10,
   },
 });
