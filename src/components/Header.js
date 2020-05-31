@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-BoldItalic',
   },
   textPrimary: {
-    color: '#f53ba3',
+    color: '#e91e63',
   },
   icon: {
     position: 'absolute',

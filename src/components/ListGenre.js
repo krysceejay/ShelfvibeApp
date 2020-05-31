@@ -97,7 +97,7 @@ export default class ListGenre extends Component {
               size={30}
               style={{
                 paddingRight: 20,
-                color: '#f53ba3',
+                color: '#e91e63',
                 fontFamily: 'Nunito-BoldItalic',
               }}
             />

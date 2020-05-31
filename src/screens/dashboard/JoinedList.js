@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderRadius: 5,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 1.5,
     padding: 5,
     marginVertical: 7,

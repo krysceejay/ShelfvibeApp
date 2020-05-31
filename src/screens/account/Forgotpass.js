@@ -38,7 +38,7 @@ export default class Forgotpass extends Component {
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.action}>
-              <Ionicons name="ios-mail" color="#f53ba3" size={25} />
+              <Ionicons name="ios-mail" color="#333" size={25} />
               <TextInput
                 placeholder="Your email..."
                 style={styles.textInput}
@@ -61,7 +61,7 @@ export default class Forgotpass extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#242c42',
+    backgroundColor: '#00a2cc',
   },
   header: {
     flex: 1,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 1,
     //marginTop: 15,
   },

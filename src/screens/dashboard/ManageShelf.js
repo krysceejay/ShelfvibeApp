@@ -69,7 +69,7 @@ export default class ManageShelf extends Component {
                 this.props.navigation.navigate('BookTopic');
               }}>
               <View style={styles.iconContainer}>
-                <FontAwesome name="book" size={16} color="#3a4155" />
+                <FontAwesome name="book" size={16} color="#fff" />
               </View>
             </TouchableOpacity>
 
@@ -78,7 +78,7 @@ export default class ManageShelf extends Component {
                 this.props.navigation.navigate('Members');
               }}>
               <View style={styles.iconContainer}>
-                <FontAwesome name="users" size={16} color="#3a4155" />
+                <FontAwesome name="users" size={16} color="#fff" />
               </View>
             </TouchableOpacity>
           </View>
@@ -152,9 +152,20 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderRadius: 30,
-    borderColor: '#f53ba3',
+    borderColor: '#fff',
     borderWidth: 2,
     padding: 10,
+    backgroundColor: '#00a2cc',
+    borderWidth: 3,
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   itemInvisible: {
     backgroundColor: 'transparent',

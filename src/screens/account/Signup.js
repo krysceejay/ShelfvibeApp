@@ -52,7 +52,7 @@ export default class Signup extends Component {
             scrollEnabled={true}
             showsVerticalScrollIndicator={false}>
             <View style={styles.action}>
-              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <Ionicons name="ios-person" color="#333" size={25} />
               <TextInput
                 placeholder="Your first name..."
                 style={styles.textInput}
@@ -60,7 +60,7 @@ export default class Signup extends Component {
               />
             </View>
             <View style={styles.action}>
-              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <Ionicons name="ios-person" color="#333" size={25} />
               <TextInput
                 placeholder="Your last name..."
                 style={styles.textInput}
@@ -69,7 +69,7 @@ export default class Signup extends Component {
             </View>
 
             <View style={styles.action}>
-              <Ionicons name="ios-mail" color="#f53ba3" size={25} />
+              <Ionicons name="ios-mail" color="#333" size={25} />
               <TextInput
                 placeholder="Your email..."
                 style={styles.textInput}
@@ -78,7 +78,7 @@ export default class Signup extends Component {
             </View>
 
             <View style={styles.action}>
-              <Ionicons name="ios-person" color="#f53ba3" size={25} />
+              <Ionicons name="ios-person" color="#333" size={25} />
               <TextInput
                 placeholder="Your user name..."
                 style={styles.textInput}
@@ -88,7 +88,7 @@ export default class Signup extends Component {
 
             {/* <Text style={styles.textFooter}>Password</Text> */}
             <View style={styles.action}>
-              <Ionicons name="ios-lock" color="#f53ba3" size={25} />
+              <Ionicons name="ios-lock" color="#333" size={25} />
               <TextInput
                 placeholder="Your password..."
                 secureTextEntry={this.state.secureTextEntry}
@@ -135,7 +135,7 @@ export default class Signup extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#242c42',
+    backgroundColor: '#00a2cc',
   },
   header: {
     flex: 1,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 1,
   },
   textSign: {

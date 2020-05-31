@@ -57,11 +57,11 @@ export default class Details extends Component {
               <Text style={styles.topDetailsTitle}>Meeting Details</Text>
               <View style={styles.detailsGroupView}>
                 <View style={styles.detailsGroup}>
-                  <FontAwesome name="calendar" size={18} color="#f53ba3" />
+                  <FontAwesome name="calendar" size={18} color="#373435" />
                   <Text style={styles.detailsText}>Sat, 26 Jun 2019</Text>
                 </View>
                 <View style={styles.detailsGroup}>
-                  <FontAwesome name="clock-o" size={18} color="#f53ba3" />
+                  <FontAwesome name="clock-o" size={18} color="#373435" />
                   <Text style={styles.detailsText}>10 am GMT</Text>
                 </View>
               </View>
@@ -75,7 +75,7 @@ export default class Details extends Component {
               <Text style={styles.joinDiscussionHead}>Join The Discussion</Text>
               <TouchableOpacity onPress={() => {}}>
                 <View style={styles.chatBtn}>
-                  <FontAwesome name="comment-o" size={16} color="#f53ba3" />
+                  <FontAwesome name="comment-o" size={16} color="#00a2cc" />
                   <Text style={styles.chatBtnText}>Chat</Text>
                 </View>
               </TouchableOpacity>
@@ -204,10 +204,10 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderRadius: 10,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 1,
     paddingHorizontal: 5,
-    paddingVertical: 2,
+    paddingVertical: 3,
     //marginVertical: 7,
   },
   ratingText: {
@@ -237,9 +237,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   joinDiscussionView: {
-    backgroundColor: '#fff7fb',
+    backgroundColor: '#e6f6fa',
     borderRadius: 5,
-    borderColor: '#ffe2f2',
+    borderColor: '#ccecf5',
     borderWidth: 1,
     padding: 20,
     margin: 20,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   chatBtn: {
     flexDirection: 'row',
     borderRadius: 5,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 5,

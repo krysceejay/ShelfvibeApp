@@ -25,7 +25,7 @@ const DashboardSidebar = props => {
             size={30}
             style={{
               paddingRight: 20,
-              color: '#f53ba3',
+              color: '#e91e63',
               fontFamily: 'Nunito-BoldItalic',
             }}
           />
@@ -51,7 +51,7 @@ const DashboardSidebar = props => {
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#f53ba3" size={20} name="dashboard" />}
+              icon={() => <Icon color="#242c42" size={20} name="dashboard" />}
               onPress={() => {
                 props.navigation.navigate('Dashboard');
               }}
@@ -69,7 +69,7 @@ const DashboardSidebar = props => {
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#f53ba3" size={20} name="book" />}
+              icon={() => <Icon color="#242c42" size={20} name="book" />}
               onPress={() => {
                 props.navigation.navigate('ManageShelf');
               }}
@@ -80,7 +80,7 @@ const DashboardSidebar = props => {
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#f53ba3" size={20} name="plus-square" />}
+              icon={() => <Icon color="#242c42" size={20} name="plus-square" />}
               onPress={() => {
                 props.navigation.navigate('AddShelf');
               }}
@@ -91,7 +91,7 @@ const DashboardSidebar = props => {
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#f53ba3" size={20} name="handshake-o" />}
+              icon={() => <Icon color="#242c42" size={20} name="handshake-o" />}
               onPress={() => {
                 props.navigation.navigate('JoinedList');
               }}
@@ -102,7 +102,7 @@ const DashboardSidebar = props => {
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#f53ba3" size={20} name="id-card" />}
+              icon={() => <Icon color="#242c42" size={20} name="id-card" />}
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
@@ -117,7 +117,7 @@ const DashboardSidebar = props => {
             fontSize: 16,
             fontFamily: 'Nunito-Regular',
           }}
-          icon={() => <Icon color="#f53ba3" size={20} name="sign-out" />}
+          icon={() => <Icon color="#242c42" size={20} name="sign-out" />}
           onPress={() => {}}
         />
       </View>

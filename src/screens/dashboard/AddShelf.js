@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    borderColor: '#f53ba3',
+    borderColor: '#e91e63',
     borderWidth: 1,
     //marginTop: 15,
   },

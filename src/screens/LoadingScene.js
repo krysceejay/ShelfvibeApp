@@ -62,9 +62,14 @@ export default class LoadingScene extends Component {
         <View style={styles.logoContainer}>
           <Animatable.Image
             animation="bounceInDown"
-            duration={2000}
+            duration={2200}
             style={styles.logo}
             source={require('../assets/img/logo.png')}
+            onAnimationEnd={() => {
+              this.setState({
+                loadingSpinner: true,
+              });
+            }}
           />
         </View>
         {this.state.loadingSpinner ? (
@@ -88,7 +93,7 @@ export default class LoadingScene extends Component {
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
         </Animated.View> */}
-        <Animatable.Text
+        {/* <Animatable.Text
           animation="tada"
           duration={2500}
           style={styles.text}
@@ -98,7 +103,7 @@ export default class LoadingScene extends Component {
             });
           }}>
           <Text style={styles.textPrimary}>SHELF</Text>VIBE
-        </Animatable.Text>
+        </Animatable.Text> */}
       </View>
     );
   }
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#242c42',
+    //backgroundColor: '#242c42',
   },
   logoContainer: {
     width: 90,
@@ -129,6 +134,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-BoldItalic',
   },
   textPrimary: {
-    color: '#f53ba3',
+    color: '#e91e63',
   },
 });

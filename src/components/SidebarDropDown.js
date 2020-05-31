@@ -33,7 +33,7 @@ export default class SidebarDropDown extends Component {
           <TouchableWithoutFeedback onPress={this.onPress}>
             <View style={styles.titleContainer}>
               <Text style={styles.text}>My Shelf</Text>
-              <Icon name="angle-down" size={18} color="#f53ba3" />
+              <Icon name="angle-down" size={18} color="#e91e63" />
             </View>
           </TouchableWithoutFeedback>
           {isSelected && this.renderDetails()}

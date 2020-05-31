@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 20,
-    borderColor: '#f53ba3',
+    borderColor: '#00a2cc',
     borderWidth: 2,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBold',
     fontSize: 16,
     letterSpacing: 5,
-    color: '#f53ba3',
+    color: '#00a2cc',
     marginVertical: 5,
   },
   aboutBodyText: {

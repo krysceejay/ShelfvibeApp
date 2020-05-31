@@ -49,6 +49,17 @@ const MyTheme = {
   },
 };
 
+const MyDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    primary: 'rgb(255, 45, 85)',
+    background: 'rgb(0, 0, 0)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(255, 255, 255)',
+    border: 'rgb(199, 199, 204)',
+  },
+};
+
 function DashboardheaderRight() {
   const navigation = useNavigation();
   return (
@@ -112,7 +123,7 @@ export default class App extends Component {
             headerTitle: () => <Header />,
             headerTitleContainerStyle: {
               height: '100%',
-              width: '35%',
+              width: '30%',
               //paddingVertical: 7,
             },
           }}
@@ -203,7 +214,7 @@ export default class App extends Component {
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#f53ba3',
+          activeTintColor: '#00a2cc',
           inactiveTintColor: 'gray',
           style: {
             //backgroundColor: '#242c42',

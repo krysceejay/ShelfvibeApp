@@ -37,7 +37,7 @@ export default class Genre extends Component {
                 : 'ios-square-outline'
             }
             size={25}
-            color={genreListChild.includes(item) ? '#f53ba3' : '#666666'}
+            color={genreListChild.includes(item) ? '#e91e63' : '#666666'}
             style={{width: 32}}
           />
         </TouchableOpacity>
