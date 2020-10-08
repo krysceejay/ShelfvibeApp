@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import store from './src/store';
 
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
@@ -34,6 +36,8 @@ import Header from './src/components/Header';
 import Login from './src/screens/account/Login';
 import Signup from './src/screens/account/Signup';
 import Forgotpass from './src/screens/account/Forgotpass';
+import AsyncStorage from '@react-native-community/async-storage';
+//import {getLoginLocal} from './src/actions/authActions';
 
 Icon.loadFont();
 Ionicons.loadFont();
@@ -95,6 +99,11 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export default class App extends Component {
+  async componentDidMount() {
+    const authData = await AsyncStorage.getItem('loginData');
+    this.isLoggedIn = JSON.parse(authData);
+  }
+
   createHomeStack = () => {
     return (
       <Stack.Navigator
@@ -156,6 +165,13 @@ export default class App extends Component {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Forgot Password" component={Forgotpass} />
+        <Stack.Screen
+          name="Dashboard"
+          component={this.createBottomTabs}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     );
   };
@@ -225,8 +241,13 @@ export default class App extends Component {
         <Tab.Screen name="Home" children={this.createHomeStack} />
         <Tab.Screen name="Shelf" component={this.createShelfStack} />
         <Tab.Screen name="Tab3" component={Tab3} />
-        <Tab.Screen name="Account" children={this.createAccountStack} />
         <Tab.Screen name="Dashboard" children={this.createDrawer} />
+        {/* 
+        {this.isLoggedIn ? (
+          <Tab.Screen name="Dashboard" children={this.createDrawer} />
+        ) : (
+          <Tab.Screen name="Account" children={this.createAccountStack} />
+        )} */}
       </Tab.Navigator>
     );
   };
@@ -255,7 +276,7 @@ export default class App extends Component {
           children={this.createJoinedListStack}
         />
         <Drawer.Screen name="Profile" children={this.createProfileStack} />
-        <Drawer.Screen name="Contact" component={Tab3} />
+        <Drawer.Screen name="Auth" children={this.createAccountStack} />
       </Drawer.Navigator>
     );
   };
@@ -518,20 +539,43 @@ export default class App extends Component {
       );
     }
   };
+
+  showAuthOrDash = () => {
+    return (
+      <Stack.Navigator
+        headerMode="screen"
+        screenOptions={{
+          gestureEnabled: false,
+          headerShown: false,
+        }}>
+        {this.isLoggedIn ? (
+          <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
+        ) : (
+          <Stack.Screen name="Accounts" children={this.createAccountStack} />
+        )}
+      </Stack.Navigator>
+    );
+  };
+
   render() {
     return (
-      <NavigationContainer theme={DefaultTheme}>
-        <Stack.Navigator
-          initialRouteName="Loading"
-          headerMode="screen"
-          screenOptions={{
-            gestureEnabled: false,
-            headerShown: false,
-          }}>
-          <Stack.Screen name="Loading" component={LoadingScene} />
-          <Stack.Screen name="Bottom Tabs" children={this.createBottomTabs} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer theme={DefaultTheme}>
+          <Stack.Navigator
+            initialRouteName="Loading"
+            headerMode="screen"
+            screenOptions={{
+              gestureEnabled: false,
+              headerShown: false,
+            }}>
+            <Stack.Screen name="Loading" component={LoadingScene} />
+            <Stack.Screen
+              name="showAuthOrDash"
+              component={this.showAuthOrDash}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     );
   }
 }

@@ -1,10 +1,14 @@
-import {createStore, combineReducers} from 'redux';
-import DrawerReducer from './reducers/DrawerReducer';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
 
-const rootReducer = combineReducers({
-  drawerReducer: DrawerReducer,
-});
+const initialState = {};
+const middleware = [thunk];
 
-const configureStore = () => createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  initialState,
+  applyMiddleware(...middleware),
+);
 
-export default configureStore;
+export default store;

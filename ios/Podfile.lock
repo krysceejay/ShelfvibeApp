@@ -298,6 +298,8 @@ PODS:
     - React-cxxreact (= 0.62.1)
     - React-jsi (= 0.62.1)
     - ReactCommon/callinvoker (= 0.62.1)
+  - RNCAsyncStorage (1.12.0):
+    - React
   - RNCMaskedView (0.1.7):
     - React
   - RNCPicker (1.3.0):
@@ -352,6 +354,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/callinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -431,6 +434,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -487,6 +492,7 @@ SPEC CHECKSUMS:
   React-RCTText: 239e040f401505001327a109f9188a4e6dad1bd2
   React-RCTVibration: 072c3b427dd29e730c2ee5bfc509cf5054741a50
   ReactCommon: 3585806280c51d5c2c0d3aa5a99014c3badb629d
+  RNCAsyncStorage: 3eea36d9460c5159b592f9ecbe5a77f8aca98006
   RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
   RNCPicker: 7d06ee91dff65b0bcd400ca00039051d5ddcb938
   RNDateTimePicker: 0f657a34a0f6465ab7d0255c24954693bc7a8cf6
