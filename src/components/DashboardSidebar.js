@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -6,13 +7,34 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 //import SidebarDropDown from './SidebarDropDown';
+import {logout} from '../actions/authActions';
 
 const DashboardSidebar = props => {
+  logoutUser = async () => {
+    await props.logout();
+  };
+
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      'Sign Out',
+      'Do you really want to sign out of your account?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => false,
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => logoutUser()},
+      ],
+      {cancelable: false},
+    );
+
   return (
     <View style={{flex: 1}}>
       <SafeAreaView style={styles.closeBtn}>
@@ -118,14 +140,21 @@ const DashboardSidebar = props => {
             fontFamily: 'Nunito-Regular',
           }}
           icon={() => <Icon color="#242c42" size={20} name="sign-out" />}
-          onPress={() => {}}
+          onPress={createTwoButtonAlert}
         />
       </View>
     </View>
   );
 };
 
-export default DashboardSidebar;
+const mapStateToProps = state => ({
+  isLoggedIn: state.login.isLoggedIn,
+});
+
+export default connect(
+  mapStateToProps,
+  {logout},
+)(DashboardSidebar);
 
 const styles = StyleSheet.create({
   drawerContent: {

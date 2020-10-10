@@ -1,5 +1,4 @@
-import {OPEN_DRAWER} from './types';
-import {CLOSE_DRAWER} from './types';
+import {OPEN_DRAWER, CLOSE_DRAWER} from './types';
 
 export const openDrawerAction = () => ({
   type: OPEN_DRAWER,

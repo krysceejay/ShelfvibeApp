@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 17,
     color: '#333',
   },
 
