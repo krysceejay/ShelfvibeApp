@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import AsyncStorage from '@react-native-community/async-storage';
 
 export default class LoadingScene extends Component {
   state = {
@@ -52,16 +51,10 @@ export default class LoadingScene extends Component {
 
   switchToTab = async () => {
     return setTimeout(
-      () => this.props.navigation.navigate('showAuthOrDash'),
+      () => this.props.navigation.navigate('BottomTabs'),
       //this.props.navigation.dispatch(StackActions.replace('Bottom Tabs'))
       4000,
     );
-  };
-
-  getStorage = async () => {
-    const authData = await AsyncStorage.getItem('loginData');
-    this.isLoggedIn = JSON.parse(authData);
-    return this.isLoggedIn;
   };
 
   render() {

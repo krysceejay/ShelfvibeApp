@@ -14,16 +14,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const DashboardSidebar = props => {
   logoutUser = async () => {
     await props.logout();
-    const authData = await AsyncStorage.getItem('loginData');
-    const authDataParse = JSON.parse(authData);
-    if (authDataParse == false || authDataParse == null) {
-      props.navigation.navigate('Auth');
-    }
   };
 
   const createTwoButtonAlert = () =>
@@ -153,12 +147,12 @@ const DashboardSidebar = props => {
   );
 };
 
-// const mapStateToProps = state => ({
-//   isLoggedIn: state.login.isLoggedIn,
-// });
+const mapStateToProps = state => ({
+  isLoggedIn: state.login.isLoggedIn,
+});
 
 export default connect(
-  null,
+  mapStateToProps,
   {logout},
 )(DashboardSidebar);
 

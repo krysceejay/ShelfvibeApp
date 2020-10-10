@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {login} from '../../actions/authActions';
 
 const Login = props => {
+  const {login} = props;
   // constructor(props) {
   //   super(props);
   //   this.state = {
@@ -46,35 +47,22 @@ const Login = props => {
   //   });
   // };
 
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   //setIsLoading(false);
+  //   return () => {
+  //     // Anything in here is fired on component unmount.
+  //     true;
+  //   };
+  // }, []);
+
   loginAction = async () => {
     setIsLoading(true);
-    await props.login({username, password});
-    setIsLoading(false);
-    // console.log(props.isLoggedIn);
-    // if (props.isLoggedIn == false) {
-    //   props.navigation.navigate('Dashboard');
-    // }
-    // const authData = await AsyncStorage.getItem('loginData');
-    // const authDataParse = JSON.parse(authData);
-    // if (authDataParse !== null) {
-    //   if (authDataParse.isLoggedIn == true) {
-    //     props.navigation.navigate('Dashboard');
-    //   }
-    // } else {
-    //   return false;
-    // }
+    const userLogin = await login({username, password});
+    if (userLogin == 'failed') {
+      setIsLoading(false);
+    }
   };
-
-  if (props.isLoggedIn) {
-    props.navigation.navigate('Dashboard');
-    //console.log('logged in');
-  }
-
-  // useEffect(() => {
-  //   if (props.isLoggedIn == false) {
-  //     props.navigation.navigate('Dashboard');
-  //   }
-  // }, []);
 
   return (
     <View style={styles.container}>
@@ -227,7 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 17,
     color: '#333',
   },
 

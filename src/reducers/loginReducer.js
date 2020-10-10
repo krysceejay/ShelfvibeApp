@@ -1,4 +1,4 @@
-import {SET_LOGIN_STATE, LOGOUT} from '../actions/types';
+import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN} from '../actions/types';
 
 const initialState = {
   isLoggedIn: false,
@@ -16,7 +16,7 @@ const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload, // this is what we expect to get back from API call and login page input
-        //isLoading: true, // we set this as true on login
+        //fromLogin: true, // we set this as true on login
       };
 
     case LOGOUT:
@@ -25,6 +25,12 @@ const loginReducer = (state = initialState, action) => {
         token: null,
         isLoggedIn: false,
         userId: null,
+      };
+
+    case STILL_LOGGEDIN:
+      return {
+        ...state,
+        isLoggedIn: true,
       };
 
     default:

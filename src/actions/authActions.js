@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Alert} from 'react-native'; // to show alerts in app
 import AsyncStorage from '@react-native-community/async-storage';
-import {SET_LOGIN_STATE, LOGOUT} from './types';
+import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN} from './types';
 
 const url = 'https://shelfvibe.com/api/graphql/';
 
@@ -16,16 +16,33 @@ const setLoginLocal = async loginData => {
   try {
     await AsyncStorage.setItem('loginData', JSON.stringify(loginData));
   } catch (err) {
-    console.log(err);
+    //console.log(err);
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry',
+    );
   }
 };
 
-export const getLoginLocal = async () => {
+export const getLoginLocal = () => async dispatch => {
   try {
     const storedData = await AsyncStorage.getItem('loginData');
-    return JSON.parse(storedData);
+    const storedDataParse = JSON.parse(storedData);
+    if (storedDataParse !== null) {
+      dispatch({
+        type: STILL_LOGGEDIN,
+      });
+    } else {
+      dispatch({
+        type: LOGOUT,
+      });
+    }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry',
+    );
   }
 };
 
@@ -99,9 +116,15 @@ export const login = loginInput => async dispatch => {
       // response success checking logic could differ
     } else {
       Alert.alert('Login Failed', 'Username or Password is incorrect');
+      return 'failed';
     }
   } catch (err) {
-    Alert.alert('Login Failed', 'Some error occured, please retry');
+    //Alert.alert('Login Failed', 'Some error occured, please retry');
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry',
+    );
+    return 'failed';
   }
 };
 

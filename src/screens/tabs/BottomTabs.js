@@ -1,20 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-// export default function BottomTabs() {
-//     return (
-//         <View>
-//             <Text></Text>
-//         </View>
-//     )
-// }
+import Icon from 'react-native-vector-icons/FontAwesome';
+import HomeStack from '../stack/HomeStack';
+import ShelfStack from '../stack/ShelfStack';
+import AccountStack from '../stack/AccountStack';
+import DashDrawer from '../drawer/DashDrawer';
+import Contact from '../Contact';
+import {getLoginLocal} from '../../actions/authActions';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabs = () => {
+const BottomTabs = props => {
+  const {isLoggedIn, getLoginLocal} = props;
+  //console.log('islogin from bottom tab: ' + isLoggedIn);
+
+  useEffect(() => {
+    getLoginLocal();
+  });
+
   return (
     <Tab.Navigator
+      // initialRouteName={fromLogin ? 'Dashboard' : 'Account'}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           size = 25;
@@ -26,7 +33,7 @@ const BottomTabs = () => {
           if (route.name === 'Shelf') {
             iconName = focused ? 'book' : 'book';
           }
-          if (route.name === 'Tab3') {
+          if (route.name === 'Contact') {
             iconName = focused ? 'phone' : 'phone';
           }
           if (route.name === 'Account') {
@@ -49,13 +56,13 @@ const BottomTabs = () => {
         showLabel: false,
         keyboardHidesTabBar: true,
       }}>
-      <Tab.Screen name="Home" children={this.createHomeStack} />
-      <Tab.Screen name="Shelf" component={this.createShelfStack} />
-      <Tab.Screen name="Tab3" component={Tab3} />
-      {this.props.isLoggedIn ? (
-        <Tab.Screen name="Dashboard" children={this.createDrawer} />
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Shelf" component={ShelfStack} />
+      <Tab.Screen name="Contact" component={Contact} />
+      {isLoggedIn ? (
+        <Tab.Screen name="Dashboard" children={DashDrawer} />
       ) : (
-        <Tab.Screen name="Account" children={this.createAccountStack} />
+        <Tab.Screen name="Account" children={AccountStack} />
       )}
     </Tab.Navigator>
   );
@@ -67,5 +74,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  null,
+  {getLoginLocal},
 )(BottomTabs);
