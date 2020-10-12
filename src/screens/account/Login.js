@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 //import {useDispatch} from 'react-redux';
 import {connect} from 'react-redux';
 import {
@@ -15,52 +15,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {login} from '../../actions/authActions';
 
 const Login = props => {
-  const {login} = props;
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     check_textInputChange: false,
-  //     password: '',
-  //     secureTextEntry: true,
-  //   };
-  // }
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  //const dispatch = useDispatch();
-  // textInputChange = value => {
-  //   if (value.length !== 0) {
-  //     this.setState({
-  //       check_textInputChange: true,
-  //     });
-  //   } else {
-  //     this.setState({
-  //       check_textInputChange: false,
-  //     });
-  //   }
-  // };
+  const {login, navigation} = props;
 
-  // secureTextEntry = () => {
-  //   this.setState({
-  //     secureTextEntry: !this.state.secureTextEntry,
-  //   });
-  // };
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    secureTextEntry: true,
+    isLoading: false,
+  });
 
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   //setIsLoading(false);
-  //   return () => {
-  //     // Anything in here is fired on component unmount.
-  //     true;
-  //   };
-  // }, []);
+  const {email, password, secureTextEntry, isLoading} = formData;
+
+  const onChange = name => text => setFormData({...formData, [name]: text});
 
   loginAction = async () => {
-    setIsLoading(true);
-    const userLogin = await login({username, password});
+    setFormData({...formData, isLoading: true});
+    const userLogin = await login({email, password});
     if (userLogin == 'failed') {
-      setIsLoading(false);
+      setFormData({...formData, isLoading: false});
     }
   };
 
@@ -81,9 +53,8 @@ const Login = props => {
               placeholder="Your email..."
               autoCapitalize="none"
               style={styles.textInput}
-              value={username}
-              //onChangeText={text => this.textInputChange(text)}
-              onChangeText={text => setUsername(text)}
+              value={email}
+              onChangeText={onChange('email')}
             />
           </View>
 
@@ -95,16 +66,13 @@ const Login = props => {
               secureTextEntry={secureTextEntry}
               style={styles.textInput}
               value={password}
-              // onChangeText={text =>
-              //   this.setState({
-              //     password: text,
-              //   })
-              // }
-              onChangeText={text => setPassword(text)}
+              onChangeText={onChange('password')}
             />
 
             <TouchableOpacity
-              onPress={() => setSecureTextEntry(!secureTextEntry)}>
+              onPress={() =>
+                setFormData({...formData, secureTextEntry: !secureTextEntry})
+              }>
               {secureTextEntry ? (
                 <Ionicons name="md-eye-off" color="#000" size={25} />
               ) : (
@@ -116,18 +84,12 @@ const Login = props => {
 
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('Forgot Password');
+            navigation.navigate('Forgot Password');
           }}>
           <Text style={styles.forgotPass}> Forgot password ?</Text>
         </TouchableOpacity>
         <View style={styles.button}>
-          <TouchableOpacity
-            style={styles.signIn}
-            // onPress={() =>
-            //   //dispatch(login({username: username, password: password}))
-            //   props.login({username: username, password: password})
-            // }
-            onPress={loginAction}>
+          <TouchableOpacity style={styles.signIn} onPress={loginAction}>
             <Text style={styles.textSign}>Sign In</Text>
           </TouchableOpacity>
           <View style={styles.signUp}>
@@ -135,7 +97,7 @@ const Login = props => {
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
-                props.navigation.navigate('Signup');
+                navigation.navigate('Signup');
               }}>
               <Text style={styles.signUpBtnText}>Sign Up</Text>
             </TouchableOpacity>
@@ -163,12 +125,8 @@ const Login = props => {
   );
 };
 
-const mapStateToProps = state => ({
-  isLoggedIn: state.login.isLoggedIn,
-});
-
 export default connect(
-  mapStateToProps,
+  null,
   {login},
 )(Login);
 

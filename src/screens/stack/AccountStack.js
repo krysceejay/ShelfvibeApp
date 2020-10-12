@@ -5,7 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../account/Login';
 import Signup from '../account/Signup';
 import Forgotpass from '../account/Forgotpass';
-import DrawerHomeStack from '../stack/DrawerHomeStack';
+import Confirm from '../account/Confirm';
+//import DrawerHomeStack from '../stack/DrawerHomeStack';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,14 @@ const AccountStack = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Forgot Password" component={Forgotpass} />
+      <Stack.Screen
+        name="Confirm"
+        component={Confirm}
+        initialParams={{email: ''}}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

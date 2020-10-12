@@ -148,7 +148,7 @@ const DashboardSidebar = props => {
 };
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.login.isLoggedIn,
+  isLoggedIn: state.auth.isLoggedIn,
 });
 
 export default connect(
