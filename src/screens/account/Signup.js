@@ -19,39 +19,57 @@ const Signup = props => {
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
-    email: '',
-    username: '',
+    useremail: '',
+    userName: '',
     password: '',
     secureTextEntry: true,
     isLoading: false,
   });
 
+  const [errorMsg, setErrorMsg] = useState({
+    firstName: '',
+    email: '',
+    lastName: '',
+    passwordfield: '',
+    username: '',
+  });
+
   const {
     firstname,
     lastname,
-    email,
-    username,
+    useremail,
+    userName,
     password,
     secureTextEntry,
     isLoading,
   } = formData;
+
+  const {firstName, email, lastName, passwordfield, username} = errorMsg;
 
   const onChange = name => text => setFormData({...formData, [name]: text});
 
   signupAction = async () => {
     setFormData({...formData, isLoading: true});
     const userSignUp = await signup({
-      email,
+      useremail,
       firstname,
       lastname,
-      username,
+      userName,
       password,
     });
-    if (userSignUp == 'failed') {
+    if (userSignUp == 'failed' || Array.isArray(userSignUp)) {
       setFormData({...formData, isLoading: false});
+
+      if (Array.isArray(userSignUp)) {
+        const errMsges = {};
+        userSignUp.forEach(item => {
+          errMsges[item.field] = item.message;
+        });
+        setErrorMsg(errMsges);
+      }
     } else {
       navigation.navigate('Confirm', {
-        email,
+        useremail,
       });
     }
   };
@@ -75,6 +93,9 @@ const Signup = props => {
               onChangeText={onChange('firstname')}
             />
           </View>
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMessage}>{firstName}</Text>
+          </Animatable.View>
           <View style={styles.action}>
             <Ionicons name="ios-person" color="#333" size={25} />
             <TextInput
@@ -84,27 +105,36 @@ const Signup = props => {
               onChangeText={onChange('lastname')}
             />
           </View>
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMessage}>{lastName}</Text>
+          </Animatable.View>
 
           <View style={styles.action}>
             <Ionicons name="ios-mail" color="#333" size={25} />
             <TextInput
               placeholder="Your email..."
               style={styles.textInput}
-              value={email}
+              value={useremail}
               autoCapitalize="none"
-              onChangeText={onChange('email')}
+              onChangeText={onChange('useremail')}
             />
           </View>
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMessage}>{email}</Text>
+          </Animatable.View>
 
           <View style={styles.action}>
             <Ionicons name="ios-person" color="#333" size={25} />
             <TextInput
               placeholder="Your user name..."
               style={styles.textInput}
-              value={username}
-              onChangeText={onChange('username')}
+              value={userName}
+              onChangeText={onChange('userName')}
             />
           </View>
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMessage}>{username}</Text>
+          </Animatable.View>
           <View style={styles.action}>
             <Ionicons name="ios-lock" color="#333" size={25} />
             <TextInput
@@ -112,6 +142,7 @@ const Signup = props => {
               secureTextEntry={secureTextEntry}
               style={styles.textInput}
               value={password}
+              minLen
               onChangeText={onChange('password')}
             />
 
@@ -126,6 +157,9 @@ const Signup = props => {
               )}
             </TouchableOpacity>
           </View>
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMessage}>{passwordfield}</Text>
+          </Animatable.View>
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={signupAction}>
@@ -254,5 +288,9 @@ const styles = StyleSheet.create({
   signUpBtnText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 15,
+  },
+  errorMessage: {
+    fontSize: 13,
+    color: 'red',
   },
 });

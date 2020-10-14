@@ -108,10 +108,10 @@ export const logout = () => async dispatch => {
 
 //Register User
 export const signup = signupInput => async dispatch => {
-  const {firstname, lastname, email, username, password} = signupInput;
+  const {firstname, lastname, useremail, userName, password} = signupInput;
   const query = `
   mutation {
-    registerUser(input: {email: "${email}",firstName: "${firstname}",lastName: "${lastname}", passwordfield: "${password}",  username: "${username}"}){
+    registerUser(input: {email: "${useremail}",firstName: "${firstname}",lastName: "${lastname}", passwordfield: "${password}",  username: "${userName}"}){
       result{
         email
       }
@@ -127,14 +127,17 @@ export const signup = signupInput => async dispatch => {
 
   try {
     const signUpUser = await api.post('/', {query});
-    //console.log(signUpUser.data.data.registerUser);
     if (signUpUser.data.data.registerUser.successful === true) {
       dispatch({
         type: USER_SIGNUP,
       });
     } else {
-      Alert.alert('Signup Failed', 'Username or Password is incorrect');
-      return 'failed';
+      const errorMessages = signUpUser.data.data.registerUser.messages;
+      Alert.alert(
+        'Signup Failed',
+        'Please make sure you provide the required data',
+      );
+      return errorMessages;
     }
   } catch (err) {
     Alert.alert(

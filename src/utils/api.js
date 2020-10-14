@@ -1,8 +1,9 @@
 import axios from 'axios';
+import Config from 'react-native-config';
 import store from '../store';
 import {LOGOUT} from '../actions/types';
 
-const baseURL = 'http://127.0.0.1:4000/api/graphiql';
+const baseURL = Config.API_URL;
 
 const api = axios.create({
   baseURL,
