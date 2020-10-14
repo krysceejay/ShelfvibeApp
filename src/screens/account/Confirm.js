@@ -10,7 +10,7 @@ import Svg, {
 } from 'react-native-svg';
 
 const Confirm = ({route}) => {
-  const {email} = route.params;
+  const {useremail} = route.params;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -344,7 +344,7 @@ const Confirm = ({route}) => {
         <Text style={styles.textBody}>
           Kindly go to{' '}
           <Text style={{color: '#00a2cc', fontFamily: 'Nunito-SemiBold'}}>
-            {email}
+            {useremail}
           </Text>{' '}
           to verify your account.
         </Text>

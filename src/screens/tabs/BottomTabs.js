@@ -11,10 +11,8 @@ import {getLoginLocal} from '../../actions/authActions';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabs = props => {
-  const {isLoggedIn, getLoginLocal} = props;
+const BottomTabs = ({isLoggedIn, getLoginLocal}) => {
   //console.log('islogin from bottom tab: ' + isLoggedIn);
-
   useEffect(() => {
     getLoginLocal();
   });

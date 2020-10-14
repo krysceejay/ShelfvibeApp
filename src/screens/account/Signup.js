@@ -93,9 +93,11 @@ const Signup = props => {
               onChangeText={onChange('firstname')}
             />
           </View>
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMessage}>{firstName}</Text>
-          </Animatable.View>
+          {firstName == '' ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{firstName}</Text>
+            </Animatable.View>
+          )}
           <View style={styles.action}>
             <Ionicons name="ios-person" color="#333" size={25} />
             <TextInput
@@ -105,9 +107,11 @@ const Signup = props => {
               onChangeText={onChange('lastname')}
             />
           </View>
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMessage}>{lastName}</Text>
-          </Animatable.View>
+          {lastName == '' ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{lastName}</Text>
+            </Animatable.View>
+          )}
 
           <View style={styles.action}>
             <Ionicons name="ios-mail" color="#333" size={25} />
@@ -119,9 +123,11 @@ const Signup = props => {
               onChangeText={onChange('useremail')}
             />
           </View>
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMessage}>{email}</Text>
-          </Animatable.View>
+          {email == '' ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{email}</Text>
+            </Animatable.View>
+          )}
 
           <View style={styles.action}>
             <Ionicons name="ios-person" color="#333" size={25} />
@@ -132,9 +138,11 @@ const Signup = props => {
               onChangeText={onChange('userName')}
             />
           </View>
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMessage}>{username}</Text>
-          </Animatable.View>
+          {username == '' ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{username}</Text>
+            </Animatable.View>
+          )}
           <View style={styles.action}>
             <Ionicons name="ios-lock" color="#333" size={25} />
             <TextInput
@@ -157,9 +165,11 @@ const Signup = props => {
               )}
             </TouchableOpacity>
           </View>
-          <Animatable.View animation="fadeInLeft" duration={500}>
-            <Text style={styles.errorMessage}>{passwordfield}</Text>
-          </Animatable.View>
+          {passwordfield == '' ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{passwordfield}</Text>
+            </Animatable.View>
+          )}
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={signupAction}>
@@ -198,10 +208,6 @@ const Signup = props => {
     </View>
   );
 };
-
-// const mapStateToProps = state => ({
-//   isLoggedIn: state.auth.isLoggedIn,
-// });
 
 export default connect(
   null,

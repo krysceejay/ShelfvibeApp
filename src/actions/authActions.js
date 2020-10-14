@@ -142,7 +142,7 @@ export const signup = signupInput => async dispatch => {
   } catch (err) {
     Alert.alert(
       'Error',
-      'Some error occured, please check your internet connection and retry',
+      'Some error occured, please check your internet connection and retry.',
     );
     return 'failed';
   }

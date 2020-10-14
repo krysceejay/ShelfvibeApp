@@ -30,7 +30,7 @@ const AccountStack = () => {
       <Stack.Screen
         name="Confirm"
         component={Confirm}
-        initialParams={{email: ''}}
+        initialParams={{useremail: ''}}
         options={{
           headerShown: false,
         }}

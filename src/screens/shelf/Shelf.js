@@ -1,42 +1,34 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
+import {connect} from 'react-redux';
 import {
   Text,
   StyleSheet,
   View,
-  Button,
   FlatList,
   Dimensions,
   Image,
   TouchableOpacity,
 } from 'react-native';
+import Config from 'react-native-config';
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
-];
-const numColumns = 2;
+import {fetchBooks} from '../../actions/bookActions';
+
 const WIDTH = Dimensions.get('window').width;
 
-export default class Shelf extends Component {
+const Shelf = ({fetchBooks, navigation, books}) => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+      fetchBooks();
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  const numColumns = 2;
+  const imgURL = Config.IMAGE_URL;
+
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
     let totalLastRow = dataList.length - totalRows * numColumns;
@@ -46,59 +38,67 @@ export default class Shelf extends Component {
     }
     return dataList;
   };
+
   _renderItem = ({item, index}) => {
     if (item.empty) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
       <View style={styles.item}>
-        {/* <Text style={styles.itemText}>{item.key}</Text> */}
-
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate('Details');
+              navigation.navigate('Details');
             }}>
             <Image
+              source={{
+                uri: `${imgURL + item.bookcover}`,
+              }}
               style={styles.bookCover}
-              source={require('../../assets/img/Leanin.jpg')}
             />
           </TouchableOpacity>
         </View>
 
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>Think Big</Text>
-          <Text style={styles.bookAuthor}>Ben Carson, Phil James</Text>
-          <Text>
-            Added By<Text style={styles.bookAddedBy}> Diadem</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+            {item.title}
+          </Text>
+          <Text
+            style={styles.bookAuthor}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.author}
+          </Text>
+          <Text numberOfLines={1} ellipsizeMode="tail">
+            Added By
+            <Text style={styles.bookAddedBy}> {item.user.username}</Text>
           </Text>
         </View>
       </View>
     );
   };
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={this.formatData(dataList, numColumns)}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
-          showsVerticalScrollIndicator={false}
-        />
-        {/* <View style={styles.center}>
-          <Text style={styles.title}> Feeds </Text>
-          <Button
-            title="Go to Details"
-            onPress={() => {
-              this.props.navigation.navigate('Details');
-            }}
-          />
-        </View> */}
-      </View>
-    );
-  }
-}
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={formatData(books, numColumns)}
+        renderItem={_renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={numColumns}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+  );
+};
+
+const mapStateToProps = state => ({
+  books: state.book.books,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchBooks},
+)(Shelf);
 
 const styles = StyleSheet.create({
   container: {
