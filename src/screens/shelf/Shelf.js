@@ -27,7 +27,8 @@ const Shelf = ({fetchBooks, navigation, books}) => {
   }, [navigation]);
 
   const numColumns = 2;
-  const imgURL = Config.IMAGE_URL;
+  //const imgURL = Config.IMAGE_URL;
+  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
@@ -48,7 +49,9 @@ const Shelf = ({fetchBooks, navigation, books}) => {
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details');
+              navigation.navigate('Details', {
+                item,
+              });
             }}>
             <Image
               source={{

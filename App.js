@@ -11,11 +11,13 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LoadingScene from './src/screens/LoadingScene';
 import BottomTabs from './src/screens/tabs/BottomTabs';
 
 Icon.loadFont();
 Ionicons.loadFont();
+MaterialCommunityIcons.loadFont();
 
 const MyTheme = {
   ...DefaultTheme,

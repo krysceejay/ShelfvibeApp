@@ -55,6 +55,7 @@ export default class LoadingScene extends Component {
       //this.props.navigation.dispatch(StackActions.replace('Bottom Tabs'))
       4000,
     );
+    //return true;
   };
 
   render() {
@@ -66,11 +67,11 @@ export default class LoadingScene extends Component {
             duration={2200}
             style={styles.logo}
             source={require('../assets/img/logo.png')}
-            onAnimationEnd={() => {
-              this.setState({
-                loadingSpinner: true,
-              });
-            }}
+            // onAnimationEnd={() => {
+            //   this.setState({
+            //     loadingSpinner: true,
+            //   });
+            // }}
           />
         </View>
         {this.state.loadingSpinner ? (
@@ -94,7 +95,7 @@ export default class LoadingScene extends Component {
             <Text style={styles.textPrimary}>SHELF</Text>VIBE
           </Text>
         </Animated.View> */}
-        {/* <Animatable.Text
+        <Animatable.Text
           animation="tada"
           duration={2500}
           style={styles.text}
@@ -104,7 +105,7 @@ export default class LoadingScene extends Component {
             });
           }}>
           <Text style={styles.textPrimary}>SHELF</Text>VIBE
-        </Animatable.Text> */}
+        </Animatable.Text>
       </View>
     );
   }
@@ -128,13 +129,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: {
-    color: '#fff',
+    color: '#242c42',
     fontSize: 25,
     fontWeight: '600',
     marginTop: 20,
     fontFamily: 'Nunito-BoldItalic',
   },
   textPrimary: {
-    color: '#e91e63',
+    color: '#00a2cc',
   },
 });

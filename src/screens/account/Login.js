@@ -33,6 +33,8 @@ const Login = props => {
     const userLogin = await login({email, password});
     if (userLogin == 'failed') {
       setFormData({...formData, isLoading: false});
+    } else {
+      navigation.navigate('Shelf');
     }
   };
 

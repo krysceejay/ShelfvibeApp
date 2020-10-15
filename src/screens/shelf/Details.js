@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -7,98 +7,130 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
+import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import StarGroup from '../../components/StarGroup';
 import Topics from '../../components/Topics';
+import HtmlReader from '../../components/HtmlReader';
 
-export default class Details extends Component {
-  render() {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: '#fff'}}>
-        <View style={styles.container}>
-          <View style={styles.bookCoverContain}>
-            <Image
-              style={styles.bookCover}
-              source={require('../../assets/img/Leanin.jpg')}
-            />
-          </View>
-          <View style={styles.bookDetails}>
-            <Text style={styles.bookTitle}>Lean In</Text>
-            <Text style={styles.bookAuthor}>Sheryl Sandberg</Text>
-          </View>
-          <View style={styles.horizontalLine} />
-          <View style={styles.otherDetails}>
-            <View style={styles.otherTopDetails}>
-              <View style={styles.bookGenreView}>
-                <Text style={styles.topDetailsTitle}>Genre</Text>
-                <Text style={styles.bookGenre}>
-                  Biography, Adventure, Romance
-                </Text>
-              </View>
-              <View style={styles.bookStarRatingView}>
-                <Text style={styles.topDetailsTitle}>Stars</Text>
-                <StarGroup />
-                <View style={styles.starText}>
-                  <Text style={styles.starRateText}>4.5 of </Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate('Rating');
-                    }}>
-                    <View style={styles.iconContainer}>
-                      <Text style={styles.ratingText}>400 rating(s)</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <View style={styles.bookMeetingView}>
-              <Text style={styles.topDetailsTitle}>Meeting Details</Text>
-              <View style={styles.detailsGroupView}>
-                <View style={styles.detailsGroup}>
-                  <FontAwesome name="calendar" size={18} color="#373435" />
-                  <Text style={styles.detailsText}>Sat, 26 Jun 2019</Text>
-                </View>
-                <View style={styles.detailsGroup}>
-                  <FontAwesome name="clock-o" size={18} color="#373435" />
-                  <Text style={styles.detailsText}>10 am GMT</Text>
-                </View>
-              </View>
-            </View>
+const Details = ({route, navigation}) => {
+  const {item} = route.params;
+  //const imgURL = Config.IMAGE_URL;
+  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
-            <View>
-              <Topics />
-            </View>
+  const formatGenre = (item, index, arr) => {
+    let genre;
+    if (index == arr.length - 1) {
+      genre = item;
+    } else {
+      genre = item + ', ';
+    }
+    return genre;
+  };
 
-            <View style={styles.joinDiscussionView}>
-              <Text style={styles.joinDiscussionHead}>Join The Discussion</Text>
-              <TouchableOpacity onPress={() => {}}>
-                <View style={styles.chatBtn}>
-                  <FontAwesome name="comment-o" size={16} color="#00a2cc" />
-                  <Text style={styles.chatBtnText}>Chat</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View>
-              <Text style={styles.descriptionHead}>Description</Text>
-              <Text style={styles.descriptionBody}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laboru.
+  return (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{backgroundColor: '#fff'}}>
+      <View style={styles.container}>
+        <View style={styles.bookCoverContain}>
+          <Image
+            source={{
+              uri: `${imgURL + item.bookcover}`,
+            }}
+            style={styles.bookCover}
+          />
+        </View>
+        <View style={styles.bookDetails}>
+          <Text style={styles.bookTitle}>{item.title}</Text>
+          <Text style={styles.bookAuthor}>{item.author}</Text>
+        </View>
+        <View style={styles.horizontalLine} />
+        <View style={styles.otherDetails}>
+          <View style={styles.otherTopDetails}>
+            <View style={styles.bookGenreView}>
+              <Text style={styles.topDetailsTitle}>Genre</Text>
+              <Text style={styles.bookGenre}>
+                {item.genre.map(formatGenre)}
               </Text>
             </View>
+            <View style={styles.bookStarRatingView}>
+              <Text style={styles.topDetailsTitle}>Stars</Text>
+              <View style={styles.starText}>
+                <StarGroup />
+              </View>
+              <View style={styles.starText}>
+                <Text style={styles.starRateText}>4.5 of </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Rating');
+                  }}>
+                  <View style={styles.iconContainer}>
+                    <Text style={styles.ratingText}>400 rating(s)</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.bookMeetingView}>
+            {/* <Text style={styles.topDetailsTitle}>Meeting Details</Text> */}
+            <View style={styles.detailsGroupView}>
+              <View style={styles.detailsGroup}>
+                <MaterialCommunityIcons
+                  name="cards-club"
+                  size={20}
+                  color="#373435"
+                />
+                {item.public ? (
+                  <View style={styles.detailsTextPublic}>
+                    <Text>public</Text>
+                  </View>
+                ) : (
+                  <View style={styles.detailsTextPrivate}>
+                    <Text>private</Text>
+                  </View>
+                )}
+              </View>
+              {/* <View style={styles.detailsGroup}>
+                <FontAwesome name="clock-o" size={18} color="#373435" />
+                <Text style={styles.detailsText}>10 am GMT</Text>
+              </View> */}
+            </View>
+          </View>
+
+          <View>
+            <Topics />
+          </View>
+
+          <View style={styles.joinDiscussionView}>
+            <Text style={styles.joinDiscussionHead}>Join The Discussion</Text>
+            <TouchableOpacity onPress={() => {}}>
+              <View style={styles.chatBtn}>
+                <FontAwesome name="comment-o" size={16} color="#00a2cc" />
+                <Text style={styles.chatBtnText}>Chat</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Text style={styles.descriptionHead}>Description</Text>
+            <HtmlReader html={item.description} />
+            {/* <Text style={styles.descriptionBody}>{item.description}</Text> */}
           </View>
         </View>
-      </ScrollView>
-    );
-  }
-}
+      </View>
+    </ScrollView>
+  );
+};
+
+export default connect(
+  null,
+  null,
+)(Details);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -133,6 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 15,
+    paddingHorizontal: 15,
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -167,20 +200,21 @@ const styles = StyleSheet.create({
   bookGenreView: {
     flex: 1,
     //backgroundColor: 'purple',
-    alignItems: 'center',
+    //alignItems: 'center',
   },
   bookGenre: {
     fontFamily: 'Nunito-Bold',
     fontSize: 15,
-    textAlign: 'center',
+    //textAlign: 'center',
     //color: '#444444',
   },
 
   bookStarRatingView: {
     flex: 1,
     //justifyContent: 'center',
-    alignItems: 'center',
+    //alignItems: 'center',
     //backgroundColor: 'green',
+    paddingLeft: 20,
   },
 
   bookMeetingView: {
@@ -217,6 +251,7 @@ const styles = StyleSheet.create({
   starText: {
     flexDirection: 'row',
     marginVertical: 4,
+    width: '70%',
   },
   starRateText: {
     fontFamily: 'Nunito-Bold',
@@ -231,10 +266,23 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginRight: 15,
   },
-  detailsText: {
+  detailsTextPublic: {
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
     marginLeft: 5,
+    borderRadius: 5,
+    backgroundColor: '#d4edda',
+    color: '#155724',
+    padding: 4,
+  },
+  detailsTextPrivate: {
+    fontFamily: 'Nunito-Bold',
+    fontSize: 14,
+    marginLeft: 5,
+    borderRadius: 5,
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
+    padding: 4,
   },
   joinDiscussionView: {
     backgroundColor: '#e6f6fa',
