@@ -18,8 +18,8 @@ import HtmlReader from '../../components/HtmlReader';
 
 const Details = ({route, navigation}) => {
   const {item} = route.params;
-  //const imgURL = Config.IMAGE_URL;
-  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+  const imgURL = Config.IMAGE_URL;
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   const formatGenre = (item, index, arr) => {
     let genre;
@@ -58,51 +58,56 @@ const Details = ({route, navigation}) => {
               </Text>
             </View>
             <View style={styles.bookStarRatingView}>
-              <Text style={styles.topDetailsTitle}>Stars</Text>
+              <Text style={styles.topDetailsTitle}>Ratings</Text>
               <View style={styles.starText}>
                 <StarGroup />
-              </View>
-              <View style={styles.starText}>
-                <Text style={styles.starRateText}>4.5 of </Text>
+
+                <Text
+                  style={styles.starRateText}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  4.5 of 400
+                </Text>
+
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('Rating');
                   }}>
                   <View style={styles.iconContainer}>
-                    <Text style={styles.ratingText}>400 rating(s)</Text>
+                    <Text style={styles.ratingText}>view more</Text>
                   </View>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <View style={styles.bookMeetingView}>
-            {/* <Text style={styles.topDetailsTitle}>Meeting Details</Text> */}
-            <View style={styles.detailsGroupView}>
-              <View style={styles.detailsGroup}>
-                <MaterialCommunityIcons
-                  name="cards-club"
-                  size={20}
-                  color="#373435"
-                />
-                {item.public ? (
-                  <View style={styles.detailsTextPublic}>
-                    <Text>public</Text>
-                  </View>
-                ) : (
-                  <View style={styles.detailsTextPrivate}>
-                    <Text>private</Text>
-                  </View>
-                )}
-              </View>
-              {/* <View style={styles.detailsGroup}>
+            <View style={styles.bookMeetingView}>
+              {/* <Text style={styles.topDetailsTitle}>Meeting Details</Text> */}
+              <View style={styles.detailsGroupView}>
+                <View style={styles.detailsGroup}>
+                  <MaterialCommunityIcons
+                    name="cards-club"
+                    size={25}
+                    color="#373435"
+                  />
+                  {item.public ? (
+                    <View style={styles.detailsTextPublic}>
+                      <Text>public</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.detailsTextPrivate}>
+                      <Text>private</Text>
+                    </View>
+                  )}
+                </View>
+                {/* <View style={styles.detailsGroup}>
                 <FontAwesome name="clock-o" size={18} color="#373435" />
                 <Text style={styles.detailsText}>10 am GMT</Text>
               </View> */}
+              </View>
             </View>
           </View>
 
           <View>
-            <Topics />
+            <Topics dataList={item.topics} />
           </View>
 
           <View style={styles.joinDiscussionView}>
@@ -110,14 +115,17 @@ const Details = ({route, navigation}) => {
             <TouchableOpacity onPress={() => {}}>
               <View style={styles.chatBtn}>
                 <FontAwesome name="comment-o" size={16} color="#00a2cc" />
-                <Text style={styles.chatBtnText}>Chat</Text>
+                <Text style={styles.chatBtnText}>Join</Text>
               </View>
             </TouchableOpacity>
           </View>
 
           <View>
             <Text style={styles.descriptionHead}>Description</Text>
-            <HtmlReader html={item.description} />
+            <HtmlReader
+              html={item.description}
+              style={styles.descriptionBody}
+            />
             {/* <Text style={styles.descriptionBody}>{item.description}</Text> */}
           </View>
         </View>
@@ -191,6 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 15,
+    //backgroundColor: 'red',
   },
   topDetailsTitle: {
     fontFamily: 'Nunito-Regular',
@@ -242,16 +251,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 5,
     paddingVertical: 3,
-    //marginVertical: 7,
+    marginVertical: 3,
   },
   ratingText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 11,
+    textAlign: 'center',
   },
   starText: {
-    flexDirection: 'row',
+    //flexDirection: 'column',
     marginVertical: 4,
-    width: '70%',
+    width: '75%',
+    //backgroundColor: 'red',
   },
   starRateText: {
     fontFamily: 'Nunito-Bold',
@@ -259,12 +270,13 @@ const styles = StyleSheet.create({
   },
   detailsGroupView: {
     flexDirection: 'row',
-    //justifyContent: 'space-around',
+    justifyContent: 'flex-end',
+    //backgroundColor: 'red',
   },
   detailsGroup: {
     flexDirection: 'row',
     marginVertical: 5,
-    marginRight: 15,
+    //marginRight: 15,
   },
   detailsTextPublic: {
     fontFamily: 'Nunito-Bold',
@@ -285,19 +297,20 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   joinDiscussionView: {
-    backgroundColor: '#e6f6fa',
-    borderRadius: 5,
-    borderColor: '#ccecf5',
-    borderWidth: 1,
-    padding: 20,
-    margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    //backgroundColor: '#e6f6fa',
+    //borderRadius: 5,
+    //borderColor: '#ccecf5',
+    //borderWidth: 1,
+    //padding: 20,
+    marginVertical: 30,
+    alignItems: 'flex-start',
+    //justifyContent: 'center',
+    //width: 300,
   },
   joinDiscussionHead: {
     fontFamily: 'Nunito-Bold',
     fontSize: 16,
-    textAlign: 'center',
+    //textAlign: 'center',
     marginBottom: 10,
   },
   chatBtn: {
@@ -307,8 +320,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    //width: '25%',
     alignItems: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
   },
   chatBtnText: {
     fontFamily: 'Nunito-Regular',

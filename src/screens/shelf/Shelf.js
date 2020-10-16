@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   Text,
@@ -12,23 +12,30 @@ import {
 import Config from 'react-native-config';
 
 import {fetchBooks} from '../../actions/bookActions';
+import Skeleton from '../../components/Skeleton';
 
-const WIDTH = Dimensions.get('window').width;
+const {width} = Dimensions.get('window');
 
 const Shelf = ({fetchBooks, navigation, books}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
       // The screen is focused
       // Call any action
-      fetchBooks();
+      const getShelf = await fetchBooks();
+      if (getShelf !== 'failed') {
+        setIsLoading(false);
+      }
     });
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
   const numColumns = 2;
-  //const imgURL = Config.IMAGE_URL;
-  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+  const imgURL = Config.IMAGE_URL;
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
@@ -83,13 +90,17 @@ const Shelf = ({fetchBooks, navigation, books}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={formatData(books, numColumns)}
-        renderItem={_renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={numColumns}
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <Skeleton />
+      ) : (
+        <FlatList
+          data={formatData(books, numColumns)}
+          renderItem={_renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={numColumns}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
@@ -122,7 +133,7 @@ const styles = StyleSheet.create({
     //backgroundColor: '#3232ff',
     alignItems: 'center',
     justifyContent: 'center',
-    height: WIDTH / 1.4,
+    height: width / 1.4,
     textAlign: 'center',
   },
   bookCoverContain: {

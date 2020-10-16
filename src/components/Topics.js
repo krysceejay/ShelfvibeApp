@@ -1,75 +1,64 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Text, StyleSheet, View, FlatList, Dimensions} from 'react-native';
-import StarGroup from './StarGroup';
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
-];
-const WIDTH = Dimensions.get('window').width;
+const {width} = Dimensions.get('window');
 
-export default class AllRatings extends Component {
-  _renderItem = () => {
+const renderSwitch = param => {
+  switch (param) {
+    case 0:
+      return (
+        <Text style={[styles.reviewStatus, {color: '#818182'}]}>
+          coming soon
+        </Text>
+      );
+    case 1:
+      return (
+        <Text style={[styles.reviewStatus, {color: '#155724'}]}>on-going</Text>
+      );
+    case 2:
+      return (
+        <Text style={[styles.reviewStatus, {color: '#721c24'}]}>done</Text>
+      );
+    default:
+      break;
+  }
+};
+
+const Topics = ({dataList}) => {
+  _renderItem = ({item, index, arr}) => {
     return (
       <View style={styles.item}>
-        <View style={styles.reviewTop}>
-          <StarGroup />
-          <Text style={styles.reviewDate}>10/05/2020</Text>
-        </View>
         <View>
-          <Text style={styles.reviewText}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in.
-          </Text>
+          <Text style={styles.reviewText}>{item.topicText}</Text>
         </View>
-        <Text style={styles.reviewUser}>By StayAlive</Text>
+        {renderSwitch(item.topicStatus)}
       </View>
     );
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.descriptionHead}>Topics</Text>
-        <FlatList
-          data={dataList}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal={true}
-          //showsVerticalScrollIndicator={false}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.descriptionHead}>Topics</Text>
+      <FlatList
+        data={dataList}
+        renderItem={_renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal={true}
+        ListEmptyComponent={() => <Text>No topic yet</Text>}
+        //showsVerticalScrollIndicator={false}
+      />
+    </View>
+  );
+};
+
+export default Topics;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 15,
+    //paddingVertical: 15,
     //paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
   },
   reviewTitle: {
     fontFamily: 'Nunito-SemiBold',
@@ -81,11 +70,11 @@ const styles = StyleSheet.create({
     //flex: 1,
     marginVertical: 10,
     padding: 15,
-    width: WIDTH - 100,
+    width: width - 120,
     marginRight: 20,
-
-    backgroundColor: '#f4f4f4',
+    borderWidth: 1,
     borderRadius: 5,
+    borderColor: '#ccc',
   },
   reviewTop: {
     flexDirection: 'row',
@@ -102,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
   },
-  reviewUser: {
+  reviewStatus: {
     textAlign: 'right',
     fontFamily: 'Nunito-Italic',
     fontSize: 12,

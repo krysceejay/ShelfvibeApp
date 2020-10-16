@@ -13,10 +13,9 @@ import {
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {login} from '../../actions/authActions';
+import Loader from '../../components/Loader';
 
-const Login = props => {
-  const {login, navigation} = props;
-
+const Login = ({login, navigation}) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -107,9 +106,7 @@ const Login = props => {
         </View>
       </Animatable.View>
       {isLoading ? (
-        <ActivityIndicator
-          size={Platform.OS === 'ios' ? 'large' : 70}
-          color="#ccc"
+        <Loader
           style={{
             position: 'absolute',
             left: 0,

@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, Linking} from 'react-native';
 import HTML from 'react-native-render-html';
 
-const HtmlReader = ({html}) => {
+const HtmlReader = ({html, style}) => {
   return (
     <HTML
       html={html}
@@ -13,6 +13,7 @@ const HtmlReader = ({html}) => {
       tagsStyles={{
         a: {textDecorationLine: 'none'},
       }}
+      baseFontStyle={style}
     />
   );
 };

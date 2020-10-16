@@ -19,6 +19,10 @@ export const fetchBooks = () => async dispatch => {
             user{
               username
             }
+            topics{
+              topicText
+              topicStatus
+            }
           }
         }
     `;
@@ -34,5 +38,6 @@ export const fetchBooks = () => async dispatch => {
       'Error',
       'Some error occured, please check your internet connection and retry.',
     );
+    return 'failed';
   }
 };

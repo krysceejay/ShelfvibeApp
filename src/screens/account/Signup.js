@@ -6,13 +6,13 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {signup} from '../../actions/authActions';
+import Loader from '../../components/Loader';
 
 const Signup = props => {
   const {signup, navigation} = props;
@@ -189,9 +189,7 @@ const Signup = props => {
         </KeyboardAwareScrollView>
       </Animatable.View>
       {isLoading ? (
-        <ActivityIndicator
-          size={Platform.OS === 'ios' ? 'large' : 70}
-          color="#ccc"
+        <Loader
           style={{
             position: 'absolute',
             left: 0,
