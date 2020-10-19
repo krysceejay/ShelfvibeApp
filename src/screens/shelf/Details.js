@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -20,8 +20,9 @@ const Details = ({route, navigation}) => {
   const {item} = route.params;
   const imgURL = Config.IMAGE_URL;
   //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+  let totalRatings = 0;
 
-  const formatGenre = (item, index, arr) => {
+  formatGenre = (item, index, arr) => {
     let genre;
     if (index == arr.length - 1) {
       genre = item;
@@ -30,6 +31,23 @@ const Details = ({route, navigation}) => {
     }
     return genre;
   };
+
+  sumRatings = item => {
+    totalRatings += parseInt(item.rating);
+  };
+  item.ratings.forEach(sumRatings);
+
+  calRating = () => {
+    let actualRating;
+    if (item.ratings.length == 0) {
+      actualRating = '0.0';
+    } else {
+      actualRating = (totalRatings / item.ratings.length).toFixed(1);
+    }
+    return actualRating;
+  };
+
+  const data = {ratingActual: calRating(), numberOfRev: item.ratings.length};
 
   return (
     <ScrollView
@@ -60,18 +78,21 @@ const Details = ({route, navigation}) => {
             <View style={styles.bookStarRatingView}>
               <Text style={styles.topDetailsTitle}>Ratings</Text>
               <View style={styles.starText}>
-                <StarGroup />
+                <StarGroup rating={data.ratingActual} />
 
                 <Text
                   style={styles.starRateText}
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  4.5 of 400
+                  {data.ratingActual} of {data.numberOfRev}
                 </Text>
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('Rating');
+                    navigation.navigate('Rating', {
+                      data,
+                      item,
+                    });
                   }}>
                   <View style={styles.iconContainer}>
                     <Text style={styles.ratingText}>view more</Text>
@@ -198,7 +219,7 @@ const styles = StyleSheet.create({
   otherTopDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 15,
+    marginTop: 15,
     //backgroundColor: 'red',
   },
   topDetailsTitle: {
@@ -238,7 +259,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-SemiBoldItalic',
     fontSize: 18,
     color: '#444444',
-    marginVertical: 10,
+    marginVertical: 5,
   },
   descriptionBody: {
     fontFamily: 'Nunito-Regular',

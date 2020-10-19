@@ -32,7 +32,7 @@ export default class AllRatings extends Component {
     return (
       <View style={styles.item}>
         <View style={styles.reviewTop}>
-          <StarGroup />
+          <StarGroup rating="3.5" />
           <Text style={styles.reviewDate}>10/05/2020</Text>
         </View>
         <View>

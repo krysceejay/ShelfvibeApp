@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,163 +6,145 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  FlatList,
 } from 'react-native';
 import StarGroup from '../../components/StarGroup';
 import ProgressBar from '../../components/ProgressBar';
 import BorderButton from '../../components/BorderButton';
 import RatingStarGroup from '../../components/RatingStarGroup';
 
-export default class Rating extends Component {
+const Rating = ({route, navigation}) => {
+  const {data, item} = route.params;
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
         <View style={styles.reviewTop}>
-          <StarGroup />
-          <Text style={styles.reviewDate}>10/05/2020</Text>
+          <StarGroup rating={item.rating.toString()} />
+          <Text style={styles.reviewDate}>{item.updatedAt}</Text>
         </View>
         <View>
-          <Text style={styles.reviewText}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in.
-          </Text>
+          <Text style={styles.reviewText}>{item.comment}</Text>
         </View>
-        <Text style={styles.reviewUser}>By StayAlive</Text>
+        <Text style={styles.reviewUser}>By {item.user.username}</Text>
       </View>
     );
   };
-  render() {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: '#fff'}}>
-        <View style={styles.container}>
-          <View style={styles.ratingView}>
-            <View style={styles.ratingStats}>
-              <View style={styles.ratingNumStar}>
-                <Text style={styles.ratingBigNum}>4.5</Text>
 
-                <StarGroup />
+  return (
+    <View style={styles.container}>
+      <FlatList
+        ListHeaderComponent={
+          <View>
+            <View style={styles.ratingView}>
+              <View style={styles.ratingStats}>
+                <View style={styles.ratingNumStar}>
+                  <Text style={styles.ratingBigNum}>4.5</Text>
 
-                <Text style={styles.ratingSmallNum}>400</Text>
+                  <StarGroup rating={data.ratingActual} />
+
+                  <Text style={styles.ratingSmallNum}>{data.numberOfRev}</Text>
+                </View>
+                <View style={styles.ratingMetrics}>
+                  <Text style={styles.ratingMetricsSingleText}>5</Text>
+
+                  <Text style={styles.ratingMetricsSingleText}>4</Text>
+                  <Text style={styles.ratingMetricsSingleText}>3</Text>
+                  <Text style={styles.ratingMetricsSingleText}>2</Text>
+                  <Text style={styles.ratingMetricsSingleText}>1</Text>
+                </View>
               </View>
-              <View style={styles.ratingMetrics}>
-                <Text style={styles.ratingMetricsSingleText}>5</Text>
-
-                <Text style={styles.ratingMetricsSingleText}>4</Text>
-                <Text style={styles.ratingMetricsSingleText}>3</Text>
-                <Text style={styles.ratingMetricsSingleText}>2</Text>
-                <Text style={styles.ratingMetricsSingleText}>1</Text>
+              <View style={styles.ratingProgress}>
+                <ProgressBar percent={100} />
+                <ProgressBar percent={80} />
+                <ProgressBar percent={60} />
+                <ProgressBar percent={40} />
+                <ProgressBar percent={20} />
               </View>
             </View>
-            <View style={styles.ratingProgress}>
-              <ProgressBar percent={100} />
-              <ProgressBar percent={80} />
-              <ProgressBar percent={60} />
-              <ProgressBar percent={40} />
-              <ProgressBar percent={20} />
-            </View>
-          </View>
-          <View style={styles.ratingActionView}>
-            <View style={{alignSelf: 'center', marginVertical: 15}}>
-              <RatingStarGroup />
-            </View>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                borderColor: '#ccc',
-                borderWidth: 2,
-              }}>
-              <TextInput
-                multiline
-                numberOfLines={2}
-                editable
-                placeholder="Review comment"
-                //maxLength={40}
+            <View style={styles.ratingActionView}>
+              <View style={{alignSelf: 'center', marginVertical: 15}}>
+                <RatingStarGroup />
+              </View>
+              <View
                 style={{
                   backgroundColor: '#fff',
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  fontSize: 15,
-                  color: '#333',
-                }}
-              />
-            </View>
-            <TouchableOpacity onPress={() => {}}>
-              <View style={styles.submit}>
-                <Text style={styles.submitText}>Submit</Text>
+                  borderColor: '#ccc',
+                  borderWidth: 2,
+                }}>
+                <TextInput
+                  multiline
+                  numberOfLines={3}
+                  editable
+                  placeholder="Review comment"
+                  //maxLength={40}
+                  style={{
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    fontSize: 15,
+                    color: '#333',
+                  }}
+                />
               </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.reviewView}>
+              <TouchableOpacity onPress={() => {}}>
+                <View style={styles.submit}>
+                  <Text style={styles.submitText}>Submit</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
             <Text style={styles.reviewTitle}>Reviews</Text>
-
-            <View style={styles.item}>
-              <View style={styles.reviewTop}>
-                <StarGroup />
-                <Text style={styles.reviewDate}>10/05/2020</Text>
-              </View>
-              <View>
-                <Text style={styles.reviewText}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in.
-                </Text>
-              </View>
-              <Text style={styles.reviewUser}>By StayAlive</Text>
-            </View>
-            <View style={styles.item}>
-              <View style={styles.reviewTop}>
-                <StarGroup />
-                <Text style={styles.reviewDate}>10/05/2020</Text>
-              </View>
-              <View>
-                <Text style={styles.reviewText}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                </Text>
-              </View>
-              <Text style={styles.reviewUser}>By StayAlive</Text>
-            </View>
-            <View style={styles.item}>
-              <View style={styles.reviewTop}>
-                <StarGroup />
-                <Text style={styles.reviewDate}>10/05/2020</Text>
-              </View>
-              <View>
-                <Text style={styles.reviewText}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                </Text>
-              </View>
-              <Text style={styles.reviewUser}>By StayAlive</Text>
-            </View>
-
-            {/* <TouchableOpacity onPress={() => {}}>
-              <View style={styles.viewAll}>
-                <Text style={styles.viewAllText}>View All</Text>
-              </View>
-            </TouchableOpacity> */}
-            <BorderButton
-              onpress={() => {
-                this.props.navigation.navigate('All Ratings');
-              }}
-              text="View All"
-            />
           </View>
-        </View>
-      </ScrollView>
-    );
-  }
-}
+        }
+        data={item.ratings}
+        renderItem={_renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={() => <Text>No review yet</Text>}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+
+    // <ScrollView
+    //   showsVerticalScrollIndicator={false}
+    //   style={{backgroundColor: '#fff'}}>
+    //   <View style={styles.container}>
+
+    //     <View style={styles.reviewView}>
+    //       <Text style={styles.reviewTitle}>Reviews</Text>
+
+    //       {/* <FlatList
+    //       ListHeaderComponent={
+
+    //       }
+    //         data={item.ratings}
+    //         renderItem={_renderItem}
+    //         keyExtractor={(item, index) => index.toString()}
+    //         ListEmptyComponent={() => <Text>No review yet</Text>}
+    //         showsVerticalScrollIndicator={false}
+    //       /> */}
+
+    //       {/* <TouchableOpacity onPress={() => {}}>
+    //           <View style={styles.viewAll}>
+    //             <Text style={styles.viewAllText}>View All</Text>
+    //           </View>
+    //         </TouchableOpacity> */}
+    //       <BorderButton
+    //         onpress={() => {
+    //           this.props.navigation.navigate('All Ratings');
+    //         }}
+    //         text="View All"
+    //       />
+    //     </View>
+    //   </View>
+    // </ScrollView>
+  );
+};
+
+export default Rating;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#fff',
+    backgroundColor: '#fff',
     padding: 20,
 
     //paddingHorizontal: 10,

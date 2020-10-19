@@ -23,6 +23,14 @@ export const fetchBooks = () => async dispatch => {
               topicText
               topicStatus
             }
+            ratings{
+              comment
+              rating
+              updatedAt
+              user{
+                username
+              }
+            }
           }
         }
     `;

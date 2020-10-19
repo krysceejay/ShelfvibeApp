@@ -3,7 +3,7 @@ import {Text, StyleSheet, View, FlatList, Dimensions} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
-const renderSwitch = param => {
+renderSwitch = param => {
   switch (param) {
     case 0:
       return (
