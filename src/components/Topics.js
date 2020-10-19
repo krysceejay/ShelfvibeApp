@@ -44,7 +44,9 @@ const Topics = ({dataList}) => {
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         horizontal={true}
-        ListEmptyComponent={() => <Text>No topic yet</Text>}
+        ListEmptyComponent={() => (
+          <Text style={styles.reviewText}>No topic yet</Text>
+        )}
         //showsVerticalScrollIndicator={false}
       />
     </View>

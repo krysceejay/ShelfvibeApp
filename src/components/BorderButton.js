@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 3.0,
+    elevation: 2,
   },
   viewAllText: {
     color: '#fff',

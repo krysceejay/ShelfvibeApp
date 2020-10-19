@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ScrollView,
   TextInput,
   FlatList,
 } from 'react-native';
@@ -15,6 +14,7 @@ import RatingStarGroup from '../../components/RatingStarGroup';
 
 const Rating = ({route, navigation}) => {
   const {data, item} = route.params;
+  let progress = [];
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
@@ -30,6 +30,30 @@ const Rating = ({route, navigation}) => {
     );
   };
 
+  ratingPercent = rate => {
+    let convertToPercent;
+    if (item.ratings.map(getRatings).length == 0) {
+      convertToPercent = 0;
+    } else {
+      convertToPercent =
+        (countOccurrences(item.ratings.map(getRatings), rate) /
+          data.numberOfRev) *
+        100;
+    }
+    return convertToPercent;
+  };
+
+  getRatings = item => {
+    return item.rating;
+  };
+
+  const countOccurrences = (arr, val) =>
+    arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+
+  for (let i = 5; i > 0; i--) {
+    progress.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -38,7 +62,7 @@ const Rating = ({route, navigation}) => {
             <View style={styles.ratingView}>
               <View style={styles.ratingStats}>
                 <View style={styles.ratingNumStar}>
-                  <Text style={styles.ratingBigNum}>4.5</Text>
+                  <Text style={styles.ratingBigNum}>{data.ratingActual}</Text>
 
                   <StarGroup rating={data.ratingActual} />
 
@@ -53,13 +77,7 @@ const Rating = ({route, navigation}) => {
                   <Text style={styles.ratingMetricsSingleText}>1</Text>
                 </View>
               </View>
-              <View style={styles.ratingProgress}>
-                <ProgressBar percent={100} />
-                <ProgressBar percent={80} />
-                <ProgressBar percent={60} />
-                <ProgressBar percent={40} />
-                <ProgressBar percent={20} />
-              </View>
+              <View style={styles.ratingProgress}>{progress}</View>
             </View>
             <View style={styles.ratingActionView}>
               <View style={{alignSelf: 'center', marginVertical: 15}}>
@@ -95,11 +113,24 @@ const Rating = ({route, navigation}) => {
             <Text style={styles.reviewTitle}>Reviews</Text>
           </View>
         }
-        data={item.ratings}
+        data={item.ratings.slice(0, 3)}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
-        ListEmptyComponent={() => <Text>No review yet</Text>}
+        ListEmptyComponent={() => (
+          <Text style={styles.reviewText}>No review yet</Text>
+        )}
         showsVerticalScrollIndicator={false}
+        ListFooterComponent={
+          <BorderButton
+            onpress={() => {
+              navigation.navigate('All Ratings');
+            }}
+            text="View All"
+          />
+        }
+        ListFooterComponentStyle={{
+          paddingVertical: 15,
+        }}
       />
     </View>
 
@@ -122,11 +153,11 @@ const Rating = ({route, navigation}) => {
     //         showsVerticalScrollIndicator={false}
     //       /> */}
 
-    //       {/* <TouchableOpacity onPress={() => {}}>
-    //           <View style={styles.viewAll}>
-    //             <Text style={styles.viewAllText}>View All</Text>
-    //           </View>
-    //         </TouchableOpacity> */}
+    // {/* <TouchableOpacity onPress={() => {}}>
+    //     <View style={styles.viewAll}>
+    //       <Text style={styles.viewAllText}>View All</Text>
+    //     </View>
+    //   </TouchableOpacity> */}
     //       <BorderButton
     //         onpress={() => {
     //           this.props.navigation.navigate('All Ratings');
