@@ -26,6 +26,7 @@ export const getLoginLocal = () => async dispatch => {
     const storedData = await AsyncStorage.getItem('loginData');
     const storedDataParse = JSON.parse(storedData);
     if (storedDataParse !== null) {
+      //setAuthToken(storedDataParse.token);
       dispatch({
         type: STILL_LOGGEDIN,
         payload: storedDataParse,

@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   isLoggedIn: false,
-  token: '',
+  token: null,
   user: null,
   //isLoading: false,
 };

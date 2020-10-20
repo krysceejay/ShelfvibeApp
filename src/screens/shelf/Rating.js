@@ -91,7 +91,7 @@ const Rating = ({route, navigation}) => {
                 }}>
                 <TextInput
                   multiline
-                  numberOfLines={3}
+                  numberOfLines={2}
                   editable
                   placeholder="Review comment"
                   //maxLength={40}
@@ -104,11 +104,13 @@ const Rating = ({route, navigation}) => {
                   }}
                 />
               </View>
-              <TouchableOpacity onPress={() => {}}>
-                <View style={styles.submit}>
-                  <Text style={styles.submitText}>Submit</Text>
-                </View>
-              </TouchableOpacity>
+              <View style={{alignItems: 'flex-start'}}>
+                <TouchableOpacity onPress={() => {}}>
+                  <View style={styles.submit}>
+                    <Text style={styles.submitText}>Submit</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
             <Text style={styles.reviewTitle}>Reviews</Text>
           </View>
@@ -121,52 +123,22 @@ const Rating = ({route, navigation}) => {
         )}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
-          <BorderButton
-            onpress={() => {
-              navigation.navigate('All Ratings');
-            }}
-            text="View All"
-          />
+          item.ratings.length > 3 && (
+            <BorderButton
+              onpress={() => {
+                navigation.navigate('All Ratings', {
+                  rating: item.ratings,
+                });
+              }}
+              text="View All"
+            />
+          )
         }
         ListFooterComponentStyle={{
           paddingVertical: 15,
         }}
       />
     </View>
-
-    // <ScrollView
-    //   showsVerticalScrollIndicator={false}
-    //   style={{backgroundColor: '#fff'}}>
-    //   <View style={styles.container}>
-
-    //     <View style={styles.reviewView}>
-    //       <Text style={styles.reviewTitle}>Reviews</Text>
-
-    //       {/* <FlatList
-    //       ListHeaderComponent={
-
-    //       }
-    //         data={item.ratings}
-    //         renderItem={_renderItem}
-    //         keyExtractor={(item, index) => index.toString()}
-    //         ListEmptyComponent={() => <Text>No review yet</Text>}
-    //         showsVerticalScrollIndicator={false}
-    //       /> */}
-
-    // {/* <TouchableOpacity onPress={() => {}}>
-    //     <View style={styles.viewAll}>
-    //       <Text style={styles.viewAllText}>View All</Text>
-    //     </View>
-    //   </TouchableOpacity> */}
-    //       <BorderButton
-    //         onpress={() => {
-    //           this.props.navigation.navigate('All Ratings');
-    //         }}
-    //         text="View All"
-    //       />
-    //     </View>
-    //   </View>
-    // </ScrollView>
   );
 };
 
@@ -266,11 +238,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   ratingActionView: {
+    //flexDirection: 'column',
     marginVertical: 30,
+    //alignItems: 'flex-start',
   },
   submit: {
     backgroundColor: '#242c42',
-    width: '30%',
+    width: 100,
     marginTop: 15,
     borderRadius: 5,
     padding: 5,

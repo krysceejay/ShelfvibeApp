@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,35 +9,35 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {AuthContext} from '../../utils/context';
+import {getUserBooks} from '../../actions/bookActions';
+import Skeleton from '../../components/Skeleton';
+import Empty from '../../components/Empty';
+import BorderButton from '../../components/BorderButton';
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
-];
-const numColumns = 2;
-const WIDTH = Dimensions.get('window').width;
+const {width} = Dimensions.get('window');
 
-export default class ManageShelf extends Component {
+const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const user = useContext(AuthContext);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getUserShelf = await getUserBooks(user.id);
+      if (getUserShelf !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const numColumns = 2;
+  //const imgURL = Config.IMAGE_URL;
+  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
     let totalLastRow = dataList.length - totalRows * numColumns;
@@ -53,20 +53,28 @@ export default class ManageShelf extends Component {
     }
     return (
       <View style={styles.item}>
-        {/* <Text style={styles.itemText}>{item.key}</Text> */}
         <View style={styles.bookCoverContain}>
           <Image
+            source={{
+              uri: `${imgURL + item.bookcover}`,
+            }}
             style={styles.bookCover}
-            source={require('../../assets/img/playbigger.jpg')}
           />
         </View>
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>Think Big</Text>
-          <Text style={styles.bookAuthor}>Ben Carson, Phil James</Text>
+          <Text style={styles.bookTitle} numberOfLines={1} ellipsizeMode="tail">
+            {item.title}
+          </Text>
+          <Text
+            style={styles.bookAuthor}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.author}
+          </Text>
           <View style={styles.actionRow}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('BookTopic');
+                navigation.navigate('BookTopic');
               }}>
               <View style={styles.iconContainer}>
                 <FontAwesome name="book" size={16} color="#fff" />
@@ -75,7 +83,7 @@ export default class ManageShelf extends Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Members');
+                navigation.navigate('Members');
               }}>
               <View style={styles.iconContainer}>
                 <FontAwesome name="users" size={16} color="#fff" />
@@ -86,20 +94,52 @@ export default class ManageShelf extends Component {
       </View>
     );
   };
-  render() {
-    return (
-      <View style={styles.container}>
+
+  return (
+    <View style={styles.container}>
+      {isLoading ? (
+        <Skeleton />
+      ) : (
         <FlatList
-          data={this.formatData(dataList, numColumns)}
-          renderItem={this._renderItem}
+          data={formatData(userBooks, numColumns)}
+          renderItem={_renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Empty />
+              <Text style={styles.textBody}>
+                Looks like you've not added a book.
+              </Text>
+              <BorderButton
+                onpress={() => {
+                  navigation.navigate('AddShelf');
+                }}
+                text="Add a Book"
+              />
+            </View>
+          )}
         />
-      </View>
-    );
-  }
-}
+      )}
+    </View>
+  );
+};
+
+const mapStateToProps = state => ({
+  userBooks: state.book.userBooks,
+});
+
+export default connect(
+  mapStateToProps,
+  {getUserBooks},
+)(ManageShelf);
 
 const styles = StyleSheet.create({
   container: {
@@ -111,7 +151,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: WIDTH / 1.4,
+    height: width / 1.4,
     textAlign: 'center',
 
     borderColor: '#ccc',
@@ -132,6 +172,7 @@ const styles = StyleSheet.create({
   bookDetails: {
     //alignItems: 'center',
     padding: 5,
+    width: '80%',
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -148,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   iconContainer: {
     borderRadius: 30,
@@ -170,5 +211,11 @@ const styles = StyleSheet.create({
   itemInvisible: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
+  },
+  textBody: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 10,
   },
 });

@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_BOOKS} from './types';
+import {FETCH_BOOKS, USER_BOOKS} from './types';
 import api from '../utils/api';
 
 export const fetchBooks = () => async dispatch => {
@@ -49,3 +49,71 @@ export const fetchBooks = () => async dispatch => {
     return 'failed';
   }
 };
+
+export const getUserBooks = id => async dispatch => {
+  const query = `
+      query {
+        user(id: ${id}){
+          books{
+            title
+            author
+            bookcover
+          }
+        }
+
+      }
+  `;
+
+  try {
+    const userBooks = await api.post('/', {query});
+    if (userBooks.data.data.user !== null) {
+      dispatch({
+        type: USER_BOOKS,
+        payload: userBooks.data.data.user.books,
+      });
+    } else {
+      Alert.alert('Error', 'User does not exist.');
+      return 'failed';
+    }
+  } catch (error) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+// export const getSingleBook = bookid => async dispatch => {
+//   const query = `
+//       query {
+//         user(id: ${bookid}){
+//           books{
+//             title
+//             author
+//             bookcover
+//           }
+//         }
+
+//       }
+//   `;
+
+//   try {
+//     const userBooks = await api.post('/', {query});
+//     if (userBooks.data.data.user !== null) {
+//       dispatch({
+//         type: USER_BOOKS,
+//         payload: userBooks.data.data.user.books,
+//       });
+//     } else {
+//       Alert.alert('Error', 'User does not exist.');
+//       return 'failed';
+//     }
+//   } catch (error) {
+//     Alert.alert(
+//       'Error',
+//       'Some error occured, please check your internet connection and retry.',
+//     );
+//     return 'failed';
+//   }
+// };

@@ -34,15 +34,17 @@ const Shelf = ({fetchBooks, navigation, books}) => {
   }, [navigation]);
 
   const numColumns = 2;
-  const imgURL = Config.IMAGE_URL;
-  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+  //const imgURL = Config.IMAGE_URL;
+  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   formatData = (dataList, numColumns) => {
-    const totalRows = Math.floor(dataList.length / numColumns);
-    let totalLastRow = dataList.length - totalRows * numColumns;
-    while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-      dataList.push({key: 'blank', empty: true});
-      totalLastRow++;
+    if (dataList !== null) {
+      const totalRows = Math.floor(dataList.length / numColumns);
+      let totalLastRow = dataList.length - totalRows * numColumns;
+      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
+        dataList.push({key: 'blank', empty: true});
+        totalLastRow++;
+      }
     }
     return dataList;
   };

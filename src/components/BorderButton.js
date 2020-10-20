@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 const BorderButton = ({onpress, text}) => {
   return (
-    <View>
+    <View style={{alignItems: 'flex-start'}}>
       <TouchableOpacity
         onPress={() => {
           onpress();
@@ -21,8 +21,9 @@ export default BorderButton;
 const styles = StyleSheet.create({
   viewAll: {
     backgroundColor: '#242c42',
-    width: '30%',
-    padding: 5,
+    //width: 100,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     borderColor: '#fff',
     borderWidth: 3,
     borderRadius: 25,
