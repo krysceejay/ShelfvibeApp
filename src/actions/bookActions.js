@@ -55,12 +55,33 @@ export const getUserBooks = id => async dispatch => {
       query {
         user(id: ${id}){
           books{
-            title
             author
             bookcover
+            description
+            genre
+            id
+            slug
+            meetingDetails
+            public
+            published
+            title
+            user{
+              username
+            }
+            topics{
+              topicText
+              topicStatus
+            }
+            ratings{
+              comment
+              rating
+              updatedAt
+              user{
+                username
+              }
+            }
           }
         }
-
       }
   `;
 

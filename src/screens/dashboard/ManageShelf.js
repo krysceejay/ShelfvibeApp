@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
+import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {AuthContext} from '../../utils/context';
 import {getUserBooks} from '../../actions/bookActions';
@@ -35,8 +36,8 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
   }, [navigation]);
 
   const numColumns = 2;
-  //const imgURL = Config.IMAGE_URL;
-  const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+  const imgURL = Config.IMAGE_URL;
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   formatData = (dataList, numColumns) => {
     const totalRows = Math.floor(dataList.length / numColumns);
@@ -54,12 +55,19 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
     return (
       <View style={styles.item}>
         <View style={styles.bookCoverContain}>
-          <Image
-            source={{
-              uri: `${imgURL + item.bookcover}`,
-            }}
-            style={styles.bookCover}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Details', {
+                item,
+              });
+            }}>
+            <Image
+              source={{
+                uri: `${imgURL + item.bookcover}`,
+              }}
+              style={styles.bookCover}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.bookDetails}>
           <Text style={styles.bookTitle} numberOfLines={1} ellipsizeMode="tail">
@@ -113,6 +121,7 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
+                paddingVertical: 15,
               }}>
               <Empty />
               <Text style={styles.textBody}>

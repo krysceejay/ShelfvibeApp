@@ -64,7 +64,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
           keyboardHidesTabBar: true,
         }}>
         <Tab.Screen name="Home" component={HomeStack} />
-        <Tab.Screen name="Shelf" component={ShelfStack} />
+        <Tab.Screen name="Shelf" children={ShelfStack} />
         <Tab.Screen name="Contact" component={Contact} />
         {isLoggedIn ? (
           <Tab.Screen name="Dashboard" children={DashDrawer} />

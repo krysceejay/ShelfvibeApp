@@ -6,6 +6,9 @@ import ManageShelf from '../dashboard/ManageShelf';
 
 import BookTopic from '../dashboard/BookTopic';
 import Members from '../dashboard/Members';
+import Details from '../shelf/Details';
+import Rating from '../shelf/Rating';
+import AllRatings from '../shelf/AllRatings';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +58,27 @@ const ManageShelfStack = ({navigation}) => {
         }}
       />
       <Stack.Screen name="Members" component={Members} />
+      <Stack.Screen
+        name="Details"
+        component={Details}
+        options={{
+          title: 'Details',
+        }}
+      />
+      <Stack.Screen
+        name="Rating"
+        component={Rating}
+        options={{
+          title: 'Rating',
+        }}
+      />
+      <Stack.Screen
+        name="AllRatings"
+        component={AllRatings}
+        options={{
+          title: 'All Ratings',
+        }}
+      />
     </Stack.Navigator>
   );
 };
