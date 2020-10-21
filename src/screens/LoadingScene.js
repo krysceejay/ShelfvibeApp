@@ -1,12 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, StyleSheet, View, Animated} from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import LinearGradient from 'react-native-linear-gradient';
 import Loader from '../components/Loader';
+//import Circle from '../components/Circle';
 
-const LoadingScene = props => {
+const LoadingScene = ({navigation}) => {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
+  // const animatedValue = useRef(new Animated.Value(0)).current;
+
+  // const inputRange = [0, 0.001, 0.5, 0.501, 1];
+  // const backgroundColor = animatedValue.interpolate({
+  //   inputRange,
+  //   outputRange: ['#242c42', '#242c42', '#242c42', '#4dbedb', '#4dbedb'],
+  // });
 
   useEffect(() => {
+    // Animated.sequence([
+    //   Animated.timing(animatedValue, {
+    //     toValue: 1,
+    //     duration: 2000,
+    //     useNativeDriver: false,
+    //   }),
+    //   Animated.timing(animatedValue, {
+    //     toValue: 0,
+    //     duration: 2000,
+    //     useNativeDriver: false,
+    //   }),
+    // ]).start();
     switchToTab();
   });
 
@@ -44,14 +65,19 @@ const LoadingScene = props => {
 
   switchToTab = async () => {
     return setTimeout(
-      () => props.navigation.navigate('BottomTabs'),
+      () => navigation.navigate('BottomTabs'),
       //this.props.navigation.dispatch(StackActions.replace('Bottom Tabs'))
       4000,
     );
+    //return true;
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#99daeb', '#ccecf5', '#f3fbfd', '#e6f6fa']}
+      style={styles.container}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}>
       <View style={styles.logoContainer}>
         <Animatable.Image
           animation="bounceInDown"
@@ -93,8 +119,37 @@ const LoadingScene = props => {
         }}>
         <Text style={styles.textPrimary}>SHELF</Text>VIBE
       </Animatable.Text>
-    </View>
+    </LinearGradient>
   );
+
+  // return (
+  //   <Animated.View
+  //     style={[
+  //       StyleSheet.absoluteFillObject,
+  //       styles.container,
+  //       {
+  //         backgroundColor,
+  //       },
+  //     ]}>
+  //     <Animated.View style={styles.subContainer}>
+  //       <View style={styles.logoContainer}>
+  //         <Animatable.Image
+  //           animation="bounceInDown"
+  //           duration={3000}
+  //           style={styles.logo}
+  //           source={require('../assets/img/logo.png')}
+  //         />
+  //       </View>
+  //       <Animatable.Text animation="tada" duration={3500} style={styles.text}>
+  //         SHELFVIBE
+  //       </Animatable.Text>
+  //       {/* <CircleAnim /> */}
+  //     </Animated.View>
+  //     <View style={styles.circleStyle}>
+  //       <Circle animatedValue={animatedValue} />
+  //     </View>
+  //   </Animated.View>
+  // );
 };
 
 export default LoadingScene;
@@ -102,13 +157,24 @@ export default LoadingScene;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    //backgroundColor: '#242c42',
+    alignItems: 'center',
+    padding: 8,
+    //paddingBottom: 100,
+  },
+  subContainer: {
+    flex: 3,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  circleStyle: {
+    flex: 2,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   logoContainer: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
   },
   logo: {
     width: '100%',
