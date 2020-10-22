@@ -42,6 +42,7 @@ export const fetchBooks = () => async dispatch => {
       payload: allbooks.data.data.allbooks,
     });
   } catch (err) {
+    //console.log(err.message);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',

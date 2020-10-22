@@ -241,8 +241,8 @@ PODS:
     - react-native-config/App (= 1.3.3)
   - react-native-config/App (1.3.3):
     - React
-  - react-native-image-picker (2.3.1):
-    - React
+  - react-native-image-picker (2.3.4):
+    - React-Core
   - react-native-safe-area-context (0.7.3):
     - React
   - react-native-webview (10.9.2):
@@ -306,23 +306,27 @@ PODS:
     - React-cxxreact (= 0.62.1)
     - React-jsi (= 0.62.1)
     - ReactCommon/callinvoker (= 0.62.1)
-  - RNCAsyncStorage (1.12.0):
+  - RNCAsyncStorage (1.12.1):
+    - React-Core
+  - RNCMaskedView (0.1.10):
     - React
-  - RNCMaskedView (0.1.7):
+  - RNCPicker (1.8.1):
+    - React-Core
+  - RNDateTimePicker (2.6.2):
     - React
-  - RNCPicker (1.3.0):
+  - RNGestureHandler (1.8.0):
     - React
-  - RNDateTimePicker (2.3.2):
+  - RNReanimated (1.13.1):
     - React
-  - RNGestureHandler (1.6.1):
+  - RNScreens (2.11.0):
     - React
-  - RNReanimated (1.7.1):
-    - React
-  - RNScreens (2.4.0):
+  - RNSharedElement (0.7.0):
     - React
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
+    - React
+  - toolbar-android (0.1.0-rc.2):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -374,8 +378,10 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSharedElement (from `../node_modules/react-native-shared-element`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - "toolbar-android (from `../node_modules/@react-native-community/toolbar-android`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -468,10 +474,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSharedElement:
+    :path: "../node_modules/react-native-shared-element"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  toolbar-android:
+    :path: "../node_modules/@react-native-community/toolbar-android"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -504,7 +514,7 @@ SPEC CHECKSUMS:
   React-jsinspector: f74a62727e5604119abd4a1eda52c0a12144bcd5
   react-native-checkbox: 2d04aeb0c7e2c2cbd9a9a902ca6a5cf642688d09
   react-native-config: 9a061347e0136fdb32d43a34d60999297d672361
-  react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
+  react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-webview: c51f73be304c61d359ec3e7c5e4e8f2c977fd360
   React-RCTActionSheet: af8f28dd82fec89b8fe29637b8c779829e016a88
@@ -517,18 +527,20 @@ SPEC CHECKSUMS:
   React-RCTText: 239e040f401505001327a109f9188a4e6dad1bd2
   React-RCTVibration: 072c3b427dd29e730c2ee5bfc509cf5054741a50
   ReactCommon: 3585806280c51d5c2c0d3aa5a99014c3badb629d
-  RNCAsyncStorage: 3eea36d9460c5159b592f9ecbe5a77f8aca98006
-  RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
-  RNCPicker: 7d06ee91dff65b0bcd400ca00039051d5ddcb938
-  RNDateTimePicker: 0f657a34a0f6465ab7d0255c24954693bc7a8cf6
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
-  RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
-  RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNCAsyncStorage: cb9a623793918c6699586281f0b51cbc38f046f9
+  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
+  RNDateTimePicker: dc9dab744823a2c734dbc7362cdf57a3adba3c43
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
+  RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
+  RNSharedElement: 591b3be4f03678cee37697acc62702984ea43de4
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
+  toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
   Yoga: 50fb6eb13d2152e7363293ff603385db380815b1
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 619a535735d0d6589e00ac30045b0c5650cfb0ee
+PODFILE CHECKSUM: 21f5d49a3e7a9988c3b9db660733c9a031dd260e
 
 COCOAPODS: 1.8.4
