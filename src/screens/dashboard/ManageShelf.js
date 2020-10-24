@@ -8,20 +8,25 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import {AuthContext} from '../../utils/context';
 import {getUserBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import Empty from '../../components/Empty';
 import BorderButton from '../../components/BorderButton';
+import Readers from '../../components/Readers';
 
 const {width} = Dimensions.get('window');
 
 const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
+  //const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(AuthContext);
 
   useEffect(() => {
@@ -48,13 +53,24 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
     }
     return dataList;
   };
+
+  handleOnSelectItem = item => {
+    setSelectedItem(item);
+    //setModalVisible(true);
+  };
+
+  handleOnCloseModal = () => {
+    setSelectedItem(null);
+    //setModalVisible(!modalVisible);
+  };
+
   _renderItem = ({item, index}) => {
     if (item.empty) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
       <View style={styles.item}>
-        <View style={styles.bookCoverContain}>
+        <View style={[StyleSheet.absoluteFill, styles.bookCoverContain]}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
@@ -70,7 +86,7 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle} numberOfLines={1} ellipsizeMode="tail">
+          {/* <Text style={styles.bookTitle} numberOfLines={1} ellipsizeMode="tail">
             {item.title}
           </Text>
           <Text
@@ -78,7 +94,7 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
             numberOfLines={1}
             ellipsizeMode="tail">
             {item.author}
-          </Text>
+          </Text> */}
           <View style={styles.actionRow}>
             <TouchableOpacity
               onPress={() => {
@@ -89,10 +105,7 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Members');
-              }}>
+            <TouchableOpacity onPress={() => handleOnSelectItem(item.readers)}>
               <View style={styles.iconContainer}>
                 <FontAwesome name="users" size={16} color="#fff" />
               </View>
@@ -108,34 +121,48 @@ const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
       {isLoading ? (
         <Skeleton />
       ) : (
-        <FlatList
-          data={formatData(userBooks, numColumns)}
-          renderItem={_renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingVertical: 15,
-              }}>
-              <Empty />
-              <Text style={styles.textBody}>
-                Looks like you've not added a book.
-              </Text>
-              <BorderButton
-                onpress={() => {
-                  navigation.navigate('AddShelf');
-                }}
-                text="Add a Book"
+        <View>
+          <FlatList
+            data={formatData(userBooks, numColumns)}
+            renderItem={_renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={numColumns}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingVertical: 15,
+                }}>
+                <Empty />
+                <Text style={styles.textBody}>
+                  Looks like you've not added a book.
+                </Text>
+                <BorderButton
+                  onpress={() => {
+                    navigation.navigate('AddShelf');
+                  }}
+                  text="Add a Book"
+                />
+              </View>
+            )}
+          />
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={selectedItem ? true : false}>
+            <View style={styles.modalView}>
+              <Readers
+                closeModal={handleOnCloseModal}
+                selectedItem={selectedItem}
+                username={user.username}
               />
             </View>
-          )}
-        />
+          </Modal>
+        </View>
       )}
     </View>
   );
@@ -162,11 +189,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: width / 1.4,
     textAlign: 'center',
-
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 12,
+    overflow: 'hidden',
+    //padding: 10,
   },
   bookCoverContain: {
     flex: 1,
@@ -176,12 +201,15 @@ const styles = StyleSheet.create({
   bookCover: {
     height: '100%',
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   bookDetails: {
     //alignItems: 'center',
     padding: 5,
-    width: '80%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    position: 'absolute',
+    bottom: 0,
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -196,16 +224,18 @@ const styles = StyleSheet.create({
   },
   actionRow: {
     flexDirection: 'row',
-    marginTop: 10,
+    //marginTop: 10,
     alignItems: 'center',
     justifyContent: 'space-around',
+
+    //backgroundColor: 'red',
   },
   iconContainer: {
     borderRadius: 30,
     borderColor: '#fff',
     borderWidth: 2,
     padding: 10,
-    backgroundColor: '#00a2cc',
+    backgroundColor: '#00A2CC',
     borderWidth: 3,
 
     shadowColor: '#000',
@@ -226,5 +256,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 10,
+  },
+  modalView: {
+    flex: 1,
+    //marginVertical: 20,
+    backgroundColor: '#fff',
+    //borderRadius: 20,
+    //padding: 35,
+    //alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

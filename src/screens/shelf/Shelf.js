@@ -55,7 +55,7 @@ const Shelf = ({fetchBooks, navigation, books}) => {
     }
     return (
       <View style={styles.item}>
-        <View style={styles.bookCoverContain}>
+        <View style={[StyleSheet.absoluteFill, styles.bookCoverContain]}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
@@ -72,7 +72,7 @@ const Shelf = ({fetchBooks, navigation, books}) => {
         </View>
 
         <View style={styles.bookDetails}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+          {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
             {item.title}
           </Text>
           <Text
@@ -80,10 +80,12 @@ const Shelf = ({fetchBooks, navigation, books}) => {
             numberOfLines={1}
             ellipsizeMode="tail">
             {item.author}
-          </Text>
-          <Text numberOfLines={1} ellipsizeMode="tail">
-            Added By
-            <Text style={styles.bookAddedBy}> {item.user.username}</Text>
+          </Text> */}
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[styles.bookAddedBy, {fontSize: 14}]}>
+            {item.user.username}
           </Text>
         </View>
       </View>
@@ -127,10 +129,11 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     margin: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
+    //borderColor: '#ccc',
+    //borderWidth: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+    //padding: 10,
 
     //backgroundColor: '#3232ff',
     alignItems: 'center',
@@ -146,13 +149,19 @@ const styles = StyleSheet.create({
   bookCover: {
     height: '100%',
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   bookDetails: {
     //flex: 1,
-    //backgroundColor: 'red',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     alignItems: 'center',
     padding: 5,
+    position: 'absolute',
+    top: 5,
+    left: 0,
+    maxWidth: '100%',
+    borderBottomRightRadius: 7,
+    borderTopRightRadius: 7,
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -167,8 +176,8 @@ const styles = StyleSheet.create({
   },
   bookAddedBy: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 13,
-    color: '#444444',
+    fontWeight: '800',
+    color: '#fff',
     textAlign: 'center',
   },
   itemInvisible: {

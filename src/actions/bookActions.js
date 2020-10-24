@@ -80,6 +80,13 @@ export const getUserBooks = id => async dispatch => {
                 username
               }
             }
+            readers{
+              status
+              user{
+                username
+                propix
+              }
+            }
           }
         }
       }

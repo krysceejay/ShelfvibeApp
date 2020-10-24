@@ -40,10 +40,10 @@ const Skeleton = props => {
       <View style={styles.item}>
         <View style={styles.bookCoverContain} />
 
-        <View style={styles.bookDetails}>
+        {/* <View style={styles.bookDetails}>
           <Text style={styles.bookTitle} />
           <Text style={styles.bookAuthor} />
-        </View>
+        </View> */}
       </View>
     );
   };
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     //backgroundColor: 'green',
     flex: 1,
     width: '100%',
-    borderColor: '#ccc',
-    borderWidth: 1,
+    //borderColor: '#ccc',
+    //borderWidth: 1,
   },
   bookCover: {
     height: '100%',
