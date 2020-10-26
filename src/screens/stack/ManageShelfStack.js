@@ -2,11 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ManageShelf from '../dashboard/ManageShelf';
+import ManageClub from '../dashboard/ManageClub';
 
-import BookTopic from '../dashboard/BookTopic';
-import Members from '../dashboard/Members';
-import Details from '../shelf/Details';
+import Details from '../club/Details';
 import Rating from '../shelf/Rating';
 import AllRatings from '../shelf/AllRatings';
 
@@ -15,7 +13,7 @@ const Stack = createStackNavigator();
 const ManageShelfStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="ManageShelf"
+      initialRouteName="ManageClub"
       screenOptions={() => ({
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
@@ -44,25 +42,17 @@ const ManageShelfStack = ({navigation}) => {
         },
       })}>
       <Stack.Screen
-        name="ManageShelf"
-        component={ManageShelf}
+        name="ManageClub"
+        component={ManageClub}
         options={{
-          title: 'Manage Shelf',
+          title: 'Manage Club',
         }}
       />
-      <Stack.Screen
-        name="BookTopic"
-        component={BookTopic}
-        options={{
-          title: 'Book Topic',
-        }}
-      />
-      <Stack.Screen name="Members" component={Members} />
       <Stack.Screen
         name="Details"
         component={Details}
         options={{
-          title: 'Details',
+          headerShown: false,
         }}
       />
       <Stack.Screen

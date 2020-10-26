@@ -37,7 +37,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home';
             }
-            if (route.name === 'Shelf') {
+            if (route.name === 'Club') {
               iconName = focused ? 'book' : 'book';
             }
             if (route.name === 'Contact') {
@@ -64,7 +64,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
           keyboardHidesTabBar: true,
         }}>
         <Tab.Screen name="Home" component={HomeStack} />
-        <Tab.Screen name="Shelf" children={ShelfStack} />
+        <Tab.Screen name="Club" children={ShelfStack} />
         <Tab.Screen name="Contact" component={Contact} />
         {isLoggedIn ? (
           <Tab.Screen name="Dashboard" children={DashDrawer} />

@@ -12,6 +12,7 @@ import {
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
 
@@ -86,18 +87,24 @@ const DashboardSidebar = props => {
               }}
             /> */}
             <DrawerItem
-              label="Manage Shelf"
+              label="Manage Club"
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
               }}
-              icon={() => <Icon color="#242c42" size={20} name="book" />}
+              icon={() => (
+                <MaterialCommunityIcons
+                  color="#242c42"
+                  size={20}
+                  name="cards-club"
+                />
+              )}
               onPress={() => {
                 props.navigation.navigate('ManageShelf');
               }}
             />
             <DrawerItem
-              label="Add To Shelf"
+              label="Add Club"
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
@@ -108,7 +115,7 @@ const DashboardSidebar = props => {
               }}
             />
             <DrawerItem
-              label="Joined List"
+              label="Joined Club"
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
@@ -128,6 +135,15 @@ const DashboardSidebar = props => {
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
+            />
+            <DrawerItem
+              label="Notifications"
+              labelStyle={{
+                fontSize: 16,
+                fontFamily: 'Nunito-Regular',
+              }}
+              icon={() => <Icon color="#242c42" size={20} name="bell-o" />}
+              onPress={() => {}}
             />
           </View>
         </View>

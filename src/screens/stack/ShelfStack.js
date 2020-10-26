@@ -3,17 +3,17 @@ import {StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Shelf from '../shelf/Shelf';
-import Details from '../shelf/Details';
+import Details from '../club/Details';
 import Rating from '../shelf/Rating';
 import AllRatings from '../shelf/AllRatings';
+import Club from '../club/Club';
 
 const Stack = createStackNavigator();
 
 const ShelfStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Shelf"
+      initialRouteName="Club"
       screenOptions={({route}) => ({
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
@@ -33,8 +33,14 @@ const ShelfStack = () => {
           );
         },
       })}>
-      <Stack.Screen name="Shelf" component={Shelf} />
-      <Stack.Screen name="Details" component={Details} />
+      <Stack.Screen name="Clubs" component={Club} />
+      <Stack.Screen
+        name="Details"
+        component={Details}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Rating" component={Rating} />
       <Stack.Screen name="All Ratings" component={AllRatings} />
     </Stack.Navigator>

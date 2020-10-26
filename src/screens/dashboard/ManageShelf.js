@@ -25,7 +25,6 @@ const {width} = Dimensions.get('window');
 
 const ManageShelf = ({getUserBooks, userBooks, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
-  //const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(AuthContext);
 
