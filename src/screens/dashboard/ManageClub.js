@@ -110,7 +110,7 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
               
             }}
             onPress={() => {
-              
+              navigation.navigate('AdminTopTab');
             }}>
             <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
           </TouchableOpacity>
