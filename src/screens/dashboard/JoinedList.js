@@ -139,6 +139,7 @@ const JoinedClub = ({fetchClubs, navigation, clubs}) => {
               alignItems: 'center',
               justifyContent: 'center',
               marginLeft: 10,
+              marginVertical: 15
               
             }}
             onPress={() => {createTwoButtonAlert(1)}}>
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 15,
     overflow: 'hidden',
-    alignItems: 'center',
+    //alignItems: 'center',
     justifyContent: 'flex-start',
     height: 120,
     borderWidth: 2,
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
   bookDetails: {
     marginLeft: 15,
     width: '40%',
+    paddingVertical: 15,
     //backgroundColor: 'red'
   },
   bookTitle: {

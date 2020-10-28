@@ -258,7 +258,7 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				4081861709D21BB130F3EF7E /* [CP] Copy Pods Resources */,
+				C24E507768A4ABB7A8373AD2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -280,7 +280,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				BB98B3B0F009819EAFA73C62 /* [CP] Copy Pods Resources */,
+				43B9A3460D142948D5B346D1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -454,13 +454,13 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		4081861709D21BB130F3EF7E /* [CP] Copy Pods Resources */ = {
+		43B9A3460D142948D5B346D1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe-ShelfvibeTests/Pods-Shelfvibe-ShelfvibeTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe/Pods-Shelfvibe-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -499,7 +499,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe-ShelfvibeTests/Pods-Shelfvibe-ShelfvibeTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe/Pods-Shelfvibe-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5E31DB38845DAFD30C51EB78 /* [CP] Check Pods Manifest.lock */ = {
@@ -590,13 +590,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BB98B3B0F009819EAFA73C62 /* [CP] Copy Pods Resources */ = {
+		C24E507768A4ABB7A8373AD2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe/Pods-Shelfvibe-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe-ShelfvibeTests/Pods-Shelfvibe-ShelfvibeTests-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -635,7 +635,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe/Pods-Shelfvibe-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shelfvibe-ShelfvibeTests/Pods-Shelfvibe-ShelfvibeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {

@@ -4,7 +4,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import JoinedClub from '../dashboard/JoinedList';
-import Details from '../club/Details';
 
 const Stack = createStackNavigator();
 
@@ -40,13 +39,7 @@ const JoinedListStack = ({navigation}) => {
         },
       })}>
       <Stack.Screen name="JoinedClub" component={JoinedClub} />
-      <Stack.Screen
-        name="Details"
-        component={Details}
-        options={{
-          headerShown: false,
-        }}
-      />
+     
     </Stack.Navigator>
   );
 };

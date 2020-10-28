@@ -13,8 +13,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {AuthContext} from '../../utils/context';
 import {getUserBooks} from '../../actions/bookActions';
@@ -66,12 +65,14 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
-      <TouchableWithoutFeedback
+      
+      <View style={styles.item}>
+        
+        <View style={styles.bookCoverContain}>
+        <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
             }}>
-      <View style={styles.item}>
-        <View style={styles.bookCoverContain}>
           
             {/* <Image
                 source={{
@@ -83,8 +84,10 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
               style={styles.bookCover}
               source={require('../../assets/img/showup.jpg')}
             />
+          </TouchableOpacity>
           
         </View>
+        
         <View style={styles.bookDetails}>
           <View>
             <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
@@ -98,21 +101,22 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
             </Text>
           </View>
           <TouchableOpacity
-                    style={{
-                      zIndex: 2,
-                      width: 34,
-                      height: 34,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      //marginHorizontal: 10,
-                      
-                    }}
-                    onPress={() => {}}>
-                    <Ionicons name="ellipsis-vertical" size={22} color="#444444" />
-                  </TouchableOpacity>
+            style={{
+              zIndex: 2,
+              width: 34,
+              height: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+              
+            }}
+            onPress={() => {
+              
+            }}>
+            <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
+          </TouchableOpacity>
         </View>
       </View>
-      </TouchableWithoutFeedback>
+      
     );
   };
 
@@ -125,6 +129,7 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
       />
+      
     </View>
   );
 };
@@ -193,5 +198,5 @@ const styles = StyleSheet.create({
   itemInvisible: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
-  }
+  },
 });

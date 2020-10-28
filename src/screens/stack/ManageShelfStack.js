@@ -3,8 +3,6 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ManageClub from '../dashboard/ManageClub';
-
-import Details from '../club/Details';
 import Rating from '../shelf/Rating';
 import AllRatings from '../shelf/AllRatings';
 
@@ -46,13 +44,6 @@ const ManageShelfStack = ({navigation}) => {
         component={ManageClub}
         options={{
           title: 'Manage Club',
-        }}
-      />
-      <Stack.Screen
-        name="Details"
-        component={Details}
-        options={{
-          headerShown: false,
         }}
       />
       <Stack.Screen

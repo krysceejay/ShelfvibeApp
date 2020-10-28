@@ -23,12 +23,14 @@ import HtmlReader from '../../components/HtmlReader';
 import ReadingList from '../../components/ReadingList';
 import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
+import AdminComp from '../../components/AdminComp';
 
 const {width} = Dimensions.get('window');
 
 const Details = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
+  const [adminModal, setAdminModal] = useState(false);
 
   handleOnCloseModal = () => {
     setModalVisible(false);
@@ -36,6 +38,10 @@ const Details = ({route, navigation}) => {
 
   handleOnClosePoll = () => {
     setPollModal(false);
+  };
+
+  handleOnCloseAdmin = () => {
+    setAdminModal(false);
   };
 
   const stringToHslColor = (str) => {
@@ -144,9 +150,21 @@ const Details = ({route, navigation}) => {
           <View style={styles.readingListContainer}>
             <View style={styles.listTop}>
               <Text style={styles.listTitle}>Reading List</Text>
-              <TouchableWithoutFeedback onPress={() => {}}>
-              <MaterialCommunityIcons name="playlist-plus" size={25} color="#444444" />
+              <TouchableWithoutFeedback onPress={() => {
+                setAdminModal(true);
+              }}>
+                <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
               </TouchableWithoutFeedback>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={adminModal}>
+                  <View style={styles.modalView}>
+                    <AdminComp
+                      closeModal={handleOnCloseAdmin}
+                    />
+                  </View>
+              </Modal>
             </View>
             
               <ReadingList />
@@ -205,11 +223,11 @@ const Details = ({route, navigation}) => {
             animationType="slide"
             transparent={true}
             visible={pollModal}>
-            <View style={styles.modalView}>
-              <BookPoll
-                closeModal={handleOnClosePoll}
-              />
-            </View>
+              <View style={styles.modalView}>
+                <BookPoll
+                  closeModal={handleOnClosePoll}
+                />
+              </View>
           </Modal>
           </View>
           <TouchableOpacity style={styles.join} onPress={() => {}}>
