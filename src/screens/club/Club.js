@@ -78,12 +78,14 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
-      <View style={styles.item}>
-        <View style={styles.bookCoverContain}>
-          <TouchableOpacity
+      <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
             }}>
+      <View style={styles.item}>
+        
+        <View style={styles.bookCoverContain}>
+          
             {/* <Image
                 source={{
                   uri: `${imgURL + item.bookcover}`,
@@ -94,7 +96,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
               style={styles.bookCover}
               source={require('../../assets/img/showup.jpg')}
             />
-          </TouchableOpacity>
+          
         </View>
         <View style={styles.bookDetails}>
           <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
@@ -105,7 +107,9 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
           </Text>
           
         </View>
+        
       </View>
+      </TouchableOpacity>
     );
   };
 
@@ -149,21 +153,25 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 10,
+    paddingVertical: 10,
+    backgroundColor: '#fff'
   },
   item: {
     flex: 1,
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 15,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    height: 130,
+    height: 120,
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
+    borderRadius: 10
   },
   bookCoverContain: {
-    borderRadius: 12,
-    width: 180,
+    //borderRadius: 12,
+    width: 150,
     overflow: 'hidden',
   },
   bookCover: {

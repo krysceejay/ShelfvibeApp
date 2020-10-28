@@ -1,15 +1,23 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
 import {
   Text,
   StyleSheet,
   View,
-  Button,
   FlatList,
   Dimensions,
   Image,
   TouchableOpacity,
+  Alert
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Config from 'react-native-config';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import {fetchClubs} from '../../actions/clubActions';
+import Skeleton from '../../components/Skeleton';
+
+
+const {width} = Dimensions.get('window');
 
 const dataList = [
   {key: 1},
@@ -34,146 +42,197 @@ const dataList = [
   {key: 20},
   {key: 21},
 ];
-const numColumns = 2;
-const WIDTH = Dimensions.get('window').width;
 
-export default class JoinedList extends Component {
+const JoinedClub = ({fetchClubs, navigation, clubs}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      // The screen is focused
+      // Call any action
+      const getClubs = await fetchClubs();
+      if (getClubs !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  const numColumns = 1;
+  const imgURL = Config.IMAGE_URL;
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+
   formatData = (dataList, numColumns) => {
-    const totalRows = Math.floor(dataList.length / numColumns);
-    let totalLastRow = dataList.length - totalRows * numColumns;
-    while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-      dataList.push({key: 'blank', empty: true});
-      totalLastRow++;
+    if (dataList !== null) {
+      const totalRows = Math.floor(dataList.length / numColumns);
+      let totalLastRow = dataList.length - totalRows * numColumns;
+      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
+        dataList.push({key: 'blank', empty: true});
+        totalLastRow++;
+      }
     }
     return dataList;
   };
+
+  const removeClub =  (id) => {
+    return;
+  };
+
+  const createTwoButtonAlert = (id) =>
+    Alert.alert(
+  'Leave',
+  'Are you sure you want to leave this club?',
+  [
+    {
+      text: 'Cancel',
+      onPress: () => false,
+      style: 'cancel',
+    },
+    {text: 'OK', onPress: () => removeClub(id)},
+  ],
+  {cancelable: false},
+);
+
   _renderItem = ({item, index}) => {
     if (item.empty) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
+      
       <View style={styles.item}>
-        {/* <Text style={styles.itemText}>{item.key}</Text> */}
+        <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Details');
+            }}>
+        
         <View style={styles.bookCoverContain}>
-          <Image
-            style={styles.bookCover}
-            source={require('../../assets/img/showup.jpg')}
-          />
+          
+            {/* <Image
+                source={{
+                  uri: `${imgURL + item.bookcover}`,
+                }}
+                style={styles.bookCover}
+              /> */}
+            <Image
+              style={styles.bookCover}
+              source={require('../../assets/img/showup.jpg')}
+            />
+          
         </View>
+        </TouchableOpacity>
         <View style={styles.bookDetails}>
-          <Text style={styles.bookTitle}>Think Big</Text>
-          <Text style={styles.bookAuthor}>Ben Carson, Phil James</Text>
-          <View style={styles.addedByView}>
-            <Text style={styles.addedByText}>Added By</Text>
-            <Text style={styles.bookAddedBy}> Diadem</Text>
-          </View>
-          <TouchableOpacity onPress={() => {}}>
-            <View style={styles.iconContainer}>
-              {/* <FontAwesome name="book" size={18} color="#3a4155" /> */}
-              <Text style={styles.undoText}>Undo Join</Text>
-            </View>
-          </TouchableOpacity>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
+            Club Name Club Name
+          </Text>
+          <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+            16 members
+          </Text>
+          
         </View>
+        <TouchableOpacity
+            style={{
+              zIndex: 2,
+              width: 34,
+              height: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: 10,
+              
+            }}
+            onPress={() => {createTwoButtonAlert(1)}}>
+            <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+          </TouchableOpacity>
+        
       </View>
+      
     );
   };
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={this.formatData(dataList, numColumns)}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
-          showsVerticalScrollIndicator={false}
-        />
-        {/* <View style={styles.center}>
-          <Text style={styles.title}> Feeds </Text>
-          <Button
-            title="Go to Details"
-            onPress={() => {
-              this.props.navigation.navigate('Details');
-            }}
-          />
-        </View> */}
-      </View>
-    );
-  }
-}
+
+  //   return (
+  //     <View style={styles.container}>
+  //       {isLoading ? (
+  //         <Skeleton />
+  //       ) : (
+  //         <FlatList
+  //           data={formatData(dataList, numColumns)}
+  //           renderItem={_renderItem}
+  //           keyExtractor={(item, index) => index.toString()}
+  //           numColumns={numColumns}
+  //           showsVerticalScrollIndicator={false}
+  //         />
+  //       )}
+  //     </View>
+  //   );
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={formatData(dataList, numColumns)}
+        renderItem={_renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={numColumns}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+  );
+};
+
+const mapStateToProps = state => ({
+  clubs: state.club.clubs,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchClubs},
+)(JoinedClub);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingHorizontal: 10,
-    //paddingTop: 5,
+    paddingVertical: 10,
+    backgroundColor: '#fff'
   },
   item: {
     flex: 1,
-    margin: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-
-    //backgroundColor: '#3232ff',
+    flexDirection: 'row',
+    marginVertical: 5,
+    marginHorizontal: 15,
+    overflow: 'hidden',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: WIDTH / 1.3,
-    textAlign: 'center',
+    justifyContent: 'flex-start',
+    height: 120,
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
+    borderRadius: 10
   },
   bookCoverContain: {
-    //backgroundColor: 'green',
-    flex: 1,
-    width: '100%',
+    //borderRadius: 12,
+    width: 150,
+    overflow: 'hidden',
   },
   bookCover: {
     height: '100%',
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   bookDetails: {
-    //flex: 1,
-    //backgroundColor: 'red',
-    alignItems: 'center',
-    padding: 5,
+    marginLeft: 15,
+    width: '40%',
+    //backgroundColor: 'red'
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
+    fontSize: 18,
+  },
+  members: {
+    fontFamily: 'Nunito-Regular',
     fontSize: 15,
-    textAlign: 'center',
-  },
-  bookAuthor: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 13,
     color: '#444444',
-    textAlign: 'center',
-  },
-  addedByView: {
-    flexDirection: 'row',
-  },
-  addedByText: {
-    fontFamily: 'Nunito-SemiBold',
-    fontSize: 12,
-  },
-  bookAddedBy: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 12,
-    color: '#444444',
-    textAlign: 'center',
+    marginTop: 5,
   },
   itemInvisible: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
-  },
-  iconContainer: {
-    borderRadius: 5,
-    borderColor: '#00a2cc',
-    borderWidth: 1.5,
-    padding: 5,
-    marginVertical: 7,
-  },
-  undoText: {
-    fontFamily: 'Nunito-Italic',
-    fontSize: 11,
   },
 });

@@ -7,52 +7,70 @@ import {
   SafeAreaView,
   FlatList,
   Image,
+  Alert
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from 'react-native-config';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const proURL = Config.PROFILE_URL;
 
 const dataList = [
-    {key: 1},
-    {key: 2},
-    {key: 3},
-    {key: 4},
-    {key: 5},
-    {key: 6},
-    {key: 7},
-    {key: 8},
-    {key: 9},
-    {key: 10},
-    {key: 11},
-    {key: 12},
-    {key: 13},
-    {key: 14},
-    {key: 15},
-    {key: 16},
-    {key: 17},
-    {key: 18},
-    {key: 19},
-    {key: 20},
-    {key: 21},
+    {key: "1"},
+    {key: "2"},
+    {key: "3"},
+    {key: "4"},
+    {key: "5"},
   ];
 
 const Members = props => {
-  onClosePress = () => {
+  const onClosePress = () => {
     props.closeModal();
   };
 
-  const leftSwipe = () => {
-    return(
-      <View style={styles.deleteBox}>
-        <Text>Delete</Text>
-      </View>
-    )
-  }
+  const deActivateMember =  (id) => {
+    //console.log(id);
+    return;
+  };
 
-  renderItem = ({item}) => (
-    <Swipeable renderLeftActions={leftSwipe}>
+  const deActivate = (id) =>
+    Alert.alert(
+  'Deactivate',
+  'Are you sure you want to deactivate this member?',
+  [
+    {
+      text: 'Cancel',
+      onPress: () => false,
+      style: 'cancel',
+    },
+    {text: 'OK', onPress: () => deActivateMember(id)},
+  ],
+  {cancelable: false},
+);
+
+const removeMember =  (id) => {
+  //console.log(id);
+  return;
+};
+
+const remove = (id) =>
+  Alert.alert(
+'Remove',
+'Are you sure you want to remove this member?',
+[
+  {
+    text: 'Cancel',
+    onPress: () => false,
+    style: 'cancel',
+  },
+  {text: 'OK', onPress: () => removeMember(id)},
+],
+{cancelable: false},
+);
+
+  const VisibleItem = ({data}) => {
+    return(
     <View style={styles.userInfoSection}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         {/* <Image
@@ -68,24 +86,25 @@ const Members = props => {
             size={50}
           />
         <View style={{marginLeft: 15}}>
-          <Text style={styles.username}>kryso</Text>
-          
-            <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
-          
+      <Text style={styles.username}>kryso{data.item.key}</Text>
+          <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
             {/* <Text style={[styles.caption, {color: '#721c24'}]}>not active</Text> */}
-          
         </View>
       </View>
       {/* {props.username === item.user.username && <Text>Admin</Text>} */}
     </View>
-    </Swipeable>
+    )
+  }
+
+  const renderItem = (data, rowMap) => (
+    <VisibleItem data={data}/>
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.closeBtn}>
         <Text style={styles.title}>
-          Club Members (11)
+          Members (11)
         </Text>
         <TouchableOpacity onPress={onClosePress}
         style={{
@@ -115,7 +134,7 @@ const Members = props => {
           marginBottom: 10,
         }}>
         
-        <FlatList
+        {/* <FlatList
           data={dataList}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
@@ -123,6 +142,48 @@ const Members = props => {
           ListEmptyComponent={() => (
             <Text style={styles.reviewText}>No member yet</Text>
           )}
+        /> */}
+        <SwipeListView
+            data={dataList}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={{backgroundColor: '#f0f0f0', flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginVertical: 10, height: 60}}>
+                  <TouchableOpacity
+                    style={{
+                      zIndex: 2,
+                      width: 34,
+                      height: 34,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginHorizontal: 10,
+                      
+                    }}
+                    onPress={() => {deActivate(1)}}>
+                    <Icon name="toggle-off" size={22} color="#444444" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      zIndex: 2,
+                      width: 34,
+                      height: 34,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginHorizontal: 10,
+                      
+                    }}
+                    onPress={() => {remove(1)}}>
+                    <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+                  </TouchableOpacity>
+                    {/* <Text>Left</Text>
+                    <Text>Right</Text> */}
+                </View>
+            )}
+            showsVerticalScrollIndicator={false}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+            stopLeftSwipe={50}
+            stopRightSwipe={-50}
         />
       </View>
     </SafeAreaView>
@@ -153,8 +214,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#ccc',
-    
+    backgroundColor: '#fff',
+    width: '100%',
+    height: 60,
   },
   avatar: {
     height: 60,
@@ -179,6 +241,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   deleteBox: {
-    
+
   }
 });

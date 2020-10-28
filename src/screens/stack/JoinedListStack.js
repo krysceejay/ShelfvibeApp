@@ -3,14 +3,15 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import JoinedList from '../dashboard/JoinedList';
+import JoinedClub from '../dashboard/JoinedList';
+import Details from '../club/Details';
 
 const Stack = createStackNavigator();
 
 const JoinedListStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="JoinedList"
+      initialRouteName="JoinedClub"
       screenOptions={() => ({
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
@@ -38,7 +39,14 @@ const JoinedListStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="JoinedList" component={JoinedList} />
+      <Stack.Screen name="JoinedClub" component={JoinedClub} />
+      <Stack.Screen
+        name="Details"
+        component={Details}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

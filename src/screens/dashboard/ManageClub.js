@@ -9,17 +9,17 @@ import {
   Image,
   TouchableWithoutFeedback,
   Modal,
+  TouchableOpacity
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {AuthContext} from '../../utils/context';
 import {getUserBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import Empty from '../../components/Empty';
-import BorderButton from '../../components/BorderButton';
-import Readers from '../../components/Readers';
 
 const {width} = Dimensions.get('window');
 
@@ -67,7 +67,6 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
     }
     return (
       <TouchableWithoutFeedback
-      underlayColor="red"
             onPress={() => {
               navigation.navigate('Details');
             }}>
@@ -87,15 +86,30 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
           
         </View>
         <View style={styles.bookDetails}>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
-            Club Name Club Name
-          </Text>
-          <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-            16 members
-          </Text>
-          <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-            Created on 2nd Jan 2020
-          </Text>
+          <View>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
+              Club Name Club Name
+            </Text>
+            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+              16 members
+            </Text>
+            <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
+              Created on 2nd Jan 2020
+            </Text>
+          </View>
+          <TouchableOpacity
+                    style={{
+                      zIndex: 2,
+                      width: 34,
+                      height: 34,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      //marginHorizontal: 10,
+                      
+                    }}
+                    onPress={() => {}}>
+                    <Ionicons name="ellipsis-vertical" size={22} color="#444444" />
+                  </TouchableOpacity>
         </View>
       </View>
       </TouchableWithoutFeedback>
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    height: width / 1.4,
+    //height: width / 1.4,
     textAlign: 'center',
     borderRadius: 12,
     overflow: 'hidden',
@@ -143,6 +157,7 @@ const styles = StyleSheet.create({
   bookCoverContain: {
     flex: 3,
     width: '100%',
+    height: 200
     //backgroundColor: 'green',
   },
   bookCover: {
@@ -152,6 +167,8 @@ const styles = StyleSheet.create({
   },
   bookDetails: {
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 18,
     width: '100%',
     backgroundColor: '#fff',
