@@ -2,9 +2,9 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {Provider} from 'react-redux';
 import store from './src/store';
-//import {createStackNavigator} from '@react-navigation/stack';
-import {enableScreens} from 'react-native-screens';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createStackNavigator} from '@react-navigation/stack';
+//import {enableScreens} from 'react-native-screens';
+//import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {
   NavigationContainer,
   DarkTheme,
@@ -58,9 +58,9 @@ const MyDarkTheme = {
 //     </TouchableOpacity>
 //   );
 // }
-//const Stack = createStackNavigator();
-enableScreens();
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator();
+// enableScreens();
+// const Stack = createSharedElementStackNavigator();
 
 const App = () => {
   // useEffect(async () => {

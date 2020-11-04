@@ -1,16 +1,16 @@
 import React from 'react';
 import {StyleSheet, Text, View, Easing} from 'react-native';
-//import {createStackNavigator} from '@react-navigation/stack';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createStackNavigator} from '@react-navigation/stack';
+//import Ionicons from 'react-native-vector-icons/Ionicons';
+//import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-import Feed from '../Feed';
-import Details from '../Details';
-import Header from '../../components/Header';
-import Home from '../Home';
+//import Details from '../Details';
+//import Header from '../../components/Header';
+import HomePage from '../HomePage';
+import Details from '../Details2';
 
-//const Stack = createStackNavigator();
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator();
+//const Stack = createSharedElementStackNavigator();
 
 const options = () => ({
   gestureEnabled: false,
@@ -86,9 +86,9 @@ const HomeStack = () => {
       initialRouteName="NavigationList"
       headerMode="none"
       screenOptions={{cardStyle: {backgroundColor: '#fff'}}}>
-      <Stack.Screen name="NavigationList" component={Home} />
+      <Stack.Screen name="NavigationList" component={HomePage} />
       <Stack.Screen
-        name="TravelListDetails"
+        name="Details"
         component={Details}
         options={options}
       />

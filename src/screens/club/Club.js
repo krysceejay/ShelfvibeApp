@@ -81,7 +81,8 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
       <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
-            }}>
+            }}
+            activeOpacity={0.9}>
       <View style={styles.item}>
         
         <View style={styles.bookCoverContain}>

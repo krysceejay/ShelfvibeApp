@@ -105,7 +105,8 @@ const JoinedClub = ({fetchClubs, navigation, clubs}) => {
         <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
-            }}>
+            }}
+            activeOpacity={0.9}>
         
         <View style={styles.bookCoverContain}>
           
@@ -142,6 +143,7 @@ const JoinedClub = ({fetchClubs, navigation, clubs}) => {
               marginVertical: 15
               
             }}
+            activeOpacity={0.9}
             onPress={() => {createTwoButtonAlert(1)}}>
             <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
           </TouchableOpacity>

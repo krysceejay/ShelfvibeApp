@@ -103,7 +103,7 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('ManageShelf');
               }}
             />
-            <DrawerItem
+            {/* <DrawerItem
               label="Add Club"
               labelStyle={{
                 fontSize: 16,
@@ -113,7 +113,7 @@ const DashboardSidebar = props => {
               onPress={() => {
                 props.navigation.navigate('AddShelf');
               }}
-            />
+            /> */}
             <DrawerItem
               label="Joined Club"
               labelStyle={{

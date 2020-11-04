@@ -23,7 +23,7 @@ const ReadingList = () => {
             style={{
               //backgroundColor: 'red',
               paddingBottom: 10,
-              width: 140,
+              width: 130,
               height: 260,
               marginRight: 12,
             borderRadius: 12,
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     bookTitle: {
-        
         fontFamily: 'Nunito-Bold',
         fontSize: 13,
     },

@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {AuthContext} from '../../utils/context';
 import {getUserBooks} from '../../actions/bookActions';
@@ -69,10 +70,11 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
       <View style={styles.item}>
         
         <View style={styles.bookCoverContain}>
-        <TouchableOpacity
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
-            }}>
+            }}
+            activeOpacity={0.9}>
           
             {/* <Image
                 source={{
@@ -110,9 +112,9 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
               
             }}
             onPress={() => {
-              navigation.navigate('AdminTopTab');
-            }}>
-            <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
+            }}
+            activeOpacity={0.9}>
+              <FontAwesome name="edit" size={25} color="#444444" />
           </TouchableOpacity>
         </View>
       </View>
@@ -122,6 +124,15 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => {}}
+        style={styles.floatingBtn}
+        activeOpacity={0.9}>
+        <Ionicons
+          name="ios-add"
+          size={40}
+          color="#fff"
+        />
+      </TouchableOpacity>
       <FlatList
         data={formatData(dataList, numColumns)}
         renderItem={_renderItem}
@@ -129,7 +140,6 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
       />
-      
     </View>
   );
 };
@@ -147,6 +157,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
+    backgroundColor: '#fff'
   },
   item: {
     flex: 1,
@@ -157,7 +168,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 12,
     overflow: 'hidden',
-    //padding: 10,
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
   },
   bookCoverContain: {
     flex: 3,
@@ -199,4 +211,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: 'transparent',
   },
+  floatingBtn: {
+    position: 'absolute',
+    bottom: 25,
+    right: 15,
+    zIndex: 2,
+    backgroundColor: '#00a2cc',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.0,
+    elevation: 4,
+      }
 });

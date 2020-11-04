@@ -8,7 +8,6 @@ import JoinedListStack from '../stack/JoinedListStack';
 import ProfileStack from '../stack/ProfileStack';
 import DashboardSidebar from '../../components/DashboardSidebar';
 import Details from '../club/Details';
-import AdminTopTab from '../tabs/AdminTopTab';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,7 +31,6 @@ const DashDrawer = () => {
       <Drawer.Screen name="JoinedList" children={JoinedListStack} />
       <Drawer.Screen name="Profile" children={ProfileStack} />
       <Drawer.Screen name="Details" component={Details} />
-      <Drawer.Screen name="AdminTopTab" component={AdminTopTab} />
     </Drawer.Navigator>
   );
 };

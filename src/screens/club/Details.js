@@ -24,6 +24,7 @@ import ReadingList from '../../components/ReadingList';
 import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('window');
 
@@ -54,10 +55,18 @@ const Details = ({route, navigation}) => {
   }
 
   return (
+    <View>
+      <TouchableOpacity onPress={() => {}}
+            style={styles.floatingBtn}
+            activeOpacity={0.9}>
+            
+            <Text style={styles.joinText}>Join</Text>
+            </TouchableOpacity>
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#fff'}}>
       <SafeAreaView style={styles.container}>
+      
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             style={{
@@ -73,9 +82,41 @@ const Details = ({route, navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
+            activeOpacity={0.9}
             onPress={navigation.goBack}>
             <Ionicons name="md-arrow-back" size={22} color="#444444" />
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+                setAdminModal(true);
+              }}
+              style={{
+                position: 'absolute',
+                top: 25,
+                right: 15,
+                zIndex: 2,
+                backgroundColor: '#fff',
+                borderRadius: 17,
+                width: 34,
+                height: 34,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              activeOpacity={0.9}
+              >
+                <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
+              </TouchableOpacity>
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={adminModal}
+                >
+                  <TouchableOpacity style={styles.adminModalView} onPress={handleOnCloseAdmin} activeOpacity={1}>
+                    <AdminComp
+                      closeModal={handleOnCloseAdmin}
+                      navigation={navigation}
+                    />
+                  </TouchableOpacity>
+              </Modal>
 
           <Image
             style={styles.bookCover}
@@ -86,16 +127,19 @@ const Details = ({route, navigation}) => {
           <Text style={styles.bookTitle}>The Designer's Club</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 20,}}>
               <View style={styles.starText}>
-                <StarGroup rating='3.5' />
-                <Text
-                  style={styles.starRateText}
-                  numberOfLines={1}
-                  ellipsizeMode="tail">
-                  3.5 of 4,000
-                  
-                </Text>
+                
+                <View style={styles.starGroup}>
+                  <StarGroup rating='3.5' />
+                  <Text
+                    style={styles.starRateText}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    3.5 of 4,000
+                  </Text>
+                </View>
+                
                 <TouchableOpacity onPress={() => {}}>
-                  <Text style={styles.seeAll}>View More</Text>
+                  <Text style={styles.seeAll}>View</Text>
                 </TouchableOpacity>
 
                 {/* <TouchableOpacity
@@ -150,21 +194,13 @@ const Details = ({route, navigation}) => {
           <View style={styles.readingListContainer}>
             <View style={styles.listTop}>
               <Text style={styles.listTitle}>Reading List</Text>
-              <TouchableWithoutFeedback onPress={() => {
+              {/* <TouchableWithoutFeedback onPress={() => {
                 setAdminModal(true);
-              }}>
+              }}
+              >
                 <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
-              </TouchableWithoutFeedback>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={adminModal}>
-                  <View style={styles.modalView}>
-                    <AdminComp
-                      closeModal={handleOnCloseAdmin}
-                    />
-                  </View>
-              </Modal>
+              </TouchableWithoutFeedback> */}
+              
             </View>
             
               <ReadingList />
@@ -230,12 +266,13 @@ const Details = ({route, navigation}) => {
               </View>
           </Modal>
           </View>
-          <TouchableOpacity style={styles.join} onPress={() => {}}>
+          {/* <TouchableOpacity style={styles.join} onPress={() => {}}>
             <Text style={styles.joinText}>Join Club</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     </ScrollView>
+    </View>
   );
 };
 
@@ -390,10 +427,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   starText: {
-    //flexDirection: 'column',
+    flexDirection: 'row',
     marginVertical: 4,
-    width: '75%',
+    //width: '75%',
     //backgroundColor: 'red',
+  },
+  starGroup: {
+    marginRight: 10
   },
   starRateText: {
     fontFamily: 'Nunito-Bold',
@@ -429,30 +469,16 @@ const styles = StyleSheet.create({
   },
   modalView: {
     flex: 1,
-    //marginVertical: 20,
-    //backgroundColor: '#fff',
-    //borderRadius: 20,
-    //padding: 35,
-    //alignItems: 'center',
-
-    // marginHorizontal: 20,
-    //height: 600,
-    //width: '90%',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 5,
-    //alignSelf: 'center',
-    //justifyContent: 'center'
-    //flex: 1,
-        //   flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center'
+   justifyContent: 'flex-end',
+   alignItems: 'center'
+  },
+  adminModalView: {
+    flex: 1,
+    //backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    //top: 100
+   //justifyContent: 'flex-end',
+   alignItems: 'flex-end',
   },
   memberModalView: {
     flex: 1,
@@ -494,6 +520,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#fff',
-  }
+  },
+  floatingBtn: {
+    position: 'absolute',
+    bottom: 25,
+    right: 15,
+    zIndex: 2,
+    backgroundColor: '#00a2cc',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.0,
+    elevation: 4,
+      }
   
 });

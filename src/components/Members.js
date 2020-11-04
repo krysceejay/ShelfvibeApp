@@ -24,9 +24,9 @@ const dataList = [
     {key: "5"},
   ];
 
-const Members = props => {
+const Members = ({closeModal}) => {
   const onClosePress = () => {
-    props.closeModal();
+    closeModal();
   };
 
   const deActivateMember =  (id) => {
