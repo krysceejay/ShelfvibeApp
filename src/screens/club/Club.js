@@ -8,6 +8,8 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  TextInput,
+  Alert
 } from 'react-native';
 import Config from 'react-native-config';
 
@@ -17,31 +19,32 @@ import Skeleton from '../../components/Skeleton';
 const {width} = Dimensions.get('window');
 
 const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
+  {key: 1, name: 'James'},
+  {key: 2, name: 'Shoe'},
+  {key: 3, name: 'Addida'},
+  {key: 4, name: 'John'},
+  {key: 5, name: 'Gadd'},
+  {key: 6, name: 'Faith'},
+  {key: 7, name: 'Amaka'},
+  {key: 8, name: 'Jack'},
+  {key: 9, name: 'Jill'},
+  {key: 10, name: 'Liller'},
+  {key: 11, name: 'Tope'},
+  {key: 12, name: 'Uduak'},
+  {key: 13, name: 'Goodness'},
+  {key: 14, name: 'Adams'},
+  {key: 15, name: 'Falz'},
+  {key: 16, name: 'Tomama'},
+  {key: 17, name: 'Saidi'},
+  {key: 18, name: 'Vickky'},
+  {key: 19, name: 'Hommie'},
+  {key: 20, name: 'Ziller'}
 ];
 
 const Shelf = ({fetchClubs, navigation, clubs}) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const [filterClubs, setFilterClubs] = useState(dataList);
 
   useEffect(() => {
     setIsLoading(true);
@@ -61,17 +64,11 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
   const imgURL = Config.IMAGE_URL;
   //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
-  formatData = (dataList, numColumns) => {
-    if (dataList !== null) {
-      const totalRows = Math.floor(dataList.length / numColumns);
-      let totalLastRow = dataList.length - totalRows * numColumns;
-      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-        dataList.push({key: 'blank', empty: true});
-        totalLastRow++;
-      }
-    }
-    return dataList;
-  };
+  const searchClub = text => {
+    setFilterClubs(dataList.filter(item => {
+      return item.name.toLowerCase().includes(text.toLowerCase());
+    }))
+  }
 
   _renderItem = ({item, index}) => {
     if (item.empty) {
@@ -101,7 +98,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
         </View>
         <View style={styles.bookDetails}>
           <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
-            Club Name Club Name
+            {item.name}
           </Text>
           <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
             16 members
@@ -131,8 +128,11 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
   //   );
   return (
     <View style={styles.container}>
+      <View style={styles.singleInput}>
+        <TextInput placeholder="Search club" style={styles.textInput} onChangeText={text => searchClub(text)} />
+      </View>
       <FlatList
-        data={formatData(dataList, numColumns)}
+        data={filterClubs}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
@@ -197,5 +197,13 @@ const styles = StyleSheet.create({
   itemInvisible: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
+  },
+  textInput: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 14,
+    color: '#444',
+    backgroundColor: '#eee',
+    height: 50,
+    paddingHorizontal: 10,
   },
 });

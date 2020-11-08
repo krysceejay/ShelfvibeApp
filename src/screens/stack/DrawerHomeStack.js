@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Dashboard from '../dashboard/Dashboard';
+import Dash from '../dashboard/Dash';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,7 @@ const DrawerHomeStack = ({navigation}) => {
       })}>
       <Stack.Screen
         name="Dashboard"
-        component={Dashboard}
+        component={Dash}
         options={{
           headerTitle: () => {
             return (

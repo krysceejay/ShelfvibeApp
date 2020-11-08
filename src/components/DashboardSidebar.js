@@ -62,9 +62,10 @@ const DashboardSidebar = props => {
               source={require('../assets/img/avatar.jpg')}
               size={50}
             />
-            <View style={{marginLeft: 15}}>
-              <Text style={styles.title}>Krys Diadem</Text>
-              <Text style={styles.caption}>@krysceejay</Text>
+            <View style={{marginLeft: 15, width: '70%'}}>
+              {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Krys Diadem</Text> */}
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>@krysceejay</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.memberDate}>Member since: 2019-06-12</Text>
             </View>
           </View>
           <View style={styles.drawerSection}>
@@ -188,9 +189,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
   title: {
     fontSize: 16,
@@ -201,8 +202,13 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 14,
-    lineHeight: 14,
     fontFamily: 'Nunito-Light',
+  },
+  memberDate: {
+    fontSize: 13,
+    lineHeight: 15,
+    fontFamily: 'Nunito-Regular',
+    marginTop: 3
   },
   drawerSection: {
     marginTop: 15,

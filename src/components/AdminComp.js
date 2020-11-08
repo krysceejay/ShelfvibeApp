@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Share from 'react-native-share';
 
 const AdminComp = ({navigation, closeModal}) => {
     onClosePress = () => {
@@ -16,6 +17,18 @@ const AdminComp = ({navigation, closeModal}) => {
       goToReadingList = () => {
         navigation.navigate('Reading List');
         closeModal();
+      }
+
+      shareBtn = async () => {
+          const shareOptions = {
+              message: 'This is a message',
+          };
+
+          try {
+              const shareResponse = await Share.open(shareOptions);
+          } catch (error) {
+              console.log('Error => ', error);
+          }
       }
 
     return (
@@ -46,12 +59,12 @@ const AdminComp = ({navigation, closeModal}) => {
                             <Text style={styles.actionText}>Set as private</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}}>
+                    {/* <TouchableOpacity onPress={shareBtn}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="share-variant" size={22} color="#444444" />
                             <Text style={styles.actionText}>Share Link</Text>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => {}}>
                         <View style={styles.actionSingle}>
                         <FontAwesome name="exclamation-triangle" size={22} color="#444444" />

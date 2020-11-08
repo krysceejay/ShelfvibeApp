@@ -65,7 +65,7 @@ const Details = ({route, navigation}) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#fff'}}>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
       
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
@@ -270,7 +270,7 @@ const Details = ({route, navigation}) => {
             <Text style={styles.joinText}>Join Club</Text>
           </TouchableOpacity> */}
         </View>
-      </SafeAreaView>
+      </View>
     </ScrollView>
     </View>
   );
