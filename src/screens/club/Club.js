@@ -9,9 +9,10 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Alert
+  SafeAreaView
 } from 'react-native';
 import Config from 'react-native-config';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {fetchClubs} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
@@ -43,7 +44,7 @@ const dataList = [
 
 const Shelf = ({fetchClubs, navigation, clubs}) => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showSearch, setShowSearch] = useState(false);
   const [filterClubs, setFilterClubs] = useState(dataList);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
   const searchClub = text => {
     setFilterClubs(dataList.filter(item => {
       return item.name.toLowerCase().includes(text.toLowerCase());
-    }))
+    }));
   }
 
   _renderItem = ({item, index}) => {
@@ -127,10 +128,33 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
   //     </View>
   //   );
   return (
-    <View style={styles.container}>
-      <View style={styles.singleInput}>
+    <SafeAreaView style={styles.container}>
+      {showSearch ? <View style={styles.singleInput}>
+      <TouchableOpacity style={styles.disableSearch} onPress={() => {
+            setShowSearch(false);
+          }}
+            activeOpacity={0.9}>
+            <Ionicons
+              name="md-arrow-back"
+              size={25}
+              color="#444444"
+            />
+          </TouchableOpacity>
         <TextInput placeholder="Search club" style={styles.textInput} onChangeText={text => searchClub(text)} />
-      </View>
+      </View> : 
+      <View style={styles.header}>
+          <Text style={styles.headerText}>All Clubs</Text>
+          <TouchableOpacity onPress={() => {
+            setShowSearch(true);
+          }}
+            activeOpacity={0.9}>
+            <Ionicons
+              name="md-search"
+              size={30}
+              color="#444444"
+            />
+          </TouchableOpacity>
+        </View>}
       <FlatList
         data={filterClubs}
         renderItem={_renderItem}
@@ -138,7 +162,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -154,13 +178,13 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
+    //paddingTop: 5,
     backgroundColor: '#fff'
   },
   item: {
     flex: 1,
     flexDirection: 'row',
-    marginVertical: 5,
+    marginVertical: 10,
     marginHorizontal: 15,
     overflow: 'hidden',
     alignItems: 'center',
@@ -198,12 +222,41 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: 'transparent',
   },
+  singleInput: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    overflow: 'hidden',
+    backgroundColor: '#eee',
+  },
+  disableSearch: {
+    flex: 1,
+    marginRight: 10,
+  },
   textInput: {
+    flex: 20,
     fontFamily: 'Nunito-Regular',
-    fontSize: 14,
+    fontSize: 15,
     color: '#444',
     backgroundColor: '#eee',
-    height: 50,
+    height: 60,
     paddingHorizontal: 10,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%', 
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginBottom: 5,
+    height: 55,
+ },
+    headerText: {
+    fontSize: 18,
+    fontFamily: 'Nunito-Bold',
+    },
+    
 });

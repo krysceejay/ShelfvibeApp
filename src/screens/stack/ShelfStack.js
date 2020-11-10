@@ -25,7 +25,11 @@ const ShelfStack = () => {
         headerTintColor: '#000',
         headerTitleAlign: 'left',
       })}>
-      <Stack.Screen name="Clubs" component={Club} />
+      <Stack.Screen name="Clubs" component={Club}
+      options={{
+        headerShown: false,
+      }}
+      />
       <Stack.Screen
         name="Details"
         component={Details}
