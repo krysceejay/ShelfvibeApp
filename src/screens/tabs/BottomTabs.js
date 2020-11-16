@@ -5,8 +5,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import HomeStack from '../stack/HomeStack';
 import ShelfStack from '../stack/ShelfStack';
 import AccountStack from '../stack/AccountStack';
+import NotificationStack from '../stack/NotificationStack';
 import DashDrawer from '../drawer/DashDrawer';
-import Contact from '../Contact';
+import Notifications from '../Notifications';
 import {getLoginLocal} from '../../actions/authActions';
 import {AuthContext} from '../../utils/context';
 import setAuthToken from '../../utils/setAuthToken';
@@ -31,7 +32,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
         // initialRouteName={fromLogin ? 'Dashboard' : 'Account'}
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
-            size = 25;
+            size = 22;
             let iconName;
 
             if (route.name === 'Home') {
@@ -40,8 +41,8 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
             if (route.name === 'Club') {
               iconName = focused ? 'book' : 'book';
             }
-            if (route.name === 'Contact') {
-              iconName = focused ? 'phone' : 'phone';
+            if (route.name === 'Notification') {
+              iconName = focused ? 'bell' : 'bell';
             }
             if (route.name === 'Account') {
               iconName = focused ? 'user' : 'user';
@@ -63,9 +64,9 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
           showLabel: false,
           keyboardHidesTabBar: true,
         }}>
-        <Tab.Screen name="Home" component={HomeStack} />
+        <Tab.Screen name="Home" children={HomeStack} />
         <Tab.Screen name="Club" children={ShelfStack} />
-        <Tab.Screen name="Contact" component={Contact} />
+        <Tab.Screen name="Notification" children={NotificationStack} />
         {isLoggedIn ? (
           <Tab.Screen name="Dashboard" children={DashDrawer} />
         ) : (

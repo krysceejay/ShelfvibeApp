@@ -2,8 +2,14 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AnimatedTabs from '../../components/AnimatedTabs';
-import TopTabs from '../tabs/TopTabs';
+import DashClubs from '../../components/DashClubs';
+
+const dataList = [
+  {key: 1},
+  {key: 2},
+  {key: 3},
+  {key: 4},
+];
 
 const Dash = ({navigation}) => {
     return (
@@ -12,40 +18,52 @@ const Dash = ({navigation}) => {
                 navigation.openDrawer();
             }} /> */}
             <View style={styles.userInfoSection}>
-                <View style={styles.infoRow}>
-                    {/* <Image
-                    source={{
-                        uri: `${proURL + item.user.propix}`,
-                    }}
-                    style={styles.avatar}
-                    size={50}
-                    /> */}
+            <View>
+                <Text style={styles.welcome}>Welcome <Text style={styles.username}>Christopher,</Text></Text>
+                
+            </View>
+                {/* <View style={styles.infoRow}>
                     <Image
                         style={styles.avatar}
                         source={require('../../assets/img/avatar.jpg')}
                         size={50}
                     />
-                    
-                </View>
-                <View>
+                </View> */}
+                <MaterialCommunityIcons name="account-edit" size={25} color="#444444" onPress={() => {}} />
+                {/* <View>
                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.number}>2</Text>
                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Clubs</Text>
                 </View>
                 <View>
                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.number}>6</Text>
                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Joined</Text>
-                </View>
-                <MaterialCommunityIcons name="account-edit" size={25} color="#444444" onPress={() => {}} />
+                </View> */}
+                
             </View>
-            <View style={{paddingHorizontal: 20}}>
-                <Text style={styles.username}>Christopher Chijioke.</Text>
-                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>@krysceejay</Text>
+            <View style={{paddingHorizontal: 12}}>
                 <Text style={styles.briefBio}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </Text>
             </View>
-            <TopTabs navigation={navigation} />
+            <View style={styles.clubViews}>
+            <View style={styles.clubs}>
+              <View style={styles.listTitleView}>
+                <Text style={styles.listTitle}>Your Clubs</Text>
+              </View>
+              <Text style={styles.title}>See all</Text>
+            </View>
+            <DashClubs data={dataList} />
+            <View style={styles.clubs}>
+              <View style={styles.listTitleView}>
+                <Text style={styles.listTitle}>Joined Clubs</Text>
+              </View>
+              <Text style={styles.title}>See all</Text>
+            </View>
+            <DashClubs data={dataList} />
+            </View>
+            
+            {/* <TopTabs navigation={navigation} /> */}
         </ScrollView>
     )
 }
@@ -70,13 +88,13 @@ const styles = StyleSheet.create({
     } ,
     userInfoSection: {
         flexDirection: 'row',
-        marginVertical: 15,
+        //marginVertical: 15,
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#fff',
         width: '100%',
         height: 60,
-        paddingHorizontal: 20
+        paddingHorizontal: 12
       }, 
       infoRow: {
         flexDirection: 'row', 
@@ -87,9 +105,12 @@ const styles = StyleSheet.create({
         width: 60,
         borderRadius: 30,
       },
-      username: {
+      welcome: {
         fontSize: 18,
         marginBottom: 5,
+        fontFamily: 'Nunito-Regular',
+      },
+      username: {
         fontFamily: 'Nunito-SemiBold',
       },
       caption: {
@@ -115,5 +136,43 @@ const styles = StyleSheet.create({
         fontFamily: 'Nunito-Regular',
         color: '#444444',
         textAlign: 'center'
+      },
+      clubViews: {
+        marginVertical: 20,
+      },
+      clubs: {
+        height: 32,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 12,
+        borderBottomWidth: 2,
+        overflow: 'hidden',
+        borderColor: '#00a2cc'
+      },
+      listTitleView: {
+        backgroundColor: '#00a2cc',
+        height: '100%',
+        width: '35%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderTopRightRadius: 12,
+        borderWidth: 0
+        
+      },
+      listTitle: {
+        fontSize: 15,
+        fontFamily: 'Nunito-SemiBold',
+        color: '#fff',
+        textAlign: 'center',
+        textTransform: 'uppercase'
+      },
+      horizontalLine: {
+        height: 2, 
+        backgroundColor: '#00a2cc', 
+        position: 'absolute', 
+        bottom: 0, 
+        left: 35, 
+        width: '94%'
       }
 })

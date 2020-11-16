@@ -72,7 +72,7 @@ const remove = (id) =>
   const VisibleItem = ({data}) => {
     return(
     <View style={styles.userInfoSection}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12}}>
         {/* <Image
           source={{
             uri: `${proURL + item.user.propix}`,
@@ -83,10 +83,9 @@ const remove = (id) =>
         <Image
             style={styles.avatar}
             source={require('../assets/img/avatar.jpg')}
-            size={50}
           />
-        <View style={{marginLeft: 15}}>
-      <Text style={styles.username}>kryso{data.item.key}</Text>
+        <View style={{paddingHorizontal: 10}}>
+      <Text style={styles.username} numberOfLines={1}>kryso{data.item.key} nnnnn</Text>
           <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
             {/* <Text style={[styles.caption, {color: '#721c24'}]}>not active</Text> */}
         </View>
@@ -111,9 +110,9 @@ const remove = (id) =>
           
           zIndex: 2,
           backgroundColor: '#fff',
-          borderRadius: 17,
-          width: 34,
-          height: 34,
+          borderRadius: 15,
+          width: 30,
+          height: 30,
           alignItems: 'center',
           justifyContent: 'center',
           borderWidth: 1,
@@ -130,7 +129,7 @@ const remove = (id) =>
         style={{
           flex: 1,
           alignSelf: 'stretch',
-          paddingHorizontal: 20,
+          //paddingHorizontal: 10,
           marginBottom: 10,
         }}>
         
@@ -148,15 +147,14 @@ const remove = (id) =>
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             renderHiddenItem={(data, rowMap) => (
-                <View style={{backgroundColor: '#f0f0f0', flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginVertical: 10, height: 60}}>
+                <View style={{backgroundColor: '#f0f0f0', flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginVertical: 5, height: 60, paddingHorizontal: 12,}}>
                   <TouchableOpacity
                     style={{
-                      zIndex: 2,
                       width: 34,
                       height: 34,
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginHorizontal: 10,
+                      //marginHorizontal: 10,
                       
                     }}
                     onPress={() => {deActivate(1)}}>
@@ -164,12 +162,11 @@ const remove = (id) =>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
-                      zIndex: 2,
                       width: 34,
                       height: 34,
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginHorizontal: 10,
+                      //marginHorizontal: 10,
                       
                     }}
                     onPress={() => {remove(1)}}>
@@ -200,8 +197,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
-    paddingHorizontal: 20,
+    marginVertical: 10,
+    paddingHorizontal: 10,
   },
   title: {
     fontSize: 20,
@@ -211,17 +208,19 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#fff',
     width: '100%',
     height: 60,
+    borderWidth: 1,
+    borderColor: '#f6f6f6',
   },
   avatar: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
   username: {
     fontSize: 16,

@@ -1,21 +1,24 @@
-import React, {useState, useEffect} from 'react';
-import {connect} from 'react-redux';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
   View,
+  Button,
   FlatList,
   Dimensions,
   Image,
-  TouchableOpacity,
-  Alert
+  TouchableWithoutFeedback,
+  Modal,
+  TouchableOpacity
 } from 'react-native';
+import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {fetchClubs} from '../../actions/clubActions';
+import {AuthContext} from '../../utils/context';
+import {getUserBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
-
+import Empty from '../../components/Empty';
 
 const {width} = Dimensions.get('window');
 
@@ -23,92 +26,39 @@ const dataList = [
   {key: 1},
   {key: 2},
   {key: 3},
-  {key: 4},
-  {key: 5},
-  {key: 6},
-  {key: 7},
-  {key: 8},
-  {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  {key: 21},
 ];
 
-const JoinedClub = ({fetchClubs, navigation, clubs}) => {
+const JoinedList = ({getUserBooks, userBooks, navigation}) => {
+
   const [isLoading, setIsLoading] = useState(false);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
-      // The screen is focused
-      // Call any action
-      const getClubs = await fetchClubs();
-      if (getClubs !== 'failed') {
+      const getUserShelf = await getUserBooks(user.id);
+      if (getUserShelf !== 'failed') {
         setIsLoading(false);
       }
     });
-    // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
   const numColumns = 1;
   const imgURL = Config.IMAGE_URL;
-  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
-
-  formatData = (dataList, numColumns) => {
-    if (dataList !== null) {
-      const totalRows = Math.floor(dataList.length / numColumns);
-      let totalLastRow = dataList.length - totalRows * numColumns;
-      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-        dataList.push({key: 'blank', empty: true});
-        totalLastRow++;
-      }
-    }
-    return dataList;
-  };
-
-  const removeClub =  (id) => {
-    return;
-  };
-
-  const createTwoButtonAlert = (id) =>
-    Alert.alert(
-  'Leave',
-  'Are you sure you want to leave this club?',
-  [
-    {
-      text: 'Cancel',
-      onPress: () => false,
-      style: 'cancel',
-    },
-    {text: 'OK', onPress: () => removeClub(id)},
-  ],
-  {cancelable: false},
-);
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/'
 
   _renderItem = ({item, index}) => {
-    if (item.empty) {
-      return <View style={[styles.item, styles.itemInvisible]} />;
-    }
     return (
       
       <View style={styles.item}>
-        <TouchableOpacity
+        
+        <View style={styles.bookCoverContain}>
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details');
             }}
             activeOpacity={0.9}>
-        
-        <View style={styles.bookCoverContain}>
           
             {/* <Image
                 source={{
@@ -120,99 +70,103 @@ const JoinedClub = ({fetchClubs, navigation, clubs}) => {
               style={styles.bookCover}
               source={require('../../assets/img/showup.jpg')}
             />
+          </TouchableOpacity>
           
         </View>
-        </TouchableOpacity>
+        
         <View style={styles.bookDetails}>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
-            Club Name Club Name
-          </Text>
-          <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-            16 members
-          </Text>
-          
-        </View>
-        <TouchableOpacity
+          <View style={styles.nameAndEdit}>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
+              Club Name Club Name
+            </Text>
+            <TouchableOpacity
             style={{
               zIndex: 2,
               width: 34,
               height: 34,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginLeft: 10,
-              marginVertical: 15
-              
             }}
-            activeOpacity={0.9}
-            onPress={() => {createTwoButtonAlert(1)}}>
-            <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+            onPress={() => {
+            }}
+            activeOpacity={0.9}>
+              <Ionicons name="md-remove-circle-outline" size={25} color="#444444" />
           </TouchableOpacity>
-        
+          </View>
+          <View style={styles.afterName}>
+              <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+                16 members
+              </Text>
+              <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
+                Created on 2nd Jan 2020
+              </Text>
+            </View>
+            <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
+              Need custom logistic service? We got it covered. From overland,
+              air, rail and sea transportation. Fast, safe and accurate
+              shipment provided all over the globe. air, rail and sea transportation. Fast safe and accurate
+              shipment provided all over the globe
+            </Text>
+        </View>
       </View>
       
     );
   };
 
-  //   return (
-  //     <View style={styles.container}>
-  //       {isLoading ? (
-  //         <Skeleton />
-  //       ) : (
-  //         <FlatList
-  //           data={formatData(dataList, numColumns)}
-  //           renderItem={_renderItem}
-  //           keyExtractor={(item, index) => index.toString()}
-  //           numColumns={numColumns}
-  //           showsVerticalScrollIndicator={false}
-  //         />
-  //       )}
-  //     </View>
-  //   );
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => {}}
+        style={styles.floatingBtn}
+        activeOpacity={0.9}>
+        <Ionicons
+          name="ios-add"
+          size={40}
+          color="#fff"
+        />
+      </TouchableOpacity>
       <FlatList
-        data={formatData(dataList, numColumns)}
+        data={dataList}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 40}}
       />
     </View>
   );
 };
 
 const mapStateToProps = state => ({
-  clubs: state.club.clubs,
+  userBooks: state.book.userBooks,
 });
 
 export default connect(
   mapStateToProps,
-  {fetchClubs},
-)(JoinedClub);
+  {getUserBooks},
+)(JoinedList);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingVertical: 10,
-    backgroundColor: '#fff'
+    //paddingVertical: 15,
+    backgroundColor: '#fff',
   },
   item: {
     flex: 1,
-    flexDirection: 'row',
-    marginVertical: 5,
-    marginHorizontal: 15,
+    marginTop: 12,
+    //marginHorizontal: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    //height: width / 1.4,
+    textAlign: 'center',
+    //borderRadius: 12,
     overflow: 'hidden',
-    //alignItems: 'center',
-    justifyContent: 'flex-start',
-    height: 120,
-    borderWidth: 2,
-    borderColor: '#f5f5f5',
-    borderRadius: 10
+    //borderBottomWidth: 2,
+    //borderColor: '#f5f5f5',
   },
   bookCoverContain: {
-    //borderRadius: 12,
-    width: 150,
-    overflow: 'hidden',
+    flex: 3,
+    width: '100%',
+    height: 200
+    //backgroundColor: 'green',
   },
   bookCover: {
     height: '100%',
@@ -220,23 +174,66 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bookDetails: {
-    marginLeft: 15,
-    width: '40%',
-    paddingVertical: 15,
-    //backgroundColor: 'red'
+    padding: 18,
+    width: '100%',
+    backgroundColor: '#fff',
+  },
+  nameAndEdit: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
-    fontSize: 18,
+    fontSize: 17,
+    maxWidth: '90%'
+    //textAlign: 'center',
   },
   members: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 15,
+    fontSize: 13,
     color: '#444444',
-    marginTop: 5,
+  },
+  clubDate: {
+    fontFamily: 'Nunito-Italic',
+    fontSize: 13,
+    color: '#444444',
   },
   itemInvisible: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
   },
+  floatingBtn: {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
+    zIndex: 2,
+    backgroundColor: '#00a2cc',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.0,
+    elevation: 4,
+      },
+      afterName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      },
+      description: {
+        fontFamily: 'Nunito-Regular',
+        fontSize: 13,
+        marginTop: 5,
+      },
 });
+
+

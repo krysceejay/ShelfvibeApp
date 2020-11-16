@@ -63,7 +63,7 @@ const DashboardSidebar = props => {
               size={50}
             />
             <View style={{marginLeft: 15, width: '70%'}}>
-              {/* <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Krys Diadem</Text> */}
+              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>Krys Diadem</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>@krysceejay</Text>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.memberDate}>Member since: 2019-06-12</Text>
             </View>
@@ -126,7 +126,7 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('JoinedList');
               }}
             />
-            <DrawerItem
+            {/* <DrawerItem
               label="Profile"
               labelStyle={{
                 fontSize: 16,
@@ -136,16 +136,7 @@ const DashboardSidebar = props => {
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
-            />
-            <DrawerItem
-              label="Notifications"
-              labelStyle={{
-                fontSize: 16,
-                fontFamily: 'Nunito-Regular',
-              }}
-              icon={() => <Icon color="#242c42" size={20} name="bell-o" />}
-              onPress={() => {}}
-            />
+            /> */}
           </View>
         </View>
       </DrawerContentScrollView>

@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, View, Easing} from 'react-native';
+import {Easing} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-//import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 //import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
 //import Details from '../Details';
-//import Header from '../../components/Header';
-import HomePage from '../HomePage';
-import Details from '../Details2';
+import Header from '../../components/Header';
+import HomePage from '../HomeP';
+import Details from '../DetailsP';
 
 const Stack = createStackNavigator();
 //const Stack = createSharedElementStackNavigator();
@@ -15,6 +15,7 @@ const Stack = createStackNavigator();
 const options = () => ({
   gestureEnabled: false,
   headerBackTitleVisible: false,
+  headerShown: false,
   transitionSpec: {
     open: {
       animation: 'timing',
@@ -83,10 +84,30 @@ const HomeStack = () => {
     // </Stack.Navigator>
 
     <Stack.Navigator
-      initialRouteName="NavigationList"
-      headerMode="none"
-      screenOptions={{cardStyle: {backgroundColor: '#fff'}}}>
-      <Stack.Screen name="NavigationList" component={HomePage} />
+      initialRouteName="Home"
+      //screenOptions={{cardStyle: {backgroundColor: '#fff'}}}
+      screenOptions={({route}) => ({
+        headerStyle: {
+          //backgroundColor: '#242c42',
+        },
+        headerTitleStyle: {
+          fontFamily: 'Nunito-Regular',
+          //color: '#fff',
+          fontSize: 20,
+        },
+
+        headerTitleAlign: 'left',
+        headerBackTitleVisible: false,
+        headerTintColor: '#000',
+        
+        //headerLeft: null,
+      })}
+      >
+      <Stack.Screen name="Home" component={HomePage}
+          options={{
+            headerShown: false,
+          }}
+       />
       <Stack.Screen
         name="Details"
         component={Details}

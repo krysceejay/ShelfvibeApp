@@ -24,7 +24,7 @@ import ReadingList from '../../components/ReadingList';
 import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import {stringToHslColor} from '../../utils/theme';
 
 const {width} = Dimensions.get('window');
 
@@ -45,17 +45,8 @@ const Details = ({route, navigation}) => {
     setAdminModal(false);
   };
 
-  const stringToHslColor = (str) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const h = hash % 360;
-    return `hsl(${h}, 50%, 70%)`;
-  }
-
   return (
-    <View>
+    <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={() => {}}
             style={styles.floatingBtn}
             activeOpacity={0.9}>
@@ -65,8 +56,7 @@ const Details = ({route, navigation}) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#fff'}}>
-      <View style={styles.container}>
-      
+      <View style={{marginBottom: 20,}}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             style={{
@@ -158,7 +148,7 @@ const Details = ({route, navigation}) => {
                     color="#373435"
                   />
                     <View style={styles.detailsTextPublic}>
-                      <Text>public</Text>
+                      <Text style={styles.justTextPublic}>public</Text>
                     </View>
                 </View>
                 </View>
@@ -272,7 +262,7 @@ const Details = ({route, navigation}) => {
         </View>
       </View>
     </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -286,8 +276,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: 'center',
     // justifyContent: 'center',
-    marginBottom: 20,
-    //backgroundColor: 'blue',
+    //marginBottom: 20,
+    backgroundColor: '#fff',
     overflow: 'hidden',
   },
 
@@ -450,13 +440,17 @@ const styles = StyleSheet.create({
     //marginRight: 15,
   },
   detailsTextPublic: {
-    fontFamily: 'Nunito-Bold',
-    fontSize: 14,
+    
     marginLeft: 5,
     borderRadius: 5,
     backgroundColor: '#d4edda',
-    color: '#155724',
+    
     padding: 4,
+  },
+  justTextPublic: {
+    color: '#155724',
+    fontFamily: 'Nunito-Regular',
+    fontSize: 14,
   },
   detailsTextPrivate: {
     fontFamily: 'Nunito-Bold',

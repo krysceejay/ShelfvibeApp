@@ -47,24 +47,9 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
 
   const numColumns = 1;
   const imgURL = Config.IMAGE_URL;
-  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
-
-  formatData = (dataList, numColumns) => {
-    if (dataList !== null) {
-      const totalRows = Math.floor(dataList.length / numColumns);
-      let totalLastRow = dataList.length - totalRows * numColumns;
-      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-        dataList.push({key: 'blank', empty: true});
-        totalLastRow++;
-      }
-    }
-    return dataList;
-  };
+  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/'
 
   _renderItem = ({item, index}) => {
-    if (item.empty) {
-      return <View style={[styles.item, styles.itemInvisible]} />;
-    }
     return (
       
       <View style={styles.item}>
@@ -91,31 +76,35 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
         </View>
         
         <View style={styles.bookDetails}>
-          <View>
+          <View style={styles.nameAndEdit}>
             <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
               Club Name Club Name
             </Text>
-            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-              16 members
-            </Text>
-            <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-              Created on 2nd Jan 2020
-            </Text>
-          </View>
-          <TouchableOpacity
+            <TouchableOpacity
             style={{
               zIndex: 2,
               width: 34,
               height: 34,
-              alignItems: 'center',
-              justifyContent: 'center',
-              
             }}
-            onPress={() => {
-            }}
-            activeOpacity={0.9}>
-              <FontAwesome name="edit" size={25} color="#444444" />
+            activeOpacity={0.9}
+            onPress={() => {createTwoButtonAlert(1)}}>
+            <FontAwesome name="edit" size={22} color="#444444" />
           </TouchableOpacity>
+          </View>
+          <View style={styles.afterName}>
+              <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+                16 members
+              </Text>
+              <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
+                Created on 2nd Jan 2020
+              </Text>
+            </View>
+            <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
+              Need custom logistic service? We got it covered. From overland,
+              air, rail and sea transportation. Fast, safe and accurate
+              shipment provided all over the globe. air, rail and sea transportation. Fast safe and accurate
+              shipment provided all over the globe
+            </Text>
         </View>
       </View>
       
@@ -134,11 +123,12 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
         />
       </TouchableOpacity>
       <FlatList
-        data={formatData(dataList, numColumns)}
+        data={dataList}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 40}}
       />
     </View>
   );
@@ -157,19 +147,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     //paddingVertical: 15,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   item: {
     flex: 1,
-    margin: 10,
+    marginTop: 12,
+    //marginHorizontal: 2,
     alignItems: 'center',
     justifyContent: 'center',
     //height: width / 1.4,
     textAlign: 'center',
-    borderRadius: 12,
+    //borderRadius: 12,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: '#f5f5f5',
+    //borderBottomWidth: 2,
+    //borderColor: '#f5f5f5',
   },
   bookCoverContain: {
     flex: 3,
@@ -183,29 +174,31 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bookDetails: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 18,
     width: '100%',
     backgroundColor: '#fff',
   },
+  nameAndEdit: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
     fontSize: 17,
+    maxWidth: '90%'
     //textAlign: 'center',
   },
   members: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 15,
+    fontSize: 13,
     color: '#444444',
-    marginTop: 5,
   },
   clubDate: {
     fontFamily: 'Nunito-Italic',
     fontSize: 13,
     color: '#444444',
-    marginTop: 5,
   },
   itemInvisible: {
     backgroundColor: 'transparent',
@@ -213,7 +206,7 @@ const styles = StyleSheet.create({
   },
   floatingBtn: {
     position: 'absolute',
-    bottom: 25,
+    bottom: 15,
     right: 15,
     zIndex: 2,
     backgroundColor: '#00a2cc',
@@ -230,5 +223,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.0,
     elevation: 4,
-      }
+      },
+      afterName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      },
+      description: {
+        fontFamily: 'Nunito-Regular',
+        fontSize: 13,
+        marginTop: 5,
+      },
 });

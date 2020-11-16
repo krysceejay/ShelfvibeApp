@@ -1,6 +1,6 @@
 import React, {useRef, createRef, forwardRef, useEffect, useState, useCallback} from 'react';
 import { StyleSheet, Text, View, StatusBar, Dimensions, FlatList, Animated, Image, findNodeHandle, TouchableOpacity, ScrollView } from 'react-native';
-import DashClubs from '../../components/DashClubs';
+
 
 const {width, height} = Dimensions.get('screen');
 
@@ -97,10 +97,10 @@ const TopTabs = ({navigation}) => {
                 {useNativeDriver: false}
             )}>
             <View style={styles.outer}>
-            <DashClubs navigation={navigation} />
+            <Text>content</Text>
             </View>
             <View style={styles.outer}>
-            <DashClubs navigation={navigation} />
+            <Text>content</Text>
             </View>
         </Animated.ScrollView>
         
@@ -114,9 +114,6 @@ export default TopTabs;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   outer: {
     width: width,
@@ -126,9 +123,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   red: {
-    //backgroundColor: '#dd4b39',
+    backgroundColor: '#dd4b39',
   },
   green: {
-    //backgroundColor: '#27ae60',
+    backgroundColor: '#27ae60',
   },
 });
