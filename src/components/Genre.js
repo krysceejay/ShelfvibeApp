@@ -12,18 +12,18 @@ export default class Genre extends Component {
     const {genreListChild} = this.state;
     const {item, genrelist} = this.props;
     const pushToList = () => {
-      if (!genreListChild.includes(item)) {
+      if (!genreListChild.includes(item.title)) {
         this.setState({
-          genreListChild: [...this.state.genreListChild, item],
+          genreListChild: [...this.state.genreListChild, item.title],
         });
-        genrelist.push(item);
+        genrelist.push(item.title);
       } else {
         this.setState({
           genreListChild: this.state.genreListChild.filter(
-            it => it.id != item.id,
+            it => it != item.title,
           ),
         });
-        const a = genrelist.indexOf(item);
+        const a = genrelist.indexOf(item.title);
         genrelist.splice(a, 1);
       }
     };
@@ -32,12 +32,12 @@ export default class Genre extends Component {
         <TouchableOpacity onPress={pushToList}>
           <Ionicons
             name={
-              genreListChild.includes(item)
+              genreListChild.includes(item.title)
                 ? 'ios-checkbox-outline'
                 : 'ios-square-outline'
             }
             size={25}
-            color={genreListChild.includes(item) ? '#e91e63' : '#666666'}
+            color={genreListChild.includes(item.title) ? '#e91e63' : '#666666'}
             style={{width: 32}}
           />
         </TouchableOpacity>

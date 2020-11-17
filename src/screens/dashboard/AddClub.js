@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -13,223 +14,109 @@ import {
   SafeAreaView,
   Switch,
 } from 'react-native';
-import {Picker} from '@react-native-community/picker';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ListGenre from '../../components/ListGenre';
 import ImagePicker from 'react-native-image-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import ListGenre from '../../components/ListGenre';
+import {createClub} from '../../actions/clubActions';
 
-export default class AddShelf extends Component {
-  state = {
-    modalVisible: false,
-    genre: [],
-    photo: null,
-    date: new Date(),
-    mode: 'date',
-    show: false,
-    showDate: false,
-    isPublish: false,
-    isPublic: true,
-  };
+const AddClub = ({createClub, navigation}) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        genre: [],
+        photo: null,
+        isPublish: false,
+        isPublic: true,
+        description: '',
+        modalVisible: false
+      });
 
-  setModalVisible = visible => {
-    this.setState({modalVisible: visible});
-  };
+      const {
+        name,
+        genre,
+        photo,
+        isPublish,
+        isPublic,
+        description,
+        modalVisible
+      } = formData;
 
-  setPickerVisible = visible => {
-    this.setState({showDate: visible});
-  };
+      const onChange = name => text => setFormData({...formData, [name]: text});
+
+    // formatGenre = (item, index, arr) => {
+    //     let gen;
+    //     if (index == arr.length - 1) {
+    //       gen = item.title;
+    //     } else {
+    //       gen = item.title + ', ';
+    //     }
+    //     return gen;
+    //   };
+    formatGenre = (item, index, arr) => {
+        let gen;
+        if (index == arr.length - 1) {
+          gen = item;
+        } else {
+          gen = item + ', ';
+        }
+        return gen;
+      };
 
   getGenre = genreList => {
-    this.setState({
-      genre: genreList,
-    });
-  };
-
-  togglePublishSwitch = () => {
-    return this.setState((prevState, prevProp) => ({
-      isPublish: !prevState.isPublish,
-    }));
-  };
-  togglePublicSwitch = () => {
-    return this.setState((prevState, prevProp) => ({
-      isPublic: !prevState.isPublic,
-    }));
+    setFormData({...formData, genre: genreList});
   };
 
   handleChoosePhoto = () => {
     const options = {
-      title: 'Select Book Cover',
-      // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+      title: 'Select Club Cover',
       storageOptions: {
         skipBackup: true,
-        path: 'images',
+        path: 'Shelfvibe Images',
       },
     };
     ImagePicker.showImagePicker(options, response => {
       if (response.didCancel) {
         return;
       } else if (response.error) {
-        //console.log('ImagePicker Error: ', response.error);
         return;
       } else {
-        // const source = {
-        //   uri: response.uri,
-        //   type: response.type,
-        //   name:
-        //     response.fileName ||
-        //     response.uri.substr(response.uri.lastIndexOf('/' + 1)),
-        // };
-        // const source = {
-        //   uri: response.uri,
-        // };
+          const photo = {
+            path: response.uri,
+            content_type: response.type,
+            filename:
+            response.fileName ||
+            response.uri.substr(response.uri.lastIndexOf('/' + 1)),
+        };
 
-        //console.log(response.uri);
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({photo: response});
-        //this.setState({ photo: response })
+        setFormData({...formData, photo});
       }
     });
   };
 
-  setDate = (event, selectedDate) => {
-    const currentDate = selectedDate || this.state.date;
-    this.setState({
-      date: currentDate,
-      show: Platform.OS === 'ios' ? true : false,
+  togglePublishSwitch = () => {
+    setFormData({...formData, isPublish: !isPublish});
+  };
+
+  togglePublicSwitch = () => {
+    setFormData({...formData, isPublic: !isPublic});
+  };
+
+  createClubAction = async () => {
+    const userCreateClub = await createClub({
+        name,
+        genre,
+        photo,
+        isPublish,
+        isPublic,
+        description,
     });
-  };
-
-  show = mode => {
-    this.setState({mode, show: true});
-  };
-
-  datePicker = () => {
-    this.show('date');
-  };
-
-  timePicker = () => {
-    this.show('time');
-  };
-
-  showDatePicker = () => {
-    this.setState({showDate: !this.state.showDate, mode: 'date'});
-  };
-
-  showTimePicker = () => {
-    this.setState({showDate: !this.state.showDate, mode: 'time'});
-  };
-
-  checkPlateform = (show, date, mode) => {
-    if (Platform.OS === 'ios') {
-      return (
-        <View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.showDate}>
-            <View style={styles.pickerIosmodalView}>
-              <DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={this.setDate}
-              />
-              <Button
-                onPress={() => {
-                  this.setPickerVisible(!this.state.showDate);
-                }}
-                title="Close Modal"
-              />
-            </View>
-          </Modal>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Meeting Date</Text>
-            <TouchableOpacity
-              style={styles.openButton}
-              onPress={this.showDatePicker}>
-              <Text style={styles.textStyle}>Show date picker</Text>
-            </TouchableOpacity>
-
-            {/* {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={this.setDate}
-              />
-            )} */}
-          </View>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Meeting time</Text>
-
-            <TouchableOpacity
-              style={styles.openButton}
-              onPress={this.showTimePicker}>
-              <Text style={styles.textStyle}>Show time picker</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    } else if (Platform.OS === 'android') {
-      return (
-        <View>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Meeting Date</Text>
-            <TouchableOpacity
-              style={styles.openButton}
-              onPress={this.datePicker}>
-              <Text style={styles.textStyle}>Show date picker</Text>
-            </TouchableOpacity>
-
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                timeZoneOffsetInMinutes={0}
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={this.setDate}
-              />
-            )}
-          </View>
-          <View style={styles.singleInput}>
-            <Text style={styles.textLabel}>Meeting time</Text>
-
-            <TouchableOpacity
-              style={styles.openButton}
-              onPress={this.timePicker}>
-              <Text style={styles.textStyle}>Show time picker</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
+    if (userCreateClub == 'failed' || Array.isArray(userCreateClub)) {
+      console.log('failed');
     } else {
-      return;
+        console.log('success');
     }
   };
 
-  render() {
-    const {
-      modalVisible,
-      photo,
-      show,
-      date,
-      mode,
-      isPublish,
-      isPublic,
-    } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <KeyboardAwareScrollView
@@ -238,12 +125,9 @@ export default class AddShelf extends Component {
           extraHeight={10}>
           <View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Title</Text>
-              <TextInput placeholder="Enter title" style={styles.textInput} />
-            </View>
-            <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Author</Text>
-              <TextInput placeholder="Enter author" style={styles.textInput} />
+              <Text style={styles.textLabel}>Club Name</Text>
+              <TextInput placeholder="Enter club name" style={styles.textInput} value={name}
+              onChangeText={onChange('name')} />
             </View>
             <View style={styles.singleInput}>
               <Text style={styles.textLabel}>Genre (select genre)</Text>
@@ -254,10 +138,10 @@ export default class AddShelf extends Component {
                 <View style={styles.modalView}>
                   <ListGenre
                     closeModal={() => {
-                      this.setModalVisible(!modalVisible);
+                      setFormData({...formData, modalVisible: !modalVisible})
                     }}
-                    item={this.getGenre}
-                    items={this.state.genre}
+                    item={getGenre}
+                    items={genre}
                   />
                 </View>
               </Modal>
@@ -265,21 +149,21 @@ export default class AddShelf extends Component {
                 underlayColor="#fff7fb"
                 style={styles.openButton}
                 onPress={() => {
-                  this.setModalVisible(true);
+                  setFormData({...formData, modalVisible: true})
                 }}>
                 <Text style={styles.textStyle}>
-                  {this.state.genre.map((item, index) => item.title + ', ')}
+                    {genre.map(formatGenre)}
                 </Text>
               </TouchableHighlight>
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Book cover</Text>
+              <Text style={styles.textLabel}>Club cover</Text>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
-                <TouchableOpacity onPress={this.handleChoosePhoto}>
+                <TouchableOpacity onPress={handleChoosePhoto}>
                   <View style={styles.iconContainer}>
                     <Text style={styles.textStyle}>Upload</Text>
                     <FontAwesome name="upload" size={20} color="#3a4155" />
@@ -287,26 +171,21 @@ export default class AddShelf extends Component {
                 </TouchableOpacity>
                 <View style={styles.showImage}>
                   {photo ? (
-                    <Image source={{uri: photo.uri}} style={styles.bookCover} />
+                    <Image source={{uri: photo.path}} style={styles.bookCover} />
                   ) : null}
-                  {/* <Image
-                    style={styles.bookCover}
-                    source={require('../../assets/img/playbigger.jpg')}
-                  /> */}
                 </View>
               </View>
             </View>
-            {this.checkPlateform(show, date, mode)}
             <View style={styles.singleInput}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <View>
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{marginRight: 50}}>
                   <Text style={styles.textLabel}>Publish</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={this.togglePublishSwitch}
+                    onValueChange={togglePublishSwitch}
                     value={isPublish}
                     style={{transform: [{scaleX: 1.3}, {scaleY: 1.3}]}}
                   />
@@ -317,7 +196,7 @@ export default class AddShelf extends Component {
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublic ? '#d1ecf1' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={this.togglePublicSwitch}
+                    onValueChange={togglePublicSwitch}
                     value={isPublic}
                     style={{transform: [{scaleX: 1.3}, {scaleY: 1.3}]}}
                   />
@@ -336,7 +215,7 @@ export default class AddShelf extends Component {
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
-                  //maxLength={40}
+                  maxLength={300}
                   style={{
                     backgroundColor: '#fff',
                     paddingHorizontal: 10,
@@ -344,11 +223,13 @@ export default class AddShelf extends Component {
                     fontSize: 14,
                     color: '#333',
                   }}
+                  value={description}
+                onChangeText={onChange('description')}
                 />
               </View>
             </View>
             <View style={styles.singleInput}>
-              <TouchableOpacity style={styles.signIn}>
+              <TouchableOpacity style={styles.signIn} onPress={createClubAction}>
                 <Text style={styles.textSign}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -356,8 +237,13 @@ export default class AddShelf extends Component {
         </KeyboardAwareScrollView>
       </SafeAreaView>
     );
-  }
+  
 }
+
+export default connect(
+    null,
+    {createClub},
+  )(AddClub);
 
 const styles = StyleSheet.create({
   container: {

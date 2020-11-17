@@ -14,8 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {signup} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
-const Signup = props => {
-  const {signup, navigation} = props;
+const Signup = ({signup, navigation}) => {
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',

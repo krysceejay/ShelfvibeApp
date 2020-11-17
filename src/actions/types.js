@@ -10,3 +10,4 @@ export const FETCH_BOOKS = 'FETCH_BOOKS';
 export const USER_BOOKS = 'USER_BOOKS';
 export const USER_CLUBS = 'USER_CLUBS';
 export const FETCH_CLUBS = 'FETCH_CLUBS';
+export const CREATE_CLUB = 'CREATE_CLUB';

@@ -113,15 +113,6 @@ const JoinedList = ({getUserBooks, userBooks, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {}}
-        style={styles.floatingBtn}
-        activeOpacity={0.9}>
-        <Ionicons
-          name="ios-add"
-          size={40}
-          color="#fff"
-        />
-      </TouchableOpacity>
       <FlatList
         data={dataList}
         renderItem={_renderItem}

@@ -2,15 +2,14 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import AddShelf from '../dashboard/AddShelf';
+import AddClub from '../dashboard/AddClub';
 
 const Stack = createStackNavigator();
 
 const AddToShelfStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="AddShelf"
+      initialRouteName="AddClub"
       screenOptions={() => ({
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
@@ -20,7 +19,7 @@ const AddToShelfStack = ({navigation}) => {
         headerTitleAlign: 'center',
         headerTintColor: '#000',
         headerTitleAlign: 'left',
-        title: 'Add To Shelf',
+        title: 'Add Club',
         headerRight: () => {
           return (
             <TouchableOpacity
@@ -39,7 +38,7 @@ const AddToShelfStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="AddShelf" component={AddShelf} />
+      <Stack.Screen name="AddClub" component={AddClub} />
     </Stack.Navigator>
   );
 };

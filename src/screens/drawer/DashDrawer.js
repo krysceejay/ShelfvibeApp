@@ -27,7 +27,7 @@ const DashDrawer = () => {
       })}>
       <Drawer.Screen name="Dashboard" children={DrawerHomeStack} />
       <Drawer.Screen name="ManageShelf" children={ManageShelfStack} />
-      <Drawer.Screen name="AddShelf" children={AddToShelfStack} />
+      <Drawer.Screen name="AddClub" children={AddToShelfStack} />
       <Drawer.Screen name="JoinedList" children={JoinedListStack} />
       <Drawer.Screen name="Profile" children={ProfileStack} />
       <Drawer.Screen name="Details" component={Details} />

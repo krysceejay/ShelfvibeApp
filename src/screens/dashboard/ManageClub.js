@@ -113,7 +113,9 @@ const ManageClub = ({getUserBooks, userBooks, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {}}
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('AddClub');
+      }}
         style={styles.floatingBtn}
         activeOpacity={0.9}>
         <Ionicons
