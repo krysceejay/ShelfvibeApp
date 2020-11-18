@@ -81,13 +81,10 @@ const AddClub = ({createClub, navigation}) => {
         return;
       } else {
           const photo = {
-            path: response.uri,
-            content_type: response.type,
-            filename:
-            response.fileName ||
-            response.uri.substr(response.uri.lastIndexOf('/' + 1)),
+            uri: response.uri,
+            type: response.type,
+            name: response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
         };
-
         setFormData({...formData, photo});
       }
     });
@@ -111,7 +108,7 @@ const AddClub = ({createClub, navigation}) => {
         description,
     });
     if (userCreateClub == 'failed' || Array.isArray(userCreateClub)) {
-      console.log('failed');
+      console.log('failed from app');
     } else {
         console.log('success');
     }
@@ -171,7 +168,7 @@ const AddClub = ({createClub, navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.showImage}>
                   {photo ? (
-                    <Image source={{uri: photo.path}} style={styles.bookCover} />
+                    <Image source={{uri: photo.uri}} style={styles.bookCover} />
                   ) : null}
                 </View>
               </View>
