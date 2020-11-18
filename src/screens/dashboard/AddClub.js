@@ -42,16 +42,7 @@ const AddClub = ({createClub, navigation}) => {
       } = formData;
 
       const onChange = name => text => setFormData({...formData, [name]: text});
-
-    // formatGenre = (item, index, arr) => {
-    //     let gen;
-    //     if (index == arr.length - 1) {
-    //       gen = item.title;
-    //     } else {
-    //       gen = item.title + ', ';
-    //     }
-    //     return gen;
-    //   };
+      
     formatGenre = (item, index, arr) => {
         let gen;
         if (index == arr.length - 1) {

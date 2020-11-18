@@ -13,39 +13,12 @@ import {
 } from 'react-native';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import {fetchClubs} from '../../actions/clubActions';
+import {fetchClubs, filterClub} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 
-const {width} = Dimensions.get('window');
-
-const dataList = [
-  {key: 1, name: 'James'},
-  {key: 2, name: 'Shoe'},
-  {key: 3, name: 'Addida'},
-  {key: 4, name: 'John'},
-  {key: 5, name: 'Gadd'},
-  {key: 6, name: 'Faith'},
-  {key: 7, name: 'Amaka'},
-  {key: 8, name: 'Jack'},
-  {key: 9, name: 'Jill'},
-  {key: 10, name: 'Liller'},
-  {key: 11, name: 'Tope'},
-  {key: 12, name: 'Uduak'},
-  {key: 13, name: 'Goodness'},
-  {key: 14, name: 'Adams'},
-  {key: 15, name: 'Falz'},
-  {key: 16, name: 'Tomama'},
-  {key: 17, name: 'Saidi'},
-  {key: 18, name: 'Vickky'},
-  {key: 19, name: 'Hommie'},
-  {key: 20, name: 'Ziller'}
-];
-
-const Shelf = ({fetchClubs, navigation, clubs}) => {
-  const [isLoading, setIsLoading] = useState(false);
+const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const [showSearch, setShowSearch] = useState(false);
-  const [filterClubs, setFilterClubs] = useState(dataList);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -66,14 +39,13 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
   //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
   const searchClub = text => {
-    setFilterClubs(dataList.filter(item => {
-      return item.name.toLowerCase().includes(text.toLowerCase());
-    }));
+    filterClub(text, clubs);
   }
 
   const removeSearch = () => {
-    setFilterClubs(dataList);
+    searchClub('');
     setShowSearch(false);
+    console.log(showSearch);
   }
 
   _renderItem = ({item, index}) => {
@@ -87,17 +59,16 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
               navigation.navigate('Details');
             }}
             activeOpacity={0.9}>
-          
-            {/* <Image
+            <Image
                 source={{
-                  uri: `${imgURL + item.bookcover}`,
+                  uri: `${imgURL}/club/${item.image}`,
                 }}
                 style={styles.bookCover}
-              /> */}
-            <Image
+              />
+            {/* <Image
               style={styles.bookCover}
               source={require('../../assets/img/showup.jpg')}
-            />
+            /> */}
           </TouchableOpacity>
           
         </View>
@@ -112,7 +83,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
                 16 members
               </Text>
               <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-                Created on 2nd Jan 2020
+                Created on 2nd Jan 2020 {item.insertedAt}
               </Text>
             </View>
             <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
@@ -128,22 +99,7 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
       
     );
   };
-
-  //   return (
-  //     <View style={styles.container}>
-  //       {isLoading ? (
-  //         <Skeleton />
-  //       ) : (
-  //         <FlatList
-  //           data={formatData(dataList, numColumns)}
-  //           renderItem={_renderItem}
-  //           keyExtractor={(item, index) => index.toString()}
-  //           numColumns={numColumns}
-  //           showsVerticalScrollIndicator={false}
-  //         />
-  //       )}
-  //     </View>
-  //   );
+  
   return (
     <SafeAreaView style={styles.container}>
       {showSearch ? <View style={styles.singleInput}>
@@ -187,12 +143,13 @@ const Shelf = ({fetchClubs, navigation, clubs}) => {
 
 const mapStateToProps = state => ({
   clubs: state.club.clubs,
+  filterClubs: state.club.filterClub,
 });
 
 export default connect(
   mapStateToProps,
-  {fetchClubs},
-)(Shelf);
+  {fetchClubs, filterClub},
+)(Club);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUBS, CREATE_CLUB} from './types';
+import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -10,6 +10,11 @@ export const fetchClubs = () => async dispatch => {
             image
             name
             public
+            insertedAt
+            updatedAt
+            description
+            genre
+            publish
             user{
               username
             }
@@ -37,8 +42,8 @@ export const createClub = clubInput => async dispatch => {
   const {name, genre, photo, isPublish, isPublic, description} = clubInput;
   let img;
   if(photo !== null) {
-    const uploadImage = await fileUpload(photo, 'club');
         try {
+          const uploadImage = await fileUpload(photo, 'club');
           if(uploadImage.status == 200){
             img = uploadImage.data.data;
           }else{
@@ -95,7 +100,6 @@ export const createClub = clubInput => async dispatch => {
       
       dispatch({
         type: CREATE_CLUB,
-        payload: createUserClub.data.data.createClub.result
       });
     } else {
       const errorMessages = createUserClub.data.data.createClub.messages;
@@ -112,5 +116,15 @@ export const createClub = clubInput => async dispatch => {
     );
     return 'failed';
   }
+};
+
+export const filterClub = (text, clubs) => async dispatch => {
+    let filteredClub = clubs.filter(item => {
+      return item.name.toLowerCase().includes(text.toLowerCase());
+    });
+    dispatch({
+      type: FILTER_CLUB,
+      payload: filteredClub,
+    });
 };
 

@@ -15,7 +15,6 @@ const fileUpload = async (photo, path) => {
         });
 
         return imgUpload;
-        
     }   
 
 export default fileUpload;

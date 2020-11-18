@@ -1,24 +1,30 @@
-import {FETCH_CLUBS, USER_CLUBS, CREATE_CLUB} from '../actions/types';
+import {FETCH_CLUBS, USER_CLUBS, CREATE_CLUB, FILTER_CLUB} from '../actions/types';
 
 const initialState = {
   clubs: [],
   club: {},
   userClubs: [],
+  filterClub: []
 };
 
 const clubReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_CLUBS:
-      return {...state, books: action.payload};
+      return {
+        ...state, 
+        clubs: action.payload,
+        filterClub: action.payload
+      };
 
     case USER_CLUBS:
-      return {...state, userBooks: action.payload};
+      return {...state, userClubs: action.payload};
 
     case CREATE_CLUB:
-      return {
-        ...state,
-        clubs: action.payload,
-      };  
+      return state;
+
+    case FILTER_CLUB:
+      return {...state, filterClub: action.payload};
+
     default:
       return state;
   }
