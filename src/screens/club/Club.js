@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from "moment";
 import {fetchClubs, filterClub} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 
@@ -21,7 +22,7 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    //setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
       // The screen is focused
       // Call any action
@@ -80,17 +81,14 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
             </Text>
             <View style={styles.afterName}>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-                16 members
+                {item.members.length} member(s)
               </Text>
               <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-                Created on 2nd Jan 2020 {item.insertedAt}
+                Created on {moment(item.insertedAt).format("Do MMM YYYY")} 
               </Text>
             </View>
             <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
-              Need custom logistic service? We got it covered. From overland,
-              air, rail and sea transportation. Fast, safe and accurate
-              shipment provided all over the globe. air, rail and sea transportation. Fast safe and accurate
-              shipment provided all over the globe
+              {item.description}
             </Text>
           </View>
           
@@ -102,6 +100,8 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   
   return (
     <SafeAreaView style={styles.container}>
+      {isLoading ? <Skeleton /> : 
+      <>
       {showSearch ? <View style={styles.singleInput}>
       <TouchableOpacity style={styles.disableSearch} onPress={removeSearch}
             activeOpacity={0.3}>
@@ -137,6 +137,9 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
           <Text style={styles.emptyText}>No club found</Text>
       )}
       />
+      </>
+      }
+      
     </SafeAreaView>
   );
 };

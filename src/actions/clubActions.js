@@ -7,6 +7,7 @@ export const fetchClubs = () => async dispatch => {
   const query = `
       query {
         allclubs{
+            id
             image
             name
             public
@@ -17,6 +18,11 @@ export const fetchClubs = () => async dispatch => {
             publish
             user{
               username
+            }
+            members{
+              user{
+                username
+              }
             }
           }
         }
