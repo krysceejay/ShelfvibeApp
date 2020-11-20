@@ -63,7 +63,7 @@ const Skeleton = props => {
         data={dataList}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
+        numColumns={1}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -81,13 +81,10 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    margin: 10,
+    marginVertical: 10,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
     padding: 10,
-
-    //backgroundColor: '#3232ff',
     alignItems: 'center',
     justifyContent: 'center',
     height: width / 1.4,
@@ -99,11 +96,6 @@ const styles = StyleSheet.create({
     width: '100%',
     //borderColor: '#ccc',
     //borderWidth: 1,
-  },
-  bookCover: {
-    height: '100%',
-    width: '100%',
-    resizeMode: 'contain',
   },
   bookDetails: {
     //flex: 1,

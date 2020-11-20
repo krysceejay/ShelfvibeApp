@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB} from './types';
+import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -22,7 +22,9 @@ export const fetchClubs = () => async dispatch => {
             members{
               user{
                 username
+                propix
               }
+              status
             }
           }
         }
@@ -45,8 +47,16 @@ export const fetchClubs = () => async dispatch => {
 
 //Add Club
 export const createClub = clubInput => async dispatch => {
-  const {name, genre, photo, isPublish, isPublic, description} = clubInput;
+  const {clubname, clubgenre, photo, isPublish, isPublic, clubdescription} = clubInput;
   let img;
+  let cgen;
+
+  if (clubgenre.length == 0) {
+    cgen = null
+  }else{
+    cgen = clubgenre;
+  }
+
   if(photo !== null) {
         try {
           const uploadImage = await fileUpload(photo, 'club');
@@ -71,9 +81,10 @@ export const createClub = clubInput => async dispatch => {
     }
 
   const query = `
-  mutation CreateClub($name: String!, $genre: [String!], $img: String!, $description: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
-    createClub(input: {name: $name, public: $isPublic, publish: $isPublish, image: $img, genre: $genre, description: $description}){
+  mutation CreateClub($clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+    createClub(input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription}){
       result{
+        id
         name
         image
         public
@@ -94,28 +105,29 @@ export const createClub = clubInput => async dispatch => {
   try {
     const createUserClub = await api.post('/', {query, 
       variables: {
-        name,
-        genre,
+        clubname,
+        cgen,
         isPublish,
         isPublic,
-        description,
+        clubdescription,
         img
       }
     });
     if (createUserClub.data.data.createClub.successful === true) {
-      
       dispatch({
         type: CREATE_CLUB,
       });
+      return createUserClub.data.data.createClub.result.id;
     } else {
       const errorMessages = createUserClub.data.data.createClub.messages;
       Alert.alert(
-        'Creating club Failed',
-        'Please make sure you provide the required data',
+        'Error',
+        'Please make sure you provide the required fields',
       );
       return errorMessages;
     }
   } catch (err) {
+    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
@@ -133,4 +145,50 @@ export const filterClub = (text, clubs) => async dispatch => {
       payload: filteredClub,
     });
 };
+
+//Add Member
+export const createMemberAction = memberInput => async dispatch => {
+  const {clubId, status} = memberInput;
+  const query = `
+  mutation {
+    createMember(clubId: ${clubId}, input: {status: ${status}}){
+      result{
+        user{
+          username
+        }
+        club{
+          name
+        }
+      }
+      successful
+      messages{
+        code
+        field
+        message
+      }
+    }
+  }
+  `;
+  try {
+    const createMember = await api.post('/', {query});
+    if (createMember.data.data.createMember.successful === true) {
+      dispatch({
+        type: CREATE_MEMBER,
+      });
+    } else {
+      Alert.alert(
+        'Joining Club Failed',
+        'Some error occured, please check your internet connection and retry.',
+      );
+      return 'failed';
+    }
+  } catch (err) {
+    console.log(err);
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
 

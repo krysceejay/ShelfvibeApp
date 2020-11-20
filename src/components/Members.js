@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,18 +13,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from 'react-native-config';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import {AuthContext} from '../utils/context';
+import {stringToHslColor} from '../utils/theme';
 
-const proURL = Config.PROFILE_URL;
+const proURL = Config.IMAGE_URL;
 
-const dataList = [
-    {key: "1"},
-    {key: "2"},
-    {key: "3"},
-    {key: "4"},
-    {key: "5"},
-  ];
+// const dataList = [
+//     {key: "1"},
+//     {key: "2"},
+//     {key: "3"},
+//     {key: "4"},
+//     {key: "5"},
+//   ];
 
-const Members = ({closeModal}) => {
+const Members = ({closeModal, dataList}) => {
+  const user = useContext(AuthContext);
   const onClosePress = () => {
     closeModal();
   };
@@ -73,24 +76,27 @@ const remove = (id) =>
     return(
     <View style={styles.userInfoSection}>
       <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12}}>
-        {/* <Image
-          source={{
-            uri: `${proURL + item.user.propix}`,
-          }}
+        {data.item.user.propix !== "noimage.png" ? 
+          <Image
           style={styles.avatar}
-          size={50}
-        /> */}
-        <Image
-            style={styles.avatar}
-            source={require('../assets/img/avatar.jpg')}
-          />
+          source={{
+            uri: `${proURL}/profiles/${data.item.user.propix}`,
+          }}
+        /> :
+        <View key={data.index} style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(data.item.user.username)}]}>
+          <Text style={styles.initial}>{data.item.user.username.charAt(0)}</Text>
+         </View>
+        }
         <View style={{paddingHorizontal: 10}}>
-      <Text style={styles.username} numberOfLines={1}>kryso{data.item.key} nnnnn</Text>
-          <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
-            {/* <Text style={[styles.caption, {color: '#721c24'}]}>not active</Text> */}
+      <Text style={styles.username} numberOfLines={1}>{data.item.user.username}</Text>
+      {data.item.status ?  
+        <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
+        :
+        <Text style={[styles.caption, {color: '#721c24'}]}>not active</Text>
+        }
         </View>
       </View>
-      {/* {props.username === item.user.username && <Text>Admin</Text>} */}
+      {user !== null && user.username === data.item.user.username && <Text style={styles.adminText}>Admin</Text>}
     </View>
     )
   }
@@ -103,7 +109,7 @@ const remove = (id) =>
     <SafeAreaView style={styles.container}>
       <View style={styles.closeBtn}>
         <Text style={styles.title}>
-          Members (11)
+          Members ({dataList.length})
         </Text>
         <TouchableOpacity onPress={onClosePress}
         style={{
@@ -132,16 +138,6 @@ const remove = (id) =>
           //paddingHorizontal: 10,
           marginBottom: 10,
         }}>
-        
-        {/* <FlatList
-          data={dataList}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <Text style={styles.reviewText}>No member yet</Text>
-          )}
-        /> */}
         <SwipeListView
             data={dataList}
             renderItem={renderItem}
@@ -239,7 +235,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
   },
-  deleteBox: {
-
-  }
+  adminText: {
+    paddingHorizontal: 12,
+    fontFamily: 'Nunito-SemiBold',
+  },
+  clubMembersSingle:{
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initial: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 18,
+    color: '#fff',
+    textTransform: 'uppercase'
+  },
 });

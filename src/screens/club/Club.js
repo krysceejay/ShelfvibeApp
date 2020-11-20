@@ -17,12 +17,16 @@ import moment from "moment";
 import {fetchClubs, filterClub} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 
+const numColumns = 1;
+const imgURL = Config.IMAGE_URL;
+//const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
+
 const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const [showSearch, setShowSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    //setIsLoading(true);
+    setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
       // The screen is focused
       // Call any action
@@ -35,10 +39,6 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
     return unsubscribe;
   }, [navigation]);
 
-  const numColumns = 1;
-  const imgURL = Config.IMAGE_URL;
-  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
-
   const searchClub = text => {
     filterClub(text, clubs);
   }
@@ -46,18 +46,18 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const removeSearch = () => {
     searchClub('');
     setShowSearch(false);
-    console.log(showSearch);
   }
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({item}) => {
     return (
-      
       <View style={styles.item}>
         
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details');
+              navigation.navigate('Details', {
+                item
+              });
             }}
             activeOpacity={0.9}>
             <Image
@@ -66,10 +66,6 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
                 }}
                 style={styles.bookCover}
               />
-            {/* <Image
-              style={styles.bookCover}
-              source={require('../../assets/img/showup.jpg')}
-            /> */}
           </TouchableOpacity>
           
         </View>

@@ -27,8 +27,10 @@ import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
 
 const {width} = Dimensions.get('window');
+const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation}) => {
+  const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
@@ -43,6 +45,28 @@ const Details = ({route, navigation}) => {
 
   handleOnCloseAdmin = () => {
     setAdminModal(false);
+  };
+
+  formatGenre = (item, index) => {
+    return <View key={index} style={styles.singleGenre}>
+    <Text style={styles.genreText}>{item}</Text>
+  </View>
+  };
+
+  showMembers = (item, index) => {
+    let left = 30 * index;
+    if(item.user.propix !== "noimage.png"){
+      return <View key={index} style={[styles.clubMembersSingle, {left}]}>
+          <Image
+            style={styles.memberAvatar}
+            source={require('../../assets/img/avatar.jpg')}
+          />
+      </View>
+    }else{
+      return <View key={index} style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(item.user.username), left}]}>
+          <Text style={styles.initial}>{item.user.username.charAt(0)}</Text>
+         </View>
+    }
   };
 
   return (
@@ -108,16 +132,17 @@ const Details = ({route, navigation}) => {
                   </TouchableOpacity>
               </Modal>
 
-          <Image
-            style={styles.bookCover}
-            source={require('../../assets/img/showup.jpg')}
-          />
+              <Image
+                source={{
+                  uri: `${imgURL}/club/${item.image}`,
+                }}
+                style={styles.bookCover}
+              />
         </View>
         <View style={styles.clubDetails}>
-          <Text style={styles.bookTitle}>The Designer's Club</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 20,}}>
+            <Text style={styles.bookTitle}>{item.name}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 12,}}>
               <View style={styles.starText}>
-                
                 <View style={styles.starGroup}>
                   <StarGroup rating='3.5' />
                   <Text
@@ -141,45 +166,27 @@ const Details = ({route, navigation}) => {
                   </View>
                 </TouchableOpacity> */}
               </View>
-          <View style={styles.detailsGroup}>
+              <View style={styles.detailsGroup}>
                   <MaterialCommunityIcons
                     name="cards-club"
                     size={22}
                     color="#373435"
                   />
+                  {item.public ? 
                     <View style={styles.detailsTextPublic}>
                       <Text style={styles.justTextPublic}>public</Text>
-                    </View>
+                    </View> :
+                    <View style={styles.detailsTextPrivate}>
+                    <Text style={styles.justTextPrivate}>private</Text>
+                  </View>
+                    }
                 </View>
                 </View>
-          <View style={{marginTop: 8, marginHorizontal: 20,}}>
-            <HtmlReader
-              html="Need custom logistic service? We got it covered. From overland,
-              air, rail and sea transportation. Fast, safe and accurate
-              shipment provided all over the globe. air, rail and sea transportation. Fast, safe and accurate
-              shipment provided all over the globe."
-              style={styles.descriptionBody}
-            />
+          <View style={{marginTop: 5, marginHorizontal: 12}}>
+            <Text style={styles.descriptionBody}>{item.description}</Text>
           </View>
           <View style={styles.genre}>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>psychology</Text>
-            </View>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>design</Text>
-            </View>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>graphics design</Text>
-            </View>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>product design</Text>
-            </View>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>design thinking</Text>
-            </View>
-            <View style={styles.singleGenre}>
-              <Text style={styles.genreText}>ux design</Text>
-            </View>
+            {item.genre.map(formatGenre)}
           </View>
           <View style={styles.readingListContainer}>
             <View style={styles.listTop}>
@@ -192,38 +199,24 @@ const Details = ({route, navigation}) => {
               </TouchableWithoutFeedback> */}
               
             </View>
-            
               <ReadingList />
           </View>
           <View style={styles.clubMembersContainer}>
           <Text style={styles.listTitle}>Club Members</Text>
           <View style={styles.membersAndExcess}>
             <View style={styles.clubMembers}>
-              <View style={[styles.clubMembersSingle, {left: 0}]}>
-              <Image
-            style={styles.memberAvatar}
-            source={require('../../assets/img/avatar.jpg')}
-          />
-                </View>
-                <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor('john'), left: 30}]}>
-                <Text style={styles.initial}>{'john'.charAt(0)}</Text>
-                </View>
-                <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor('femi'), left: 60}]}>
-                <Text style={styles.initial}>{'femi'.charAt(0)}</Text>
-                </View>
-                <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor('lizzy'), left: 90}]}>
-                <Text style={styles.initial}>{'lizzy'.charAt(0)}</Text>
-                </View>
-                <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor('opeyemi'), left: 120}]}>
-                <Text style={styles.initial}>{'opeyemi'.charAt(0)}</Text>
-                </View>
+              {item.members.slice(0, 5).map(showMembers)}
             </View>
-            <Text style={styles.extra}>+7</Text>
-            <TouchableWithoutFeedback onPress={() => {
-              setModalVisible(true);
-            }}>
-                <Text style={styles.seeAll}>See all</Text>
-              </TouchableWithoutFeedback>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+              {item.members.length > 5 && 
+              <Text style={styles.extra}>+{item.members.length - 5}</Text>
+              }
+              <TouchableWithoutFeedback onPress={() => {
+                setModalVisible(true);
+              }}>
+                  <Text style={styles.seeAll}>See all</Text>
+                </TouchableWithoutFeedback>
+            </View>
           </View>
 
           <Modal
@@ -233,6 +226,7 @@ const Details = ({route, navigation}) => {
             <View style={styles.memberModalView}>
               <Members
                 closeModal={handleOnCloseModal}
+                dataList={item.members}
               />
             </View>
           </Modal>
@@ -293,19 +287,18 @@ const styles = StyleSheet.create({
   },
   clubDetails: {
     marginTop: 20,
-    
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
     fontSize: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 12,
   },
 
   genre: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 15,
-    marginHorizontal: 20,
+    marginTop: 8,
+    marginHorizontal: 12,
   },
   singleGenre: {
     backgroundColor: '#f0f1f3',
@@ -326,7 +319,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginHorizontal: 12,
   },
   listTitle: {
     fontFamily: 'Nunito-Bold',
@@ -338,14 +331,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   membersAndExcess: {
-    flexDirection: 'row', 
-    justifyContent: 'flex-start', 
-    alignItems: 'center', 
+    // flexDirection: 'row', 
+    // justifyContent: 'flex-start', 
+    // alignItems: 'center', 
     marginTop: 10,
     //backgroundColor: 'red'
   },
   clubMembersContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: 12,
   },
   clubMembers: {
     position: 'relative',
@@ -390,7 +383,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginBottom: 10,
     backgroundColor: '#242c42',
-    marginHorizontal: 20,
+    marginHorizontal: 12,
     
   },
   joinText: {
@@ -401,7 +394,6 @@ const styles = StyleSheet.create({
   descriptionBody: {
     fontFamily: 'Nunito-Regular',
     fontSize: 15,
-    lineHeight: 23,
   },
   iconContainer: {
     borderRadius: 10,
@@ -440,11 +432,9 @@ const styles = StyleSheet.create({
     //marginRight: 15,
   },
   detailsTextPublic: {
-    
     marginLeft: 5,
     borderRadius: 5,
     backgroundColor: '#d4edda',
-    
     padding: 4,
   },
   justTextPublic: {
@@ -453,13 +443,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   detailsTextPrivate: {
-    fontFamily: 'Nunito-Bold',
-    fontSize: 14,
     marginLeft: 5,
     borderRadius: 5,
     backgroundColor: '#f8d7da',
-    color: '#721c24',
     padding: 4,
+  },
+  justTextPrivate: {
+    color: '#721c24',
+    fontFamily: 'Nunito-Regular',
+    fontSize: 14,
   },
   modalView: {
     flex: 1,
@@ -494,7 +486,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginHorizontal: 12,
     marginTop: 30,
     marginBottom: 5
   },
