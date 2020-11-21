@@ -35,6 +35,8 @@ const Details = ({route, navigation}) => {
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
 
+  let totalRatings = 0;
+
   handleOnCloseModal = () => {
     setModalVisible(false);
   };
@@ -68,6 +70,23 @@ const Details = ({route, navigation}) => {
          </View>
     }
   };
+
+  sumRatings = item => {
+    totalRatings += parseInt(item.rating);
+  };
+  item.rates.forEach(sumRatings);
+
+  calRating = () => {
+    let actualRating;
+    if (item.rates.length == 0) {
+      actualRating = '0.0';
+    } else {
+      actualRating = (totalRatings / item.rates.length).toFixed(1);
+    }
+    return actualRating;
+  };
+
+  const data = {ratingActual: calRating(), numberOfRev: item.rates.length};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -144,16 +163,21 @@ const Details = ({route, navigation}) => {
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 12,}}>
               <View style={styles.starText}>
                 <View style={styles.starGroup}>
-                  <StarGroup rating='3.5' />
+                  <StarGroup rating={data.ratingActual} />
                   <Text
                     style={styles.starRateText}
                     numberOfLines={1}
                     ellipsizeMode="tail">
-                    3.5 of 4,000
+                    {data.ratingActual} of {data.numberOfRev}
                   </Text>
                 </View>
                 
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={() => {
+                  navigation.navigate('Rating', {
+                    data,
+                    item,
+                  });
+                }}>
                   <Text style={styles.seeAll}>View</Text>
                 </TouchableOpacity>
 

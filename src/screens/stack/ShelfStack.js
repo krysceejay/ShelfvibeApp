@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Rating from '../shelf/Rating';
-import AllRatings from '../shelf/AllRatings';
+import Rating from '../club/Rating';
+import AllRatings from '../club/AllRatings';
 import Club from '../club/Club';
 import Details from '../club/Details';
 import Poll from '../club/Poll';

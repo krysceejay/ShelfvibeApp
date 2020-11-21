@@ -16,6 +16,14 @@ export const fetchClubs = () => async dispatch => {
             description
             genre
             publish
+            rates{
+              rating
+              comment
+              updatedAt
+              user{
+                username
+              }
+            }
             user{
               username
             }
