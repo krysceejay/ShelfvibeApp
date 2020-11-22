@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER} from './types';
+import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER, ADD_RATING} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -191,7 +191,6 @@ export const createMemberAction = memberInput => async dispatch => {
       return 'failed';
     }
   } catch (err) {
-    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
@@ -200,3 +199,51 @@ export const createMemberAction = memberInput => async dispatch => {
   }
 }
 
+//Rate Club
+export const rateClub = rateInput => async dispatch => {
+  const {clubId, userRating, userComment} = rateInput;
+  const query = `
+  mutation {
+    createRate(clubId: ${clubId}, input: {rating: ${userRating}, comment: "${userComment}"}){
+      result{
+        user{
+          username
+        }
+        club{
+          name
+        }
+        rating
+        comment
+        updatedAt
+      }
+      successful
+      messages{
+        code
+        field
+        message
+      }
+    }
+  }
+  `;
+  try {
+    const addRating = await api.post('/', {query});
+    if (addRating.data.data.createRate.successful === true) {
+      dispatch({
+        type: ADD_RATING,
+      });
+    } else {
+      const errorMessages = addRating.data.data.createRate.messages;
+      Alert.alert(
+        'Error',
+        'Please make sure you provide the required fields',
+      );
+      return errorMessages;
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}

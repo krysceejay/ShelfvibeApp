@@ -13,3 +13,6 @@ export const FETCH_CLUBS = 'FETCH_CLUBS';
 export const CREATE_CLUB = 'CREATE_CLUB';
 export const FILTER_CLUB = 'FILTER_CLUB';
 export const CREATE_MEMBER = 'CREATE_MEMBER';
+export const ADD_RATING = 'ADD_RATING';
+export const ADD_POLL = 'ADD_POLL';
+export const FETCH_CLUB_POLLS = 'FETCH_CLUB_POLLS';

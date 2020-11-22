@@ -1,12 +1,67 @@
-import React,{useState} from 'react'
+import React,{useState} from 'react';
+import {connect} from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import * as Animatable from 'react-native-animatable';
+import {addPoll} from '../actions/pollActions';
 
-const AddPoll = ({closeModal}) => {
+const AddPoll = ({closeModal, addPoll, clubId}) => {
+  const [formData, setFormData] = useState({
+    pollname: '',
+    pollbooks: [],
+    book1: '',
+    book2: '',
+    book3: '',
+    book4: '',
+   });
+
+   const {
+    pollname,
+    pollbooks,
+    book1,
+    book2,
+    book3,
+    book4
+  } = formData;
+
+  const [errorMsg, setErrorMsg] = useState({
+    pollName: '',
+    books: '',
+  });
+
+  const {pollName, books} = errorMsg;
+
+  const onChange = name => text => setFormData({...formData, [name]: text});
+
     const onClosePress = () => {
         closeModal();
       };
+
+    addPollAction = async () => {
+      if(book1 !== '') pollbooks.push(book1);
+      if(book2 !== '') pollbooks.push(book2);
+      if(book3 !== '') pollbooks.push(book3);
+      if(book4 !== '') pollbooks.push(book4);
+
+      const userAddPoll = await addPoll({
+        clubId,
+        pollname,
+        pollbooks,
+      });
+      if (userAddPoll == 'failed' || Array.isArray(userAddPoll)) {
+        if (Array.isArray(userAddPoll)) {
+          const errMsges = {};
+          userAddPoll.forEach(item => {
+            errMsges[item.field] = item.message;
+          });
+          setErrorMsg(errMsges);
+        }
+      } else {
+        onClosePress();
+      }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
         <View style={styles.closeBtn}>
@@ -40,27 +95,57 @@ const AddPoll = ({closeModal}) => {
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Poll Name</Text>
-                  <TextInput placeholder="Enter poll name" style={styles.textInput} />
+                  <TextInput 
+                  placeholder="Enter poll name" 
+                  style={styles.textInput}
+                  value={pollname}
+                  onChangeText={onChange('pollname')} 
+                  />
+                  {pollName !== '' && (
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                      <Text style={styles.errorMessage}>{pollName}</Text>
+                    </Animatable.View>
+                  )}
                 </View>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book 1</Text>
-                  <TextInput placeholder="Enter book title" style={styles.textInput} />
+                  <TextInput 
+                  placeholder="Enter book title" 
+                  style={styles.textInput} 
+                  value={book1}
+                  onChangeText={onChange('book1')}
+                  />
                 </View>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book 2</Text>
-                  <TextInput placeholder="Enter book title" style={styles.textInput} />
+                  <TextInput 
+                  placeholder="Enter book title" 
+                  style={styles.textInput} 
+                  value={book2}
+                  onChangeText={onChange('book2')}
+                  />
                 </View>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book 3</Text>
-                  <TextInput placeholder="Enter book title" style={styles.textInput} />
+                  <TextInput 
+                  placeholder="Enter book title" 
+                  style={styles.textInput} 
+                  value={book3}
+                  onChangeText={onChange('book3')}
+                  />
                 </View>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book 4</Text>
-                  <TextInput placeholder="Enter book title" style={styles.textInput} />
+                  <TextInput 
+                  placeholder="Enter book title" 
+                  style={styles.textInput} 
+                  value={book4}
+                  onChangeText={onChange('book4')}
+                  />
                 </View>
                 <View style={styles.singleInput}>
-                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6}>
-                    <Text style={styles.textSign}>Submit</Text>
+                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={addPollAction}>
+                    <Text style={styles.textSign}>Add Poll</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -69,7 +154,11 @@ const AddPoll = ({closeModal}) => {
     
     )
 }
-export default AddPoll;
+
+export default connect(
+  null,
+  {addPoll},
+)(AddPoll);
 
 const styles = StyleSheet.create({
     container: {
@@ -121,5 +210,10 @@ const styles = StyleSheet.create({
       textSign: {
         fontSize: 18,
         fontFamily: 'Nunito-Bold',
+      },
+      errorMessage: {
+        fontSize: 13,
+        color: 'red',
+        marginTop: 3
       },
 })

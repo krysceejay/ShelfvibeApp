@@ -147,6 +147,7 @@ const Details = ({route, navigation}) => {
                     <AdminComp
                       closeModal={handleOnCloseAdmin}
                       navigation={navigation}
+                      clubid={item.id}
                     />
                   </TouchableOpacity>
               </Modal>

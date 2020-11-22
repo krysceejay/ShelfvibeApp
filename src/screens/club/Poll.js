@@ -5,10 +5,8 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Dimensions,
   Modal,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,36 +16,26 @@ import {fetchBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import AddPoll from '../../components/AddPoll';
 import EditPoll from '../../components/EditPoll';
+import {fetchClubPolls} from '../../actions/pollActions';
 
-const {width} = Dimensions.get('window');
+const numColumns = 1;
 
-const dataList = [
-    {key: 1},
-    {key: 2},
-    {key: 3},
-    {key: 4},
-    {key: 5},
-    {key: 6},
-    {key: 7},
-    {key: 8},
-  ];
-
-const Poll = ({navigation}) => {
+const Poll = ({navigation, route, fetchClubPolls, polls}) => {
+  const {clubid} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [addPollShow, setAddPollShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const numColumns = 1;
 
-  formatData = (dataList, numColumns) => {
-    if (dataList !== null) {
-      const totalRows = Math.floor(dataList.length / numColumns);
-      let totalLastRow = dataList.length - totalRows * numColumns;
-      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-        dataList.push({key: 'blank', empty: true});
-        totalLastRow++;
-      }
+  useEffect(() => {
+    setIsLoading(true);
+    getClubPolls(clubid);
+  }, []);
+
+  getClubPolls = async clubid => {
+    const getPolls = await fetchClubPolls(clubid);
+      if (getPolls !== 'failed') {
+        setIsLoading(false);
     }
-    return dataList;
   };
 
   handleOnCloseModal = () => {
@@ -62,18 +50,26 @@ const Poll = ({navigation}) => {
     setSelectedItem(null);
   };
 
+  showPollBooks = (item, index) => {
+    return <View key={index} style={styles.progressSingle}>
+      <Text numberOfLines={1} ellipsizeMode="tail">{item}</Text>
+      <Text>10%</Text>
+    </View>
+  };
+
+  markCurrent = () => {
+    console.log('marked');
+  }
+
   _renderItem = ({item, index}) => {
-    if (item.empty) {
-      return <View style={[styles.item, styles.itemInvisible]} />;
-    }
     return (
       <View style={styles.item}>
         <View style={styles.header}>
-          <Text style={styles.title}>October Book Poll</Text>
+          <Text style={styles.title}>{item.pollName}</Text>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => {}}>
-            <Ionicons name="ios-checkmark-circle-outline" size={25} color="#155724" />
+            onPress={markCurrent}>
+            <Ionicons name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} size={25} color="#155724" />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.9}
@@ -82,22 +78,7 @@ const Poll = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.pollDetails}>
-            <View style={styles.progressSingle}>
-                <Text numberOfLines={1} ellipsizeMode="tail">A Designer's Art</Text>
-                <Text>10%</Text>
-            </View>
-            <View style={styles.progressSingle}>
-                <Text numberOfLines={1} ellipsizeMode="tail">Thinking with Type</Text>
-                <Text>70%</Text>
-            </View>
-            <View style={styles.progressSingle}>
-                <Text numberOfLines={1} ellipsizeMode="tail">Interaction of Color</Text>
-                <Text>60%</Text>
-            </View>
-            <View style={styles.progressSingle}>
-                <Text numberOfLines={1} ellipsizeMode="tail">Design of Everything</Text>
-                <Text>50%</Text>
-            </View>
+          {item.books.map(showPollBooks)}
         </View>
       </View>
     );
@@ -121,11 +102,11 @@ const Poll = ({navigation}) => {
         transparent={true}
         visible={addPollShow}>
         <View style={styles.memberModalView}>
-            <AddPoll closeModal={handleOnCloseModal} />
+            <AddPoll closeModal={handleOnCloseModal} clubId={clubid} />
         </View>
         </Modal>
       <FlatList
-          data={formatData(dataList, numColumns)}
+          data={polls}
           renderItem={_renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
@@ -145,12 +126,19 @@ const Poll = ({navigation}) => {
   );
 };
 
-export default Poll;
+const mapStateToProps = state => ({
+  polls: state.poll.polls,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchClubPolls},
+)(Poll);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
+    //paddingVertical: 10,
     backgroundColor: '#fff',
     overflow: 'hidden',
   },

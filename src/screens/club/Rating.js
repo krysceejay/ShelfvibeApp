@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
 import {
   Text,
   StyleSheet,
@@ -6,16 +7,44 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Alert
 } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import StarGroup from '../../components/StarGroup';
 import ProgressBar from '../../components/ProgressBar';
 import BorderButton from '../../components/BorderButton';
 import RatingStarGroup from '../../components/RatingStarGroup';
+import {rateClub} from '../../actions/clubActions';
 
-const Rating = ({route, navigation}) => {
+const Rating = ({route, navigation, rateClub}) => {
   const {data, item} = route.params;
+
+  const [formData, setFormData] = useState({
+    userRating: 0,
+    userComment: '',
+   });
+
+   const {
+    userRating,
+    userComment,
+  } = formData;
+
+  const [errorMsg, setErrorMsg] = useState({
+    rating: '',
+    comment: '',
+  });
+
+  const {rating, comment} = errorMsg; 
+
+  const onChange = name => text => setFormData({...formData, [name]: text});
+
   let progress = [];
   let progressNum = [];
+
+  getUserRating = rate => {
+    setFormData({...formData, userRating: rate});
+  };
+
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
@@ -55,6 +84,28 @@ const Rating = ({route, navigation}) => {
     progress.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
   progressNum.push(<Text key={i} style={styles.ratingMetricsSingleText}>{i}</Text>);
   }
+
+  rateClubAction = async () => {
+    const userRateClub = await rateClub({
+      clubId: item.id,
+      userRating,
+      userComment,
+    });
+    if (userRateClub == 'failed' || Array.isArray(userRateClub)) {
+      if (Array.isArray(userRateClub)) {
+        const errMsges = {};
+        userRateClub.forEach(item => {
+          errMsges[item.field] = item.message;
+        });
+        setErrorMsg(errMsges);
+      }
+    } else {
+      Alert.alert(
+        'Success!',
+        'Your review was added successfully',
+      );
+    }
+  };
   
   return (
     <View style={styles.container}>
@@ -76,7 +127,12 @@ const Rating = ({route, navigation}) => {
             </View>
             <View style={styles.ratingActionView}>
               <View style={{alignSelf: 'center', marginVertical: 15}}>
-                <RatingStarGroup />
+                <RatingStarGroup getRating={getUserRating} />
+                {rating !== '' && (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMessage}>{rating}</Text>
+                </Animatable.View>
+              )}
               </View>
               <View
                 style={{
@@ -97,10 +153,17 @@ const Rating = ({route, navigation}) => {
                     fontSize: 15,
                     color: '#333',
                   }}
+                  value={userComment}
+                  onChangeText={onChange('userComment')}
                 />
               </View>
+              {comment !== '' && (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMessage}>{comment}</Text>
+                </Animatable.View>
+              )}
               <View style={{alignItems: 'flex-start'}}>
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={rateClubAction}>
                   <View style={styles.submit}>
                     <Text style={styles.submitText}>Submit</Text>
                   </View>
@@ -138,7 +201,10 @@ const Rating = ({route, navigation}) => {
   );
 };
 
-export default Rating;
+export default connect(
+  null,
+  {rateClub},
+)(Rating);
 
 const styles = StyleSheet.create({
   container: {
@@ -250,5 +316,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
     fontSize: 16,
     textAlign: 'center',
+  },
+  errorMessage: {
+    fontSize: 13,
+    color: 'red',
+    marginTop: 3
   },
 });

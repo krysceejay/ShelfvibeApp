@@ -4,13 +4,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 
-const AdminComp = ({navigation, closeModal}) => {
+const AdminComp = ({navigation, closeModal, clubid}) => {
     onClosePress = () => {
         closeModal();
       };
 
       goToPoll = () => {
-        navigation.navigate('Poll');
+        navigation.navigate('Poll', {
+            clubid
+          });
         closeModal();
       }
 
@@ -38,13 +40,13 @@ const AdminComp = ({navigation, closeModal}) => {
                     <TouchableOpacity onPress={goToPoll}>
                         <View style={styles.actionSingle}>
                             <MaterialCommunityIcons name="poll" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Add a poll</Text>
+                            <Text style={styles.actionText}>Poll</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={goToReadingList}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="playlist-plus" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Add a book to list</Text>
+                            <Text style={styles.actionText}>Reading List</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {}}>

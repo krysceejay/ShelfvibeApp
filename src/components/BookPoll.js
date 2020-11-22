@@ -79,7 +79,7 @@ const BookPoll = (props) => {
                     
                 </View>
             </View>
-            <TouchableOpacity style={styles.join} onPress={onClosePress}>
+            <TouchableOpacity activeOpacity={0.6} style={styles.join} onPress={onClosePress}>
             <Text style={styles.joinText}>Cancel</Text>
           </TouchableOpacity>
             

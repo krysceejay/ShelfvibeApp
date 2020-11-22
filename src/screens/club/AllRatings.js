@@ -29,7 +29,7 @@ const AllRatings = ({route}) => {
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
-        contentContainerStyle={{marginVertical: 15}}
+        contentContainerStyle={{paddingVertical: 15}}
         //showsVerticalScrollIndicator={false}
       />
     </View>
@@ -41,7 +41,8 @@ export default AllRatings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
+    //marginVertical: 15,
     backgroundColor: '#fff',
   },
   reviewTitle: {

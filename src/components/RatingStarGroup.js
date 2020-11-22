@@ -11,7 +11,7 @@ import RatingStar from './RatingStar';
 
 const numStars = 5;
 
-const RatingStarGroup = props => {
+const RatingStarGroup = ({getRating}) => {
   const [stateData, setStateData] = useState({
     rating: 0,
     animation: new Animated.Value(1),
@@ -56,12 +56,18 @@ const RatingStarGroup = props => {
     opacity: animateOpacity,
   };
 
+  rateAndAnimate = (x) => {
+    rate(x);
+    animate();
+    getRating(x);
+  }
+
   for (let x = 1; x <= numStars; x++) {
     stars.push(
       <TouchableWithoutFeedback
         key={x}
         onPress={() => {
-          rate(x), animate();
+          rateAndAnimate(x)
         }}>
         <Animated.View style={x <= rating ? animationStyle : ''}>
           <RatingStar filled={x <= rating ? true : false} />
