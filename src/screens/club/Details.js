@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TouchableWithoutFeedback,
-  Dimensions,
   Modal
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -25,17 +24,26 @@ import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
+import {fetchClubPolls} from '../../actions/pollActions';
 
-const {width} = Dimensions.get('window');
 const imgURL = Config.IMAGE_URL;
 
-const Details = ({route, navigation}) => {
+const Details = ({route, navigation, polls, fetchClubPolls}) => {
   const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
 
+  useEffect(() => {
+    getClubPolls(item.id);
+  }, []);
+
+  getClubPolls = async clubid => {
+      await fetchClubPolls(clubid);
+  };
+
   let totalRatings = 0;
+  let currentPoll;
 
   handleOnCloseModal = () => {
     setModalVisible(false);
@@ -85,6 +93,15 @@ const Details = ({route, navigation}) => {
     }
     return actualRating;
   };
+
+  if (polls.length !== 0) {
+    currentPoll = polls.find(poll => {
+      return poll.current == true; 
+    });
+    if(currentPoll == undefined) currentPoll = {};
+  }else{
+    currentPoll = {}
+  }
 
   const data = {ratingActual: calRating(), numberOfRev: item.rates.length};
 
@@ -256,25 +273,33 @@ const Details = ({route, navigation}) => {
             </View>
           </Modal>
           </View>
-
-          <View style={styles.bookPoll}>
-            <Text style={styles.pollTitle}>October book poll</Text>
-            <TouchableOpacity style={styles.bookPollBtn} onPress={() => {
-              setPollModal(true);
-            }}>
-              <Text style={styles.pollText}>Vote now</Text>
-            </TouchableOpacity>
-            <Modal
-            animationType="slide"
-            transparent={true}
-            visible={pollModal}>
-              <View style={styles.modalView}>
-                <BookPoll
-                  closeModal={handleOnClosePoll}
-                />
-              </View>
-          </Modal>
-          </View>
+           
+            <View style={styles.bookPoll}>
+              {currentPoll ?
+              <>
+                <Text style={styles.pollTitle}>{currentPoll.pollName}</Text>
+                <TouchableOpacity style={styles.bookPollBtn} onPress={() => {
+                  setPollModal(true);
+                }}>
+                  <Text style={styles.pollText}>Vote now</Text>
+                </TouchableOpacity>
+                <Modal
+                animationType="slide"
+                transparent={true}
+                visible={pollModal}>
+                  <View style={styles.modalView}>
+                    <BookPoll
+                      closeModal={handleOnClosePoll}
+                      currentPoll={currentPoll}
+                    />
+                  </View>
+              </Modal>
+              </>
+              :
+              <Text style={styles.noPoll}>No active poll for this club.</Text>
+              }
+            </View> 
+          
           {/* <TouchableOpacity style={styles.join} onPress={() => {}}>
             <Text style={styles.joinText}>Join Club</Text>
           </TouchableOpacity> */}
@@ -285,9 +310,13 @@ const Details = ({route, navigation}) => {
   );
 };
 
+const mapStateToProps = state => ({
+  polls: state.poll.polls,
+});
+
 export default connect(
-  null,
-  null,
+  mapStateToProps,
+  {fetchClubPolls},
 )(Details);
 
 const styles = StyleSheet.create({
@@ -551,6 +580,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.0,
     elevation: 4,
-      }
+    },
+    noPoll: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 15,
+    },
   
 });

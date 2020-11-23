@@ -1,82 +1,111 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
+import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {fetchPollVotes, pollVoteAction} from '../actions/pollActions';
+import {AuthContext} from '../utils/context';
 
-const BookPoll = (props) => {
+const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, votes}) => {
+  const user = useContext(AuthContext);
+  useEffect(() => {
+    getPollVotes(currentPoll.id);
+  }, [])
+
+  getPollVotes = async pollid => {
+    await fetchPollVotes(pollid);
+  };
+
     onClosePress = () => {
-        props.closeModal();
+        closeModal();
       };
 
-      addVote =  (id) => {
-        return;
-      };
+    addVote =  async pollIndex => {
+      await pollVoteAction({
+        pollId: currentPoll.id, 
+        pollIndex
+      });
+    };
 
-      const createTwoButtonAlert = (id) =>
-    Alert.alert(
-      'Vote',
-      'Click OK to add your vote?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => false,
-          style: 'cancel',
-        },
-        {text: 'OK', onPress: () => addVote(id)},
-      ],
-      {cancelable: false},
-    );
+    removeVote = index => {
+      console.log('remove '+index);
+    }
+
+      const createTwoButtonAlert = index =>
+        Alert.alert(
+          'Vote',
+          'Click OK to add your vote?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => false,
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {
+              if(user !== null){
+                //TODO: check if user is a member
+                if (getUserVote(user.username).pollIndex === (index)) {
+                  removeVote(index);
+                } else {
+                  addVote(index);
+                }
+              }else{
+                Alert.alert('Failed', 'Kindly login to vote.');
+              }
+              
+            }},
+          ],
+          {cancelable: false},
+        );
+
+    getVotesByIndex = index => {
+      let votePercent;
+      const firstIndex = votes.filter(item => {
+        return item.pollIndex == index;
+      });
+      if (votes.length == 0) {
+        votePercent = 0;
+      } else {
+        votePercent = (firstIndex.length / votes.length) * 100;
+      }
+      return Math.round(votePercent);
+    }
+
+    getUserVote = username => {
+      let getVoteByUser;
+      if (votes.length !== 0) {
+        getVoteByUser = votes.find(vote => {
+          return vote.user.username == username; 
+        });
+        if(getVoteByUser == undefined) getVoteByUser = {};
+      }else{
+        getVoteByUser = {}
+      }
+      return getVoteByUser;
+    }
+
+    showPollBooks = (item, index) => {
+      return <TouchableOpacity key={index} onPress={() => {createTwoButtonAlert(index + 1)}}>
+        <View style={styles.pollSingle}>
+            <View style={styles.progressSingle}>
+                <View style={[styles.inner, {width: `${getVotesByIndex(index + 1)}%`}]}>
+                <Text style={styles.innerText}>{getVotesByIndex(index + 1)}%</Text>
+                </View>
+            </View>
+          {user !== null && getUserVote(user.username).pollIndex === (index + 1) ? 
+            <Text style={[styles.pollText, {color: 'red'}]}>{item}</Text> :
+            <Text style={[styles.pollText, {color: '#444444'}]}>{item}</Text>
+          }
+        </View>
+      </TouchableOpacity>
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.body}>
-                <Text style={styles.title}>October Book Poll</Text>
+                <Text style={styles.title}>{currentPoll.pollName}</Text>
                 <Text style={styles.shortText}>Wow another book finished!! And now it's time to decide an addition to our reading list. please vote for the book you would like us to read.</Text>
                 <View style={styles.progressContainer}>
-                    <TouchableOpacity onPress={() => {createTwoButtonAlert(1)}}>
-                        <View style={styles.pollSingle}>
-                            <View style={styles.progressSingle}>
-                                <View style={[styles.inner, {width: '60%'}]}>
-                                    <Text style={styles.innerText}>60%</Text>
-                                </View>
-                            </View>
-                            
-                            <Text style={styles.pollText}>Design of Everything</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {createTwoButtonAlert(2)}}>
-                        <View style={styles.pollSingle}>
-                            <View style={styles.progressSingle}>
-                                <View style={[styles.inner, {width: '80%'}]}>
-                                    <Text style={styles.innerText}>80%</Text>
-                                </View>
-                            </View>
-                            
-                            <Text style={styles.pollText}>Thinking with Type</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {createTwoButtonAlert(3)}}>
-                        <View style={styles.pollSingle}>
-                            <View style={styles.progressSingle}>
-                                <View style={[styles.inner, {width: '70%'}]}>
-                                    <Text style={styles.innerText}>70%</Text>
-                                </View>
-                            </View>
-                            
-                            <Text style={styles.pollText}>A Designer's Art</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {createTwoButtonAlert(4)}}>
-                        <View style={styles.pollSingle} >
-                            <View style={styles.progressSingle}>
-                                <View style={[styles.inner, {width: '0%'}]}>
-                                <Text style={styles.innerText}>0%</Text>
-                                </View>
-                            </View>
-                            
-                            <Text style={styles.pollText}>Interaction of Color</Text>
-                        </View>
-                    </TouchableOpacity>
-                    
+                  {currentPoll.books.map(showPollBooks)}
                 </View>
             </View>
             <TouchableOpacity activeOpacity={0.6} style={styles.join} onPress={onClosePress}>
@@ -87,7 +116,14 @@ const BookPoll = (props) => {
     )
 }
 
-export default BookPoll;
+const mapStateToProps = state => ({
+  votes: state.poll.votes,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchPollVotes, pollVoteAction},
+)(BookPoll);
 
 const styles = StyleSheet.create({
     container: {
@@ -161,13 +197,12 @@ const styles = StyleSheet.create({
         left: 15
       },
       pollSingle: {
-        marginTop: 20
+        marginTop: 20,
       },
       pollText: {
         paddingHorizontal: 15,
         marginTop: 5,
         fontSize: 15,
-        fontFamily: 'Nunito-SemiBold',
-        color: '#444444',
+        fontFamily: 'Nunito-SemiBold'
       }
 })

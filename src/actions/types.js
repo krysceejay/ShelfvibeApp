@@ -16,3 +16,6 @@ export const CREATE_MEMBER = 'CREATE_MEMBER';
 export const ADD_RATING = 'ADD_RATING';
 export const ADD_POLL = 'ADD_POLL';
 export const FETCH_CLUB_POLLS = 'FETCH_CLUB_POLLS';
+export const SET_POLL = 'SET_POLL';
+export const FETCH_POLL_VOTES = 'FETCH_POLL_VOTES';
+export const VOTE_POLL = 'VOTE_POLL';

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -16,15 +17,18 @@ import {fetchBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import AddPoll from '../../components/AddPoll';
 import EditPoll from '../../components/EditPoll';
-import {fetchClubPolls} from '../../actions/pollActions';
+import {fetchClubPolls, setPollAction} from '../../actions/pollActions';
+import {AuthContext} from '../../utils/context';
 
 const numColumns = 1;
 
-const Poll = ({navigation, route, fetchClubPolls, polls}) => {
+const Poll = ({navigation, route, fetchClubPolls, setPollAction, polls}) => {
   const {clubid} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [addPollShow, setAddPollShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -57,8 +61,15 @@ const Poll = ({navigation, route, fetchClubPolls, polls}) => {
     </View>
   };
 
-  markCurrent = () => {
-    console.log('marked');
+  markCurrent = async (pollId) => {
+    if(user === null){
+      Alert.alert('Failed', 'Kindly login to proceed.');
+      return;
+    }
+      await setPollAction({
+      clubid,
+      pollId
+    });
   }
 
   _renderItem = ({item, index}) => {
@@ -68,8 +79,14 @@ const Poll = ({navigation, route, fetchClubPolls, polls}) => {
           <Text style={styles.title}>{item.pollName}</Text>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={markCurrent}>
-            <Ionicons name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} size={25} color="#155724" />
+            onPress={() => {
+              markCurrent(item.id)
+            }}>
+            <Ionicons 
+            name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} 
+            size={25} 
+            color={item.current ? "#155724" : "#ccc"} 
+            />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.9}
@@ -111,6 +128,9 @@ const Poll = ({navigation, route, fetchClubPolls, polls}) => {
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyText}>No poll found</Text>
+        )}
         />
         <Modal
             animationType="fade"
@@ -132,7 +152,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {fetchClubPolls},
+  {fetchClubPolls, setPollAction},
 )(Poll);
 
 const styles = StyleSheet.create({
@@ -163,8 +183,9 @@ const styles = StyleSheet.create({
     marginBottom: 5
  },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: 'Nunito-Bold',
+    width: '60%'
   },
   bookDetails: {
     //flex: 1,
@@ -220,5 +241,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3.0,
     elevation: 4,
-      }
+      },
+    emptyText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 15,
+      paddingHorizontal: 12,
+      marginTop: 15
+    },
 });
