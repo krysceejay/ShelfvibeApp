@@ -23,3 +23,4 @@ export const REMOVE_VOTE = 'REMOVE_VOTE';
 export const FETCH_CLUB_MEMBERS = 'FETCH_CLUB_MEMBERS';
 export const FETCH_CLUB_READ_LIST = 'FETCH_CLUB_READ_LIST';
 export const ADD_BOOKLIST = 'ADD_BOOKLIST';
+export const SET_BOOK = 'SET_BOOK';

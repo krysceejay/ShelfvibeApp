@@ -20,13 +20,13 @@ import Skeleton from '../../components/Skeleton';
 import AddBook from '../../components/AddBook';
 import EditBook from '../../components/EditBook';
 import {AuthContext} from '../../utils/context';
-import {fetchClubReadList} from '../../actions/bookListActions';
+import {fetchClubReadList, setBookAction} from '../../actions/bookListActions';
 
 const {width} = Dimensions.get('window');
 const numColumns = 3;
 const imgURL = Config.IMAGE_URL;
 
-const ReadingList = ({route, fetchClubReadList, bookLists}) => {
+const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
   const {clubid} = route.params;
   const [addBookShow, setAddBookShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -58,6 +58,17 @@ const ReadingList = ({route, fetchClubReadList, bookLists}) => {
     setSelectedItem(null);
   };
 
+  markCurrent = async (bookId) => {
+    if(user === null){
+      Alert.alert('Failed', 'Kindly login to proceed.');
+      return;
+    }
+      await setBookAction({
+      clubid,
+      bookId
+    });
+  }
+
   _renderItem = ({item, index}) => {
     return (
         <View
@@ -76,10 +87,17 @@ const ReadingList = ({route, fetchClubReadList, bookLists}) => {
                 style={{width: '100%', height: '80%', resizeMode: 'cover'}}
               />
               <View style={styles.current}>
-                  <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
-                      <Ionicons name="ios-checkmark-circle-outline" size={30} color="#155724" />
+                  <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                    markCurrent(item.id)
+                  }}>
+                      <Ionicons 
+                        name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} 
+                        size={30} 
+                        color={item.current ? "#155724" : "#ccc"} 
+                      />
                   </TouchableOpacity>
-                  <Text style={styles.textMonth}>Current</Text>
+                  {item.current && <Text style={styles.textMonth}>Current</Text>}
+                  
               </View>
             <TouchableOpacity
             style={{
@@ -152,6 +170,7 @@ const ReadingList = ({route, fetchClubReadList, bookLists}) => {
           ListEmptyComponent={() => (
             <Text style={styles.emptyText}>No book found</Text>
         )}
+        contentContainerStyle={{paddingBottom: 45}}
         />
         <Modal
             animationType="fade"
@@ -173,7 +192,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {fetchClubReadList},
+  {fetchClubReadList, setBookAction},
 )(ReadingList);
 
 const styles = StyleSheet.create({

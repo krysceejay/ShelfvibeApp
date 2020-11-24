@@ -26,7 +26,7 @@ const ReadingList = ({readList}) => {
               //backgroundColor: 'red',
               paddingBottom: 10,
               width: 130,
-              height: 260,
+              height: 240,
               marginRight: 12,
             borderRadius: 12,
             overflow: 'visible',
@@ -36,11 +36,12 @@ const ReadingList = ({readList}) => {
                 source={{
                   uri: `${imgURL}/bookcover/${item.bookcover}`,
                 }}
-                style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 12,}}
+                style={{width: '100%', height: '85%', resizeMode: 'cover', borderRadius: 12,}}
               />
             <View style={styles.textContainer}>
               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
-            <Text style={styles.readingMonth}>Current Book</Text>
+              {item.current && <Text style={[styles.readingMonth, {color: '#155724'}]}>Current Book</Text>}
+            
             </View>
             
           </Animatable.View>
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     textContainer: {
-        height: '20%',
+        height: '15%',
         marginTop: 3,
         paddingHorizontal: 10,
     },

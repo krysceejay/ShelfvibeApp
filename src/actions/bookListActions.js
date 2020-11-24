@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUB_READ_LIST, ADD_BOOKLIST} from './types';
+import {FETCH_CLUB_READ_LIST, ADD_BOOKLIST, SET_BOOK} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -110,3 +110,36 @@ export const addBookToList = bookInput => async dispatch => {
       return 'failed';
     }
   }; 
+
+    //Set Book Status
+export const setBookAction = bookInput => async dispatch => {
+  const {clubid, bookId} = bookInput;
+  const query = `
+      mutation {
+          setBookStatus(clubId: ${clubid}, listId: ${bookId}){
+          title
+          bookcover
+          current
+          id
+        }
+      }
+  `;
+  try {
+    const setBook = await api.post('/', {query});
+    if (setBook.data.data.setBookStatus !== null) {
+      dispatch({
+        type: SET_BOOK,
+        payload: setBook.data.data.setBookStatus
+      });
+    } else {
+      Alert.alert('Failed', 'You already have an active book. Please deactivate it to proceed.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}

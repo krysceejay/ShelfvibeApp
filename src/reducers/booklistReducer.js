@@ -1,4 +1,4 @@
-import {FETCH_CLUB_READ_LIST, ADD_BOOKLIST} from '../actions/types';
+import {FETCH_CLUB_READ_LIST, ADD_BOOKLIST, SET_BOOK} from '../actions/types';
 
 const initialState = {
   bookLists: [],
@@ -17,7 +17,14 @@ const booklistReducer = (state = initialState, action) => {
         return {
           ...state,
           bookLists: [payload, ...state.bookLists],
-        };    
+        };  
+    case SET_BOOK:
+        return {
+          ...state,
+          bookLists: state.bookLists.map(bookList =>
+            bookList.id === payload.id ? { ...bookList, current: payload.current } : bookList
+          )
+        };  
     
     default:
       return state;
