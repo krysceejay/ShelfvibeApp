@@ -24,22 +24,34 @@ import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
+import {fetchClubMembers} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
+import {fetchClubReadList} from '../../actions/bookListActions';
 
 const imgURL = Config.IMAGE_URL;
 
-const Details = ({route, navigation, polls, fetchClubPolls}) => {
+const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList, fetchClubPolls, members, bookLists}) => {
   const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
 
   useEffect(() => {
+    getClubMembers(item.id);
+    getClubReadList(item.id);
     getClubPolls(item.id);
-  }, []);
+  }, [item.id]);
 
   getClubPolls = async clubid => {
-      await fetchClubPolls(clubid);
+    await fetchClubPolls(clubid);
+  };
+
+  getClubMembers = async clubid => {
+    await fetchClubMembers(clubid);
+  };
+
+  getClubReadList = async clubid => {
+    await fetchClubReadList(clubid);
   };
 
   let totalRatings = 0;
@@ -102,6 +114,14 @@ const Details = ({route, navigation, polls, fetchClubPolls}) => {
   }else{
     currentPoll = {}
   }
+
+  const isEmpty = (obj) => {
+    for(let key in obj) {
+      if(obj.hasOwnProperty(key))
+          return false;
+        }
+        return true;
+    }
 
   const data = {ratingActual: calRating(), numberOfRev: item.rates.length};
 
@@ -241,17 +261,17 @@ const Details = ({route, navigation, polls, fetchClubPolls}) => {
               </TouchableWithoutFeedback> */}
               
             </View>
-              <ReadingList />
+              <ReadingList readList={bookLists} />
           </View>
           <View style={styles.clubMembersContainer}>
           <Text style={styles.listTitle}>Club Members</Text>
           <View style={styles.membersAndExcess}>
             <View style={styles.clubMembers}>
-              {item.members.slice(0, 5).map(showMembers)}
+              {members.slice(0, 5).map(showMembers)}
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-              {item.members.length > 5 && 
-              <Text style={styles.extra}>+{item.members.length - 5}</Text>
+              {members.length > 5 && 
+              <Text style={styles.extra}>+{members.length - 5}</Text>
               }
               <TouchableWithoutFeedback onPress={() => {
                 setModalVisible(true);
@@ -268,37 +288,43 @@ const Details = ({route, navigation, polls, fetchClubPolls}) => {
             <View style={styles.memberModalView}>
               <Members
                 closeModal={handleOnCloseModal}
-                dataList={item.members}
+                dataList={members}
               />
             </View>
           </Modal>
           </View>
-           
-            <View style={styles.bookPoll}>
-              {currentPoll ?
-              <>
-                <Text style={styles.pollTitle}>{currentPoll.pollName}</Text>
-                <TouchableOpacity style={styles.bookPollBtn} onPress={() => {
-                  setPollModal(true);
-                }}>
-                  <Text style={styles.pollText}>Vote now</Text>
-                </TouchableOpacity>
-                <Modal
-                animationType="slide"
-                transparent={true}
-                visible={pollModal}>
-                  <View style={styles.modalView}>
-                    <BookPoll
-                      closeModal={handleOnClosePoll}
-                      currentPoll={currentPoll}
-                    />
-                  </View>
-              </Modal>
-              </>
-              :
-              <Text style={styles.noPoll}>No active poll for this club.</Text>
-              }
-            </View> 
+            
+              <View style={styles.bookPollContainer}>
+                <Text style={styles.listTitle}>Book Poll</Text>
+              </View>
+              <View style={styles.bookPoll}>
+                {isEmpty(currentPoll) ?
+                <Text style={styles.noPoll}>No active poll for this club.</Text> 
+                :
+                <>
+                  <Text style={styles.pollTitle}>{currentPoll.pollName}</Text>
+                  <TouchableOpacity style={styles.bookPollBtn} onPress={() => {
+                    setPollModal(true);
+                  }}>
+                    <Text style={styles.pollText}>Vote now</Text>
+                  </TouchableOpacity>
+                  <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={pollModal}>
+                    <View style={styles.modalView}>
+                      <BookPoll
+                        closeModal={handleOnClosePoll}
+                        currentPoll={currentPoll}
+                        clubId={item.id}
+                      />
+                    </View>
+                </Modal>
+                </>
+                
+                }
+              </View> 
+            
           
           {/* <TouchableOpacity style={styles.join} onPress={() => {}}>
             <Text style={styles.joinText}>Join Club</Text>
@@ -311,12 +337,14 @@ const Details = ({route, navigation, polls, fetchClubPolls}) => {
 };
 
 const mapStateToProps = state => ({
+  members: state.club.members,
   polls: state.poll.polls,
+  bookLists: state.booklist.bookLists,
 });
 
 export default connect(
   mapStateToProps,
-  {fetchClubPolls},
+  {fetchClubPolls, fetchClubMembers, fetchClubReadList},
 )(Details);
 
 const styles = StyleSheet.create({
@@ -367,7 +395,6 @@ const styles = StyleSheet.create({
   },
   readingListContainer: {
     marginVertical: 25,
-    
   },
   listTop: {
     flexDirection: 'row',
@@ -541,7 +568,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginHorizontal: 12,
-    marginTop: 30,
+    //marginTop: 30,
     marginBottom: 5
   },
   pollTitle: {
@@ -585,5 +612,10 @@ const styles = StyleSheet.create({
       fontFamily: 'Nunito-Regular',
       fontSize: 15,
     },
+    bookPollContainer: {
+      marginTop: 20,
+      marginBottom: 5,
+      marginHorizontal: 12
+    }
   
 });

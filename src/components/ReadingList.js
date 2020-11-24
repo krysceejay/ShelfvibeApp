@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
 import * as Animatable from 'react-native-animatable';
+import Config from 'react-native-config';
 
 const zoomIn = {
     0: {
@@ -12,8 +13,9 @@ const zoomIn = {
       scale: 1,
     },
   };
+const imgURL = Config.IMAGE_URL;
 
-const ReadingList = () => {
+const ReadingList = ({readList}) => {
     _renderItem = ({item, index}) => {
         return (
             <Animatable.View
@@ -31,14 +33,13 @@ const ReadingList = () => {
             //marginHorizontal: 10,
             }}>
             <Image
-              source={{
-                uri:
-                  'https://images.unsplash.com/photo-1533292362155-d79af6b08b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1651&q=80',
-              }}
-              style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 12,}}
-            />
+                source={{
+                  uri: `${imgURL}/bookcover/${item.bookcover}`,
+                }}
+                style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 12,}}
+              />
             <View style={styles.textContainer}>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>Activity Activity Activity Activity Activity Activity #{item + 1}</Text>
+              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
             <Text style={styles.readingMonth}>Current Book</Text>
             </View>
             
@@ -49,12 +50,15 @@ const ReadingList = () => {
     return (
         <View style={styles.container}>
         <FlatList
-        data={[...Array(8).keys()]}
-          keyExtractor={item => String(item)}
+        data={readList}
+          keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={_renderItem}
-          contentContainerStyle={{paddingHorizontal: 12}}
+          contentContainerStyle={{paddingLeft: 12}}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyText}>No book found</Text>
+        )}
         />
         </View>
     )
@@ -78,5 +82,10 @@ const styles = StyleSheet.create({
     readingMonth: {
         fontFamily: 'Nunito-Regular',
         fontSize: 11,
-    }
+    },
+    emptyText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 15,
+      marginTop: 15
+    },
 })

@@ -1,51 +1,78 @@
-import React,{useState} from 'react'
+import React,{useState} from 'react';
+import {connect} from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-picker';
+import * as Animatable from 'react-native-animatable';
+import {addBookToList} from '../actions/bookListActions';
 
-const AddBook = ({closeModal}) => {
-    const [bookcover, setBookcover] = useState(null);
+const AddBook = ({closeModal, clubId, addBookToList}) => {
+    const [formData, setFormData] = useState({
+       booktitle: '',
+       bookcover: null
+     });
+  
+     const {
+      booktitle,
+      bookcover
+    } = formData;
+  
+    const [errorMsg, setErrorMsg] = useState({
+      title: ''
+    });
+  
+    const {title} = errorMsg;
+  
+    const onChange = name => text => setFormData({...formData, [name]: text});
+
     const onClosePress = () => {
         closeModal();
       };
 
-      handleChoosePhoto = () => {
-        const options = {
-          title: 'Select Book Cover',
-          storageOptions: {
-            skipBackup: true,
-            path: 'Shelfvibe Images',
-          },
-        };
-        ImagePicker.showImagePicker(options, response => {
-          if (response.didCancel) {
-            return;
-          } else if (response.error) {
-            //console.log('ImagePicker Error: ', response.error);
-            return;
-          } else {
-            // const source = {
-            //   uri: response.uri,
-            //   type: response.type,
-            //   name:
-            //     response.fileName ||
-            //     response.uri.substr(response.uri.lastIndexOf('/' + 1)),
-            // };
-            // const source = {
-            //   uri: response.uri,
-            // };
-    
-            //console.log(response.uri);
-    
-            // You can also display the image using data:
-            // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-            setBookcover(response);
-            //this.setState({ photo: response })
-          }
-        });
+    handleChoosePhoto = () => {
+      const options = {
+        title: 'Select Book Cover',
+        storageOptions: {
+          skipBackup: true,
+          path: 'Shelfvibe Images',
+        },
       };
+      ImagePicker.showImagePicker(options, response => {
+        if (response.didCancel) {
+          return;
+        } else if (response.error) {
+          return;
+        } else {
+            const bookcover = {
+              uri: response.uri,
+              type: response.type,
+              name: response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
+          };
+          setFormData({...formData, bookcover});
+        }
+      });
+    }; 
+    
+    addBookListAction = async () => {
+      const userAddBookToList = await addBookToList({
+        clubId,
+        booktitle,
+        bookcover,
+      });
+      if (userAddBookToList == 'failed' || Array.isArray(userAddBookToList)) {
+        if (Array.isArray(userAddBookToList)) {
+          const errMsges = {};
+          userAddBookToList.forEach(item => {
+            errMsges[item.field] = item.message;
+          });
+          setErrorMsg(errMsges);
+        }
+      } else {
+        onClosePress();
+      }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -80,7 +107,13 @@ const AddBook = ({closeModal}) => {
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book Title</Text>
-                  <TextInput placeholder="Enter title" style={styles.textInput} />
+                  <TextInput placeholder="Enter title" style={styles.textInput} value={booktitle}
+              onChangeText={onChange('booktitle')} />
+                {title !== '' && (
+                  <Animatable.View animation="fadeInLeft" duration={500}>
+                    <Text style={styles.errorMessage}>{title}</Text>
+                  </Animatable.View>
+                )}
                 </View>
                 <View style={styles.singleInput}>
                     <Text style={styles.textLabel}>Book cover</Text>
@@ -104,7 +137,7 @@ const AddBook = ({closeModal}) => {
                     </View>
                 </View>
                 <View style={styles.singleInput}>
-                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6}>
+                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={addBookListAction}>
                     <Text style={styles.textSign}>Submit</Text>
                   </TouchableOpacity>
                 </View>
@@ -114,7 +147,10 @@ const AddBook = ({closeModal}) => {
     
     )
 }
-export default AddBook;
+export default connect(
+  null,
+  {addBookToList},
+)(AddBook);
 
 const styles = StyleSheet.create({
     container: {
@@ -194,4 +230,9 @@ const styles = StyleSheet.create({
         width: '100%',
         resizeMode: 'contain',
       },
+      errorMessage: {
+        fontSize: 13,
+        color: 'red',
+        marginTop: 3
+      }, 
 })

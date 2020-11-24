@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER, ADD_RATING} from './types';
+import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -73,7 +73,7 @@ export const createClub = clubInput => async dispatch => {
           }else{
             Alert.alert(
               'Error',
-              'Some error occured, file may be too lage.',
+              'Some error occured, file may be too large.',
             );
             return 'failed';
           }
@@ -135,7 +135,6 @@ export const createClub = clubInput => async dispatch => {
       return errorMessages;
     }
   } catch (err) {
-    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
@@ -247,3 +246,30 @@ export const rateClub = rateInput => async dispatch => {
     return 'failed';
   }
 }
+
+export const fetchClubMembers = clubId => async dispatch => {
+  const query = `
+      query {
+          getClubMembers(clubId: ${clubId}){
+          user{
+            username
+            propix
+          }
+          status
+        }
+      }
+    `;
+  try {
+    const members = await api.post('/', {query});
+    dispatch({
+      type: FETCH_CLUB_MEMBERS,
+      payload: members.data.data.getClubMembers
+    });
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};

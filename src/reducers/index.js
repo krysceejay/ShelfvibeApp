@@ -10,5 +10,5 @@ export default combineReducers({
   auth: authReducer,
   club: clubReducer,
   poll: pollReducer,
-  booklist: booklistReducer,
+  booklist: booklistReducer
 });

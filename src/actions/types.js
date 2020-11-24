@@ -19,3 +19,7 @@ export const FETCH_CLUB_POLLS = 'FETCH_CLUB_POLLS';
 export const SET_POLL = 'SET_POLL';
 export const FETCH_POLL_VOTES = 'FETCH_POLL_VOTES';
 export const VOTE_POLL = 'VOTE_POLL';
+export const REMOVE_VOTE = 'REMOVE_VOTE';
+export const FETCH_CLUB_MEMBERS = 'FETCH_CLUB_MEMBERS';
+export const FETCH_CLUB_READ_LIST = 'FETCH_CLUB_READ_LIST';
+export const ADD_BOOKLIST = 'ADD_BOOKLIST';

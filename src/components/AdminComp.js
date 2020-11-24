@@ -17,7 +17,9 @@ const AdminComp = ({navigation, closeModal, clubid}) => {
       }
 
       goToReadingList = () => {
-        navigation.navigate('Reading List');
+        navigation.navigate('Reading List', {
+            clubid
+          });
         closeModal();
       }
 

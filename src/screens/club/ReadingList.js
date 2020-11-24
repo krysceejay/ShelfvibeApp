@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   Text,
@@ -19,48 +19,31 @@ import {fetchBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import AddBook from '../../components/AddBook';
 import EditBook from '../../components/EditBook';
+import {AuthContext} from '../../utils/context';
+import {fetchClubReadList} from '../../actions/bookListActions';
 
 const {width} = Dimensions.get('window');
+const numColumns = 3;
+const imgURL = Config.IMAGE_URL;
 
-const dataList = [
-    {key: 1},
-    {key: 2},
-    {key: 3},
-    {key: 4},
-    {key: 5},
-    {key: 6},
-    {key: 7},
-    {key: 8},
-    {key: 9},
-  {key: 10},
-  {key: 11},
-  {key: 12},
-  {key: 13},
-  {key: 14},
-  {key: 15},
-  {key: 16},
-  {key: 17},
-  {key: 18},
-  {key: 19},
-  {key: 20},
-  ];
-
-const ReadingList = ({navigation}) => {
+const ReadingList = ({route, fetchClubReadList, bookLists}) => {
+  const {clubid} = route.params;
   const [addBookShow, setAddBookShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [current, setCurrent] = useState(false);
-  const numColumns = 3;
+  const [isLoading, setIsLoading] = useState(false);
 
-  formatData = (dataList, numColumns) => {
-    if (dataList !== null) {
-      const totalRows = Math.floor(dataList.length / numColumns);
-      let totalLastRow = dataList.length - totalRows * numColumns;
-      while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-        dataList.push({key: 'blank', empty: true});
-        totalLastRow++;
-      }
+  const user = useContext(AuthContext);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getClubReadList(clubid);
+  }, []);
+
+  getClubReadList = async clubid => {
+    const getReadList = await fetchClubReadList(clubid);
+      if (getReadList !== 'failed') {
+        setIsLoading(false);
     }
-    return dataList;
   };
 
   handleOnCloseModal = () => {
@@ -76,9 +59,6 @@ const ReadingList = ({navigation}) => {
   };
 
   _renderItem = ({item, index}) => {
-    if (item.empty) {
-      return <View style={[styles.item, styles.itemInvisible]} />;
-    }
     return (
         <View
             style={{
@@ -88,21 +68,19 @@ const ReadingList = ({navigation}) => {
                 height: width * 0.56,
                 marginVertical: 3,
                 position: 'relative'
-
             }}>
             <Image
-                source={require('../../assets/img/showup.jpg')}
+                source={{
+                  uri: `${imgURL}/bookcover/${item.bookcover}`,
+                }}
                 style={{width: '100%', height: '80%', resizeMode: 'cover'}}
-            />
-            
-                <View style={styles.current}>
-                    <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
-                        <Ionicons name="ios-checkmark-circle-outline" size={30} color="#155724" />
-                    </TouchableOpacity>
-                    <Text style={styles.textMonth}>Current</Text>
-                </View>
-            
-            
+              />
+              <View style={styles.current}>
+                  <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
+                      <Ionicons name="ios-checkmark-circle-outline" size={30} color="#155724" />
+                  </TouchableOpacity>
+                  <Text style={styles.textMonth}>Current</Text>
+              </View>
             <TouchableOpacity
             style={{
               //paddingHorizontal: 12,
@@ -121,7 +99,7 @@ const ReadingList = ({navigation}) => {
             onPress={() => {handleOnSelectItem(item)}}>
             <FontAwesome name="edit" size={18} color="#fff" />
           </TouchableOpacity>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>The Richest Man In Babylon The Richest Man In Babylon</Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
         </View>
     );
   };
@@ -162,15 +140,18 @@ const ReadingList = ({navigation}) => {
         transparent={true}
         visible={addBookShow}>
         <View style={styles.memberModalView}>
-            <AddBook closeModal={handleOnCloseModal} />
+            <AddBook closeModal={handleOnCloseModal} clubId={clubid} />
         </View>
         </Modal>
       <FlatList
-          data={formatData(dataList, numColumns)}
+          data={bookLists}
           renderItem={_renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyText}>No book found</Text>
+        )}
         />
         <Modal
             animationType="fade"
@@ -186,12 +167,19 @@ const ReadingList = ({navigation}) => {
   );
 };
 
-export default ReadingList;
+const mapStateToProps = state => ({
+  bookLists: state.booklist.bookLists,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchClubReadList},
+)(ReadingList);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
+    //paddingVertical: 10,
     backgroundColor: '#fff',
     overflow: 'hidden',
   },
@@ -266,5 +254,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3.0,
         elevation: 4,
-          }
+      },
+      emptyText: {
+        fontFamily: 'Nunito-Regular',
+        fontSize: 15,
+        paddingHorizontal: 12,
+        marginTop: 15
+      },
 });

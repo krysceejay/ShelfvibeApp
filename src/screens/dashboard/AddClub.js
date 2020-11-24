@@ -9,8 +9,6 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Image,
-  Platform,
-  Button,
   SafeAreaView,
   Switch,
 } from 'react-native';

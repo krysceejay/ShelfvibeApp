@@ -22,7 +22,7 @@ import {AuthContext} from '../../utils/context';
 
 const numColumns = 1;
 
-const Poll = ({navigation, route, fetchClubPolls, setPollAction, polls}) => {
+const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
   const {clubid} = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [addPollShow, setAddPollShow] = useState(false);

@@ -1,4 +1,4 @@
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL} from '../actions/types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE} from '../actions/types';
 
 const initialState = {
   polls: [],
@@ -35,6 +35,11 @@ const pollReducer = (state = initialState, action) => {
         return {
             ...state,
             votes: [payload, ...state.votes],
+        };
+    case REMOVE_VOTE:
+        return {
+            ...state,
+            votes: state.votes.filter(vote => vote.id !== payload)
         };
     default:
       return state;

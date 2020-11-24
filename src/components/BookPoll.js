@@ -2,17 +2,23 @@ import React, {useEffect, useContext} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
 import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {fetchPollVotes, pollVoteAction} from '../actions/pollActions';
+import {fetchPollVotes, pollVoteAction, removeVoteAction} from '../actions/pollActions';
+import {fetchClubMembers} from '../actions/clubActions';
 import {AuthContext} from '../utils/context';
 
-const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, votes}) => {
+const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, removeVoteAction, fetchClubMembers, votes, clubId, members}) => {
   const user = useContext(AuthContext);
   useEffect(() => {
+    getClubMembers(clubId);
     getPollVotes(currentPoll.id);
   }, [])
 
   getPollVotes = async pollid => {
     await fetchPollVotes(pollid);
+  };
+
+  getClubMembers = async clubid => {
+    await fetchClubMembers(clubid);
   };
 
     onClosePress = () => {
@@ -26,14 +32,14 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, vote
       });
     };
 
-    removeVote = index => {
-      console.log('remove '+index);
+    removeVote = async voteId => {
+      await removeVoteAction(voteId);
     }
 
       const createTwoButtonAlert = index =>
         Alert.alert(
           'Vote',
-          'Click OK to add your vote?',
+          'Click OK to proceed?',
           [
             {
               text: 'Cancel',
@@ -41,15 +47,20 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, vote
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              if(user !== null){
-                //TODO: check if user is a member
-                if (getUserVote(user.username).pollIndex === (index)) {
-                  removeVote(index);
-                } else {
-                  addVote(index);
-                }
+              if(user !== null && checkIfUserIsAMember(user.username) !== undefined){
+                //check if member is active
+                if (checkIfUserIsAMember(user.username).status !== false){
+                  if (getUserVote(user.username).pollIndex === (index)) {
+                    removeVote(getUserVote(user.username).id);
+                  } else {
+                    addVote(index);
+                  }
+                }else{
+                  Alert.alert('Failed', 'You are not active, therefore cannot vote.');
+                } 
+                
               }else{
-                Alert.alert('Failed', 'Kindly login to vote.');
+                Alert.alert('Failed', 'Kindly login or join the club to vote.');
               }
               
             }},
@@ -67,7 +78,8 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, vote
       } else {
         votePercent = (firstIndex.length / votes.length) * 100;
       }
-      return Math.round(votePercent);
+      return {votePercent: Math.round(votePercent), firstIndex: firstIndex.length};
+      //return Math.round(votePercent);
     }
 
     getUserVote = username => {
@@ -83,12 +95,19 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, vote
       return getVoteByUser;
     }
 
+    checkIfUserIsAMember = username => {
+      const checkMember = members.find(member => {
+        return member.user.username == username;
+      });
+      return checkMember;
+    }
+
     showPollBooks = (item, index) => {
       return <TouchableOpacity key={index} onPress={() => {createTwoButtonAlert(index + 1)}}>
         <View style={styles.pollSingle}>
             <View style={styles.progressSingle}>
-                <View style={[styles.inner, {width: `${getVotesByIndex(index + 1)}%`}]}>
-                <Text style={styles.innerText}>{getVotesByIndex(index + 1)}%</Text>
+                <View style={[styles.inner, {width: `${getVotesByIndex(index + 1).votePercent}%`}]}>
+                <Text style={styles.innerText}>{getVotesByIndex(index + 1).firstIndex} / {votes.length}</Text>
                 </View>
             </View>
           {user !== null && getUserVote(user.username).pollIndex === (index + 1) ? 
@@ -118,11 +137,12 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, vote
 
 const mapStateToProps = state => ({
   votes: state.poll.votes,
+  members: state.club.members
 });
 
 export default connect(
   mapStateToProps,
-  {fetchPollVotes, pollVoteAction},
+  {fetchPollVotes, pollVoteAction, removeVoteAction, fetchClubMembers},
 )(BookPoll);
 
 const styles = StyleSheet.create({

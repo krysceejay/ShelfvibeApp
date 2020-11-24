@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL} from './types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE} from './types';
 import api from '../utils/api';
 
 //Add Poll
@@ -53,6 +53,7 @@ export const addPoll = pollInput => async dispatch => {
     }
   }
 
+ //FETCH CLUB POLLS 
   export const fetchClubPolls = id => async dispatch => {
     const query = `
         query {
@@ -100,7 +101,7 @@ export const setPollAction = pollInput => async dispatch => {
           payload: setPoll.data.data.setPollStatus
         });
       } else {
-        Alert.alert('Failed', 'You already have an active poll, please deactivate it to proceed.');
+        Alert.alert('Failed', 'You already have an active poll. Please deactivate it to proceed.');
         return 'failed';
       }
     } catch (err) {
@@ -140,7 +141,7 @@ export const setPollAction = pollInput => async dispatch => {
     }
   };
   
-    //Vote Action
+//Vote Action
 export const pollVoteAction = voteInput => async dispatch => {
     const {pollId, pollIndex} = voteInput;
     const query = `
@@ -175,36 +176,37 @@ export const pollVoteAction = voteInput => async dispatch => {
     }
   }
 
-      //Vote Action
-// export const removePollVoteAction = pollId => async dispatch => {
-//     const query = `
-//         mutation {
-//             votePoll(pollId: ${pollId}, input: {pollIndex: ${pollIndex}}){
-//             user{
-//                 username
-//                 id
-//              }
-//             pollIndex
-//           }
-//         }
-//     `;
-//     try {
-//       const pollVote = await api.post('/', {query});
-//       if (pollVote.data.data.votePoll !== null) {
-//         dispatch({
-//           type: VOTE_POLL,
-//           payload: pollVote.data.data.votePoll
-//         });
-//       } else {
-//         Alert.alert('Failed', 'You already have an active poll, please deactivate it to proceed.');
-//         return 'failed';
-//       }
-//     } catch (err) {
-//       Alert.alert(
-//         'Error',
-//         'Some error occured, please check your internet connection and retry.',
-//       );
-//       return 'failed';
-//     }
-//   }
+//Remove Vote Action
+export const removeVoteAction = voteId => async dispatch => {
+    const query = `
+        mutation {
+            removeVote(voteId: ${voteId}){
+            user{
+                username
+                id
+             }
+            pollIndex
+            id
+          }
+        }
+    `;
+    try {
+      const removeVote = await api.post('/', {query});
+      if (removeVote.data.data.removeVote !== null) {
+        dispatch({
+          type: REMOVE_VOTE,
+          payload: removeVote.data.data.removeVote.id
+        });
+      } else {
+        Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+        return 'failed';
+      }
+    } catch (err) {
+      Alert.alert(
+        'Error',
+        'Some error occured, please check your internet connection and retry.',
+      );
+      return 'failed';
+    }
+  }
   
