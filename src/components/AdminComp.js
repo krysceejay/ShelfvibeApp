@@ -1,10 +1,12 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
+import {updateClubPublic} from '../actions/clubActions';
 
-const AdminComp = ({navigation, closeModal, clubid}) => {
+const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, publicStatus}) => {
     onClosePress = () => {
         closeModal();
       };
@@ -20,6 +22,11 @@ const AdminComp = ({navigation, closeModal, clubid}) => {
         navigation.navigate('Reading List', {
             clubid
           });
+        closeModal();
+      }
+
+      setClubPublic = async () => {
+        await updateClubPublic(clubid);
         closeModal();
       }
 
@@ -57,10 +64,13 @@ const AdminComp = ({navigation, closeModal, clubid}) => {
                             <Text style={styles.actionText}>Set as publish</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}}>
+                    <TouchableOpacity onPress={setClubPublic}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="security" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Set as private</Text>
+                            <Text style={styles.actionText}>
+                                {publicStatus ? "Set as private" : "Set as public"}
+                                
+                            </Text>
                         </View>
                     </TouchableOpacity>
                     {/* <TouchableOpacity onPress={shareBtn}>
@@ -85,7 +95,10 @@ const AdminComp = ({navigation, closeModal, clubid}) => {
     )
 }
 
-export default AdminComp;
+export default connect(
+    null,
+    {updateClubPublic},
+  )(AdminComp);
 
 const styles = StyleSheet.create({
     container: {

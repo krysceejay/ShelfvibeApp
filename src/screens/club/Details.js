@@ -24,23 +24,29 @@ import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
-import {fetchClubMembers} from '../../actions/clubActions';
+import {fetchClubMembers, getSingleClub} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
 import {fetchClubReadList} from '../../actions/bookListActions';
 
 const imgURL = Config.IMAGE_URL;
 
-const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList, fetchClubPolls, members, bookLists}) => {
+const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
+   fetchClubReadList, fetchClubPolls, members, bookLists, club}) => {
   const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
 
   useEffect(() => {
+    getClub(item.id);
     getClubMembers(item.id);
     getClubReadList(item.id);
     getClubPolls(item.id);
   }, [item.id]);
+
+  getClub = async clubid => {
+    await getSingleClub(clubid);
+  };
 
   getClubPolls = async clubid => {
     await fetchClubPolls(clubid);
@@ -128,11 +134,11 @@ const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList,
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={() => {}}
-            style={styles.floatingBtn}
-            activeOpacity={0.9}>
-            
-            <Text style={styles.joinText}>Join</Text>
-            </TouchableOpacity>
+        style={styles.floatingBtn}
+        activeOpacity={0.9}>
+        
+        <Text style={styles.joinText}>Join</Text>
+      </TouchableOpacity>
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#fff'}}>
@@ -185,6 +191,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList,
                       closeModal={handleOnCloseAdmin}
                       navigation={navigation}
                       clubid={item.id}
+                      publicStatus={club.public}
                     />
                   </TouchableOpacity>
               </Modal>
@@ -234,7 +241,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList,
                     size={22}
                     color="#373435"
                   />
-                  {item.public ? 
+                  {club.public ? 
                     <View style={styles.detailsTextPublic}>
                       <Text style={styles.justTextPublic}>public</Text>
                     </View> :
@@ -337,6 +344,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, fetchClubReadList,
 };
 
 const mapStateToProps = state => ({
+  club: state.club.club,
   members: state.club.members,
   polls: state.poll.polls,
   bookLists: state.booklist.bookLists,
@@ -344,7 +352,8 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {fetchClubPolls, fetchClubMembers, fetchClubReadList},
+  {fetchClubPolls, fetchClubMembers, fetchClubReadList, 
+    getSingleClub},
 )(Details);
 
 const styles = StyleSheet.create({

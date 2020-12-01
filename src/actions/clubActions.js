@@ -1,5 +1,7 @@
 import {Alert} from 'react-native';
-import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS} from './types';
+import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
+  CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS, 
+  SINGLE_CLUB, UPDATE_CLUB_PUBLIC} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -273,3 +275,67 @@ export const fetchClubMembers = clubId => async dispatch => {
     return 'failed';
   }
 };
+
+export const getSingleClub = id => async dispatch => {
+  const query = `
+    query {
+      club(clubId: ${id}){
+        id
+        public
+        publish
+        name
+      }
+    }
+  `;
+
+  try {
+    const club = await api.post('/', {query});
+    if (club.data.data.club !== null) {
+      dispatch({
+        type: SINGLE_CLUB,
+        payload: club.data.data.club,
+      });
+    } else {
+      Alert.alert('Error', 'Club does not exist.');
+      return 'failed';
+    }
+  } catch (error) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+//Vote Action
+export const updateClubPublic = clubId => async dispatch => {
+  const query = `
+      mutation {
+        clubPublic(clubId: ${clubId}){
+          id
+          public
+          publish
+          name
+        }
+      }
+  `;
+  try {
+    const updatePublic = await api.post('/', {query});
+    if (updatePublic.data.data.clubPublic !== null) {
+      dispatch({
+        type: UPDATE_CLUB_PUBLIC,
+        payload: updatePublic.data.data.clubPublic
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
