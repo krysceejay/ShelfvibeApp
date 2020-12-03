@@ -4,9 +4,9 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 're
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
-import {updateClubPublic} from '../actions/clubActions';
+import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
 
-const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, publicStatus}) => {
+const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, publicStatus, publishStatus}) => {
     onClosePress = () => {
         closeModal();
       };
@@ -27,6 +27,11 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, publicStat
 
       setClubPublic = async () => {
         await updateClubPublic(clubid);
+        closeModal();
+      }
+
+      setClubPublish = async () => {
+        await updateClubPublish(clubid);
         closeModal();
       }
 
@@ -58,18 +63,19 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, publicStat
                             <Text style={styles.actionText}>Reading List</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {}}>
+                    <TouchableOpacity onPress={setClubPublish}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="file-eye" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Set as publish</Text>
+                            <Text style={styles.actionText}>
+                                {publishStatus ? "Set as Draft" : "Set as publish"}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={setClubPublic}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="security" size={22} color="#444444" />
                             <Text style={styles.actionText}>
-                                {publicStatus ? "Set as private" : "Set as public"}
-                                
+                                {publicStatus ? "Set as private" : "Set as public"}   
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -97,7 +103,7 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, publicStat
 
 export default connect(
     null,
-    {updateClubPublic},
+    {updateClubPublic, updateClubPublish},
   )(AdminComp);
 
 const styles = StyleSheet.create({

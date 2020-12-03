@@ -192,6 +192,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                       navigation={navigation}
                       clubid={item.id}
                       publicStatus={club.public}
+                      publishStatus={club.publish}
                     />
                   </TouchableOpacity>
               </Modal>

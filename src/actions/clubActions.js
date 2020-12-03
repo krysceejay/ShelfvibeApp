@@ -1,7 +1,7 @@
 import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS, 
-  SINGLE_CLUB, UPDATE_CLUB_PUBLIC} from './types';
+  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -308,7 +308,7 @@ export const getSingleClub = id => async dispatch => {
   }
 };
 
-//Vote Action
+//Update Pubic
 export const updateClubPublic = clubId => async dispatch => {
   const query = `
       mutation {
@@ -326,6 +326,38 @@ export const updateClubPublic = clubId => async dispatch => {
       dispatch({
         type: UPDATE_CLUB_PUBLIC,
         payload: updatePublic.data.data.clubPublic
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
+
+//Update Pubish
+export const updateClubPublish = clubId => async dispatch => {
+  const query = `
+      mutation {
+        clubPublish(clubId: ${clubId}){
+          id
+          public
+          publish
+          name
+        }
+      }
+  `;
+  try {
+    const updatePublish = await api.post('/', {query});
+    if (updatePublish.data.data.clubPublish !== null) {
+      dispatch({
+        type: UPDATE_CLUB_PUBLISH,
+        payload: updatePublish.data.data.clubPublish
       });
     } else {
       Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
