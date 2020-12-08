@@ -27,3 +27,4 @@ export const SET_BOOK = 'SET_BOOK';
 export const SINGLE_CLUB = 'SINGLE_CLUB';
 export const UPDATE_CLUB_PUBLIC = 'UPDATE_CLUB_PUBLIC';
 export const UPDATE_CLUB_PUBLISH = 'UPDATE_CLUB_PUBLISH';
+export const REPORT_CLUB = 'REPORT_CLUB';

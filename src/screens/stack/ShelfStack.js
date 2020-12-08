@@ -8,6 +8,7 @@ import Club from '../club/Club';
 import Details from '../club/Details';
 import Poll from '../club/Poll';
 import ReadingList from '../club/ReadingList';
+import Report from '../club/Report';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ const ShelfStack = () => {
       <Stack.Screen name="Reading List" component={ReadingList} />
       <Stack.Screen name="Rating" component={Rating} />
       <Stack.Screen name="All Ratings" component={AllRatings} />
+      <Stack.Screen name="Report" component={Report} />
     </Stack.Navigator>
   );
 };

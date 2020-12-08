@@ -1,7 +1,7 @@
 import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS, 
-  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH} from './types';
+  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -364,6 +364,49 @@ export const updateClubPublish = clubId => async dispatch => {
       return 'failed';
     }
   } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
+
+//Report Club
+export const reportClubAction = reportInput => async dispatch => {
+  const {clubid, reportSubject, reportBody} = reportInput;
+  const query = `
+      mutation {
+        reportClub(clubId: ${clubid}, input: {body: "${reportBody}", subject: "${reportSubject}"}){
+          result{
+            body
+            subject
+          }
+          successful
+          messages{
+            code
+            field
+            message
+          }
+        }
+      }
+  `;
+  try {
+    const reportClub = await api.post('/', {query});
+    if (reportClub.data.data.reportClub.successful === true) {
+      dispatch({
+        type: REPORT_CLUB
+      });
+    } else {
+      const errorMessages = reportClub.data.data.reportClub.messages;
+      Alert.alert(
+        'Error',
+        'Please make sure you provide the required fields',
+      );
+      return errorMessages;
+    }
+  } catch (err) {
+    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',

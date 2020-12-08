@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
-import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
+import {updateClubPublic, updateClubPublish, reportClubAction} from '../actions/clubActions';
 
-const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, publicStatus, publishStatus}) => {
+const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, reportClubAction, publicStatus, publishStatus}) => {
     onClosePress = () => {
         closeModal();
       };
@@ -25,6 +25,13 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
         closeModal();
       }
 
+      goToReport = () => {
+        navigation.navigate('Report', {
+            clubid
+          });
+        closeModal();
+      }
+
       setClubPublic = async () => {
         await updateClubPublic(clubid);
         closeModal();
@@ -34,6 +41,28 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
         await updateClubPublish(clubid);
         closeModal();
       }
+
+    //   reportClub = async () => {
+    //     const userReportClub = await reportClubAction({
+    //         clubid, 
+    //         reportSubject,
+    //         reportBody
+    //       });
+
+    //       if (userReportClub == 'failed' || Array.isArray(userReportClub)) {
+    //         if (Array.isArray(userReportClub)) {
+    //           const errMsges = {};
+    //           userReportClub.forEach(item => {
+    //             errMsges[item.field] = item.message;
+    //           });
+    //           setErrorMsg(errMsges);
+    //         }
+    //       } else {
+    //         console.log('success');
+    //       }
+
+    //     closeModal();
+    //   }
 
       shareBtn = async () => {
           const shareOptions = {
@@ -87,6 +116,12 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                     </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => {}}>
                         <View style={styles.actionSingle}>
+                        <FontAwesome name="heart" size={22} color="#444444" />
+                            <Text style={styles.actionText}>Favorite</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={goToReport}>
+                        <View style={styles.actionSingle}>
                         <FontAwesome name="exclamation-triangle" size={22} color="#444444" />
                             <Text style={styles.actionText}>Report</Text>
                         </View>
@@ -103,7 +138,7 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 
 export default connect(
     null,
-    {updateClubPublic, updateClubPublish},
+    {updateClubPublic, updateClubPublish, reportClubAction},
   )(AdminComp);
 
 const styles = StyleSheet.create({
