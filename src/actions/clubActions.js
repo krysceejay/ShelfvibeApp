@@ -414,3 +414,4 @@ export const reportClubAction = reportInput => async dispatch => {
     return 'failed';
   }
 }
+

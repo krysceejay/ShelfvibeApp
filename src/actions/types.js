@@ -28,3 +28,6 @@ export const SINGLE_CLUB = 'SINGLE_CLUB';
 export const UPDATE_CLUB_PUBLIC = 'UPDATE_CLUB_PUBLIC';
 export const UPDATE_CLUB_PUBLISH = 'UPDATE_CLUB_PUBLISH';
 export const REPORT_CLUB = 'REPORT_CLUB';
+export const FAV_CLUB = 'FAV_CLUB';
+export const UNFAV_CLUB = 'UNFAV_CLUB';
+export const FAV_BY_USER_CLUB = 'FAV_BY_USER_CLUB';

@@ -27,11 +27,12 @@ import {stringToHslColor} from '../../utils/theme';
 import {fetchClubMembers, getSingleClub} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
 import {fetchClubReadList} from '../../actions/bookListActions';
+import {getFavByUserAndClub} from '../../actions/favActions';
 
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
-   fetchClubReadList, fetchClubPolls, members, bookLists, club}) => {
+   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, members, userFavClub, bookLists, club}) => {
   const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
@@ -42,6 +43,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     getClubMembers(item.id);
     getClubReadList(item.id);
     getClubPolls(item.id);
+    checkFav(item.id);
   }, [item.id]);
 
   getClub = async clubid => {
@@ -58,6 +60,10 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   getClubReadList = async clubid => {
     await fetchClubReadList(clubid);
+  };
+
+  checkFav = async clubid => {
+    await getFavByUserAndClub(clubid);
   };
 
   let totalRatings = 0;
@@ -193,6 +199,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                       clubid={item.id}
                       publicStatus={club.public}
                       publishStatus={club.publish}
+                      userFav={userFavClub}
                     />
                   </TouchableOpacity>
               </Modal>
@@ -347,6 +354,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 const mapStateToProps = state => ({
   club: state.club.club,
   members: state.club.members,
+  userFavClub: state.fav.userFavClub,
   polls: state.poll.polls,
   bookLists: state.booklist.bookLists,
 });
@@ -354,7 +362,7 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {fetchClubPolls, fetchClubMembers, fetchClubReadList, 
-    getSingleClub},
+    getSingleClub, getFavByUserAndClub},
 )(Details);
 
 const styles = StyleSheet.create({

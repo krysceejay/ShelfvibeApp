@@ -4,9 +4,10 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert } from 'r
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
-import {updateClubPublic, updateClubPublish, reportClubAction} from '../actions/clubActions';
+import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
+import {favClubAction, removeFavClubAction} from '../actions/favActions';
 
-const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, reportClubAction, publicStatus, publishStatus}) => {
+const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction}) => {
     onClosePress = () => {
         closeModal();
       };
@@ -39,6 +40,15 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 
       setClubPublish = async () => {
         await updateClubPublish(clubid);
+        closeModal();
+      }
+
+      setFavClub = async () => {
+        await favClubAction(clubid);
+        closeModal();
+      }
+      setUnFavClub = async () => {
+        await removeFavClubAction(clubid);
         closeModal();
       }
 
@@ -114,12 +124,24 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                             <Text style={styles.actionText}>Share Link</Text>
                         </View>
                     </TouchableOpacity> */}
-                    <TouchableOpacity onPress={() => {}}>
-                        <View style={styles.actionSingle}>
-                        <FontAwesome name="heart" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Favorite</Text>
-                        </View>
+                    {userFav ? <TouchableOpacity onPress={setUnFavClub}>
+                      <View style={styles.actionSingle}>
+                      <FontAwesome name="heart" size={22} color="#444444" />
+                          <Text style={styles.actionText}>
+                            UnFavorite
+                          </Text>
+                      </View>
+                    </TouchableOpacity> : 
+                    <TouchableOpacity onPress={setFavClub}>
+                      <View style={styles.actionSingle}>
+                      <FontAwesome name="heart-o" size={22} color="#444444" />
+                          <Text style={styles.actionText}>
+                            Favorite
+                          </Text>
+                      </View>
                     </TouchableOpacity>
+                    }
+
                     <TouchableOpacity onPress={goToReport}>
                         <View style={styles.actionSingle}>
                         <FontAwesome name="exclamation-triangle" size={22} color="#444444" />
@@ -138,7 +160,7 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 
 export default connect(
     null,
-    {updateClubPublic, updateClubPublish, reportClubAction},
+    {updateClubPublic, updateClubPublish, favClubAction, removeFavClubAction},
   )(AdminComp);
 
 const styles = StyleSheet.create({
