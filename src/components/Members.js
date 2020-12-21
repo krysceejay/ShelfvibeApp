@@ -26,7 +26,7 @@ const proURL = Config.IMAGE_URL;
 //     {key: "5"},
 //   ];
 
-const Members = ({closeModal, dataList}) => {
+const Members = ({closeModal, dataList, owner}) => {
   const user = useContext(AuthContext);
   const onClosePress = () => {
     closeModal();
@@ -96,7 +96,7 @@ const remove = (id) =>
         }
         </View>
       </View>
-      {user !== null && user.username === data.item.user.username && <Text style={styles.adminText}>Admin</Text>}
+      {user !== null && user.id === data.item.user.id && <Text style={styles.adminText}>Admin</Text>}
     </View>
     )
   }
@@ -138,6 +138,7 @@ const remove = (id) =>
           //paddingHorizontal: 10,
           marginBottom: 10,
         }}>
+         
         <SwipeListView
             data={dataList}
             renderItem={renderItem}
@@ -177,7 +178,10 @@ const remove = (id) =>
             rightOpenValue={-75}
             stopLeftSwipe={50}
             stopRightSwipe={-50}
+            disableLeftSwipe={user !== null && user.id === owner ? false : true}
+            disableRightSwipe={user !== null && user.id === owner ? false : true}
         />
+        
       </View>
     </SafeAreaView>
   );

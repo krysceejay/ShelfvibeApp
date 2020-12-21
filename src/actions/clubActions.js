@@ -24,15 +24,18 @@ export const fetchClubs = () => async dispatch => {
               updatedAt
               user{
                 username
+                id
               }
             }
             user{
               username
+              id
             }
             members{
               user{
                 username
                 propix
+                id
               }
               status
             }

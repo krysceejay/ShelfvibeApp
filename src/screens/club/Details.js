@@ -200,6 +200,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                       publicStatus={club.public}
                       publishStatus={club.publish}
                       userFav={userFavClub}
+                      owner={item.user.id}
                     />
                   </TouchableOpacity>
               </Modal>
@@ -304,6 +305,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
               <Members
                 closeModal={handleOnCloseModal}
                 dataList={members}
+                owner={item.user.id}
               />
             </View>
           </Modal>

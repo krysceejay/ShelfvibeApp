@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,8 +6,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
 import {favClubAction, removeFavClubAction} from '../actions/favActions';
+import {AuthContext} from '../utils/context';
 
-const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction}) => {
+
+const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, 
+  publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction, owner}) => {
+
+  const user = useContext(AuthContext);
+
     onClosePress = () => {
         closeModal();
       };
@@ -89,7 +95,10 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.body}>
+            {user !== null ?
                 <View style={styles.actionContainer}>
+                  {user.id === owner ?
+                  <View>
                     <TouchableOpacity onPress={goToPoll}>
                         <View style={styles.actionSingle}>
                             <MaterialCommunityIcons name="poll" size={22} color="#444444" />
@@ -118,6 +127,8 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                             </Text>
                         </View>
                     </TouchableOpacity>
+                    </View>:
+                    <View>
                     {/* <TouchableOpacity onPress={shareBtn}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="share-variant" size={22} color="#444444" />
@@ -148,7 +159,14 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                             <Text style={styles.actionText}>Report</Text>
                         </View>
                     </TouchableOpacity>
+                    </View>}
+                    
+                </View> : 
+                <View style={styles.actionSingle}>
+                <MaterialCommunityIcons name="login" size={22} color="#444444" />
+                    <Text style={styles.actionText}>Login to see actions</Text>
                 </View>
+                }
             </View>
             {/* <TouchableOpacity style={styles.join} onPress={onClosePress}>
             <Text style={styles.joinText}>Cancel</Text>
@@ -167,7 +185,7 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: 10,
         width: '55%',
-        marginVertical: 10
+        marginVertical: 10,
       },
       body: {
         backgroundColor: '#f9f9f9',
