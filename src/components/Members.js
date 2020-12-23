@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useEffect,useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,12 +9,14 @@ import {
   Image,
   Alert
 } from 'react-native';
+import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from 'react-native-config';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import {AuthContext} from '../utils/context';
 import {stringToHslColor} from '../utils/theme';
+import {fetchClubMembers, setMemberStatusAction, removeMemberAction} from '../actions/clubActions';
 
 const proURL = Config.IMAGE_URL;
 
@@ -26,18 +28,47 @@ const proURL = Config.IMAGE_URL;
 //     {key: "5"},
 //   ];
 
-const Members = ({closeModal, dataList, owner}) => {
+const Members = ({closeModal, members, owner, clubid, fetchClubMembers, setMemberStatusAction, removeMemberAction}) => {
   const user = useContext(AuthContext);
+
+  useEffect(() => {
+    //setIsLoading(true);
+    getClubMembers(clubid);
+  }, [clubid]);
+
+  getClubMembers = async clubid => {
+    await fetchClubMembers(clubid);
+  };
+
   const onClosePress = () => {
     closeModal();
   };
 
-  const deActivateMember =  (id) => {
-    //console.log(id);
-    return;
+  const deActivateMember =  async (userid) => {
+    if(user !== null && user.id === owner){
+      await setMemberStatusAction({
+        userid,
+        clubid
+      })
+    }else{
+      Alert.alert('Failed', 'Kindly login to proceed.');
+      return;
+    }
   };
 
-  const deActivate = (id) =>
+  const activateMember =  async (userid) => {
+    if(user !== null && user.id === owner){
+      await setMemberStatusAction({
+        userid,
+        clubid
+      });
+    }else{
+      Alert.alert('Failed', 'You are not allowed to perform this action.');
+      return;
+    }
+  };
+
+  const deActivate = (userid) =>
     Alert.alert(
   'Deactivate',
   'Are you sure you want to deactivate this member?',
@@ -47,14 +78,32 @@ const Members = ({closeModal, dataList, owner}) => {
       onPress: () => false,
       style: 'cancel',
     },
-    {text: 'OK', onPress: () => deActivateMember(id)},
+    {text: 'OK', onPress: () => deActivateMember(userid)},
+  ],
+  {cancelable: false},
+);
+  const activate = (userid) =>
+    Alert.alert(
+  'Activate',
+  'Are you sure you want to activate this member?',
+  [
+    {
+      text: 'Cancel',
+      onPress: () => false,
+      style: 'cancel',
+    },
+    {text: 'OK', onPress: () => activateMember(userid)},
   ],
   {cancelable: false},
 );
 
-const removeMember =  (id) => {
-  //console.log(id);
-  return;
+const removeMember =  async (id) => {
+  if(user !== null && user.id === owner){
+    await removeMemberAction(id);
+  }else{
+    Alert.alert('Failed', 'You are not allowed to perform this action.');
+    return;
+  }
 };
 
 const remove = (id) =>
@@ -109,7 +158,7 @@ const remove = (id) =>
     <SafeAreaView style={styles.container}>
       <View style={styles.closeBtn}>
         <Text style={styles.title}>
-          Members ({dataList.length})
+          Members ({members.length})
         </Text>
         <TouchableOpacity onPress={onClosePress}
         style={{
@@ -140,7 +189,7 @@ const remove = (id) =>
         }}>
          
         <SwipeListView
-            data={dataList}
+            data={members}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             renderHiddenItem={(data, rowMap) => (
@@ -152,10 +201,18 @@ const remove = (id) =>
                       alignItems: 'center',
                       justifyContent: 'center',
                       //marginHorizontal: 10,
-                      
                     }}
-                    onPress={() => {deActivate(1)}}>
-                    <Icon name="toggle-off" size={22} color="#444444" />
+                    onPress={() => {
+                      user !== null && user.id !== data.item.user.id && 
+                      (data.item.status ? deActivate(data.item.user.id) : activate(data.item.user.id))
+                      }
+                      }>
+                      {
+                      user !== null && user.id !== data.item.user.id && (data.item.status ? 
+                      <Icon name="toggle-on" size={22} color="#444444" /> : 
+                      <Icon name="toggle-off" size={22} color="#444444" />)
+                      }
+                    
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
@@ -166,8 +223,12 @@ const remove = (id) =>
                       //marginHorizontal: 10,
                       
                     }}
-                    onPress={() => {remove(1)}}>
+                    onPress={() => {
+                      user !== null && user.id !== data.item.user.id && remove(data.item.id)
+                      }}>
+                    {user !== null && user.id !== data.item.user.id && 
                     <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+                    }
                   </TouchableOpacity>
                     {/* <Text>Left</Text>
                     <Text>Right</Text> */}
@@ -187,7 +248,14 @@ const remove = (id) =>
   );
 };
 
-export default Members;
+const mapStateToProps = state => ({
+  members: state.club.members
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchClubMembers, setMemberStatusAction, removeMemberAction},
+)(Members);
 
 const styles = StyleSheet.create({
   container: {

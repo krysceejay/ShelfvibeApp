@@ -1,7 +1,8 @@
 import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, ADD_RATING, FETCH_CLUB_MEMBERS, 
-  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB} from './types';
+  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
+  SET_MEMBER, REMOVE_MEMBER} from './types';
 import api from '../utils/api';
 import fileUpload from '../utils/fileUpload';
 
@@ -256,7 +257,9 @@ export const fetchClubMembers = clubId => async dispatch => {
   const query = `
       query {
           getClubMembers(clubId: ${clubId}){
+            id
           user{
+            id
             username
             propix
           }
@@ -278,6 +281,80 @@ export const fetchClubMembers = clubId => async dispatch => {
     return 'failed';
   }
 };
+
+ //Set Member Status
+ export const setMemberStatusAction = memberInput => async dispatch => {
+  const {userid, clubid} = memberInput;
+  const query = `
+      mutation {
+        setMemberStatus(clubId: ${clubid}, userId: ${userid}){
+          id
+          user{
+            id
+            username
+            propix
+          }
+        status
+        }
+      }
+  `;
+  try {
+    const setMemberStatus = await api.post('/', {query});
+    if (setMemberStatus.data.data.setMemberStatus !== null) {
+      dispatch({
+        type: SET_MEMBER,
+        payload: setMemberStatus.data.data.setMemberStatus
+      });
+    } else {
+      Alert.alert(
+        'Error',
+        'Some error occured, please check your internet connection and retry.',
+      );
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
+
+//Remove Member Action
+export const removeMemberAction = memberId => async dispatch => {
+  const query = `
+      mutation {
+        removeMember(memberId: ${memberId}){
+          id
+          user{
+            id
+            username
+            propix
+          }
+          status
+        }
+      }
+  `;
+  try {
+    const removeMember = await api.post('/', {query});
+    if (removeMember.data.data.removeMember !== null) {
+      dispatch({
+        type: REMOVE_MEMBER,
+        payload: removeMember.data.data.removeMember.id
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
 
 export const getSingleClub = id => async dispatch => {
   const query = `

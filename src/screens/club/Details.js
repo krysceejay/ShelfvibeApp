@@ -304,7 +304,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
             <View style={styles.memberModalView}>
               <Members
                 closeModal={handleOnCloseModal}
-                dataList={members}
+                clubid={item.id}
                 owner={item.user.id}
               />
             </View>
