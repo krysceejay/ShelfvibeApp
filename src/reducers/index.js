@@ -5,6 +5,7 @@ import clubReducer from './clubReducer';
 import pollReducer from './pollReducer';
 import booklistReducer from './booklistReducer';
 import favReducer from './favReducer';
+import rateReducer from './rateReducer';
 
 export default combineReducers({
   book: bookReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   club: clubReducer,
   poll: pollReducer,
   booklist: booklistReducer,
-  fav: favReducer
+  fav: favReducer,
+  rate: rateReducer
 });

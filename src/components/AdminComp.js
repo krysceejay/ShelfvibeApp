@@ -1,16 +1,18 @@
-import React, {useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
 import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
 import {favClubAction, removeFavClubAction} from '../actions/favActions';
+import {checkRateClub} from '../actions/rateActions';
 import {AuthContext} from '../utils/context';
 
 
 const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, 
-  publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction, owner}) => {
+  publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction, owner, checkRateClub}) => {
 
   const user = useContext(AuthContext);
 
@@ -34,6 +36,14 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 
       goToReport = () => {
         navigation.navigate('Report', {
+            clubid
+          });
+        closeModal();
+      }
+
+      goToAddReview = async () => {
+        await checkRateClub(clubid);
+        navigation.navigate('Add Review', {
             clubid
           });
         closeModal();
@@ -160,6 +170,13 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                         </View>
                     </TouchableOpacity>
                     </View>}
+
+                    <TouchableOpacity onPress={goToAddReview}>
+                        <View style={styles.actionSingle}>
+                        <MaterialIcons name="rate-review" size={22} color="#444444" />
+                            <Text style={styles.actionText}>Add Review</Text>
+                        </View>
+                    </TouchableOpacity>
                     
                 </View> : 
                 <View style={styles.actionSingle}>
@@ -177,8 +194,8 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 }
 
 export default connect(
-    null,
-    {updateClubPublic, updateClubPublish, favClubAction, removeFavClubAction},
+  null,
+    {updateClubPublic, updateClubPublish, favClubAction, removeFavClubAction, checkRateClub},
   )(AdminComp);
 
 const styles = StyleSheet.create({

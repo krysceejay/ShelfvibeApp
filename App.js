@@ -14,12 +14,14 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LoadingScene from './src/screens/LoadingScene';
 import BottomTabs from './src/screens/tabs/BottomTabs';
 
 Icon.loadFont();
 Ionicons.loadFont();
 MaterialCommunityIcons.loadFont();
+MaterialIcons.loadFont();
 
 const MyTheme = {
   ...DefaultTheme,

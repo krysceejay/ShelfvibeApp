@@ -42,7 +42,6 @@ const Report = ({route, reportClubAction, navigation}) => {
             setErrorMsg(errMsges);
         }
         } else {
-        console.log('success');
         navigation.goBack();
         }
     }

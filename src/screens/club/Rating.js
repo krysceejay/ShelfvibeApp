@@ -4,46 +4,19 @@ import {
   Text,
   StyleSheet,
   View,
-  TouchableOpacity,
-  TextInput,
   FlatList,
-  Alert
+  
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
 import StarGroup from '../../components/StarGroup';
 import ProgressBar from '../../components/ProgressBar';
 import BorderButton from '../../components/BorderButton';
-import RatingStarGroup from '../../components/RatingStarGroup';
-import {rateClub} from '../../actions/clubActions';
 
-const Rating = ({route, navigation, rateClub}) => {
-  const {data, item} = route.params;
-
-  const [formData, setFormData] = useState({
-    userRating: 0,
-    userComment: '',
-   });
-
-   const {
-    userRating,
-    userComment,
-  } = formData;
-
-  const [errorMsg, setErrorMsg] = useState({
-    rating: '',
-    comment: '',
-  });
-
-  const {rating, comment} = errorMsg; 
-
-  const onChange = name => text => setFormData({...formData, [name]: text});
+const Rating = ({ navigation, ratings}) => {
+  
+  let totalRatings = 0;
 
   let progress = [];
   let progressNum = [];
-
-  getUserRating = rate => {
-    setFormData({...formData, userRating: rate});
-  };
 
   _renderItem = ({item, index}) => {
     return (
@@ -60,14 +33,31 @@ const Rating = ({route, navigation, rateClub}) => {
     );
   };
 
+  sumRatings = item => {
+    totalRatings += parseInt(item.rating);
+  };
+  ratings.forEach(sumRatings);
+
+  calRating = () => {
+    let actualRating;
+    if (ratings.length == 0) {
+      actualRating = '0.0';
+    } else {
+      actualRating = (totalRatings / ratings.length).toFixed(1);
+    }
+    return actualRating;
+  };
+
+  const data = {ratingActual: calRating()};
+
   ratingPercent = rate => {
     let convertToPercent;
-    if (item.rates.map(getRatings).length == 0) {
+    if (ratings.map(getRatings).length == 0) {
       convertToPercent = 0;
     } else {
       convertToPercent =
-        (countOccurrences(item.rates.map(getRatings), rate) /
-          data.numberOfRev) *
+        (countOccurrences(ratings.map(getRatings), rate) /
+        ratings.length) *
         100;
     }
     return convertToPercent;
@@ -80,32 +70,10 @@ const Rating = ({route, navigation, rateClub}) => {
   const countOccurrences = (arr, val) =>
     arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
 
-  for (let i = 5; i > 0; i--) {
-    progress.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
-  progressNum.push(<Text key={i} style={styles.ratingMetricsSingleText}>{i}</Text>);
-  }
-
-  rateClubAction = async () => {
-    const userRateClub = await rateClub({
-      clubId: item.id,
-      userRating,
-      userComment,
-    });
-    if (userRateClub == 'failed' || Array.isArray(userRateClub)) {
-      if (Array.isArray(userRateClub)) {
-        const errMsges = {};
-        userRateClub.forEach(item => {
-          errMsges[item.field] = item.message;
-        });
-        setErrorMsg(errMsges);
-      }
-    } else {
-      Alert.alert(
-        'Success!',
-        'Your review was added successfully',
-      );
+    for (let i = 5; i > 0; i--) {
+      progress.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
+    progressNum.push(<Text key={i} style={styles.ratingMetricsSingleText}>{i}</Text>);
     }
-  };
   
   return (
     <View style={styles.container}>
@@ -119,13 +87,13 @@ const Rating = ({route, navigation, rateClub}) => {
 
                   <StarGroup rating={data.ratingActual} />
 
-                  <Text style={styles.ratingSmallNum}>{data.numberOfRev}</Text>
+                  <Text style={styles.ratingSmallNum}>{ratings.length}</Text>
                 </View>
                 <View style={styles.ratingMetrics}>{progressNum}</View>
               </View>
               <View style={styles.ratingProgress}>{progress}</View>
             </View>
-            <View style={styles.ratingActionView}>
+            {/* <View style={styles.ratingActionView}>
               <View style={{alignSelf: 'center', marginVertical: 15}}>
                 <RatingStarGroup getRating={getUserRating} />
                 {rating !== '' && (
@@ -169,11 +137,11 @@ const Rating = ({route, navigation, rateClub}) => {
                   </View>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             <Text style={styles.reviewTitle}>Reviews</Text>
           </View>
         }
-        data={item.rates.slice(0, 3)}
+        data={ratings.slice(0, 3)}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={() => (
@@ -182,11 +150,11 @@ const Rating = ({route, navigation, rateClub}) => {
         contentContainerStyle={{marginVertical: 10}}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
-          item.rates.length > 3 && (
+          ratings.length > 3 && (
             <BorderButton
               onpress={() => {
                 navigation.navigate('All Ratings', {
-                  rating: item.rates,
+                  rating: ratings,
                 });
               }}
               text="View All"
@@ -201,9 +169,13 @@ const Rating = ({route, navigation, rateClub}) => {
   );
 };
 
+const mapStateToProps = state => ({
+  ratings: state.rate.ratings
+});
+
 export default connect(
+  mapStateToProps,
   null,
-  {rateClub},
 )(Rating);
 
 const styles = StyleSheet.create({
@@ -304,22 +276,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     //alignItems: 'flex-start',
   },
-  submit: {
-    backgroundColor: '#242c42',
-    width: 100,
-    marginTop: 10,
-    borderRadius: 5,
-    padding: 5,
-  },
-  submitText: {
-    color: '#fff',
-    fontFamily: 'Nunito-Regular',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  errorMessage: {
-    fontSize: 13,
-    color: 'red',
-    marginTop: 3
-  },
+  
+  
 });

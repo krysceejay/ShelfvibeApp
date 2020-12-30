@@ -28,11 +28,13 @@ import {fetchClubMembers, getSingleClub} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
 import {fetchClubReadList} from '../../actions/bookListActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
+import {getClubRatingsAction} from '../../actions/rateActions';
 
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
-   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, members, userFavClub, bookLists, club}) => {
+   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, getClubRatingsAction, 
+   members, userFavClub, bookLists, club, ratings}) => {
   const {item} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
@@ -40,6 +42,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   useEffect(() => {
     getClub(item.id);
+    getClubRatings(item.id);
     getClubMembers(item.id);
     getClubReadList(item.id);
     getClubPolls(item.id);
@@ -48,6 +51,10 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   getClub = async clubid => {
     await getSingleClub(clubid);
+  };
+
+  getClubRatings = async clubid => {
+    await getClubRatingsAction(clubid);
   };
 
   getClubPolls = async clubid => {
@@ -106,14 +113,14 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
   sumRatings = item => {
     totalRatings += parseInt(item.rating);
   };
-  item.rates.forEach(sumRatings);
+  ratings.forEach(sumRatings);
 
   calRating = () => {
     let actualRating;
-    if (item.rates.length == 0) {
+    if (ratings.length == 0) {
       actualRating = '0.0';
     } else {
-      actualRating = (totalRatings / item.rates.length).toFixed(1);
+      actualRating = (totalRatings / ratings.length).toFixed(1);
     }
     return actualRating;
   };
@@ -135,7 +142,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
         return true;
     }
 
-  const data = {ratingActual: calRating(), numberOfRev: item.rates.length};
+  const data = {ratingActual: calRating(), numberOfRev: ratings.length};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -228,8 +235,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                 
                 <TouchableOpacity onPress={() => {
                   navigation.navigate('Rating', {
-                    data,
-                    item,
+                    item
                   });
                 }}>
                   <Text style={styles.seeAll}>View</Text>
@@ -355,6 +361,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
 const mapStateToProps = state => ({
   club: state.club.club,
+  ratings: state.rate.ratings,
   members: state.club.members,
   userFavClub: state.fav.userFavClub,
   polls: state.poll.polls,
@@ -364,7 +371,7 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {fetchClubPolls, fetchClubMembers, fetchClubReadList, 
-    getSingleClub, getFavByUserAndClub},
+    getSingleClub, getFavByUserAndClub, getClubRatingsAction},
 )(Details);
 
 const styles = StyleSheet.create({
