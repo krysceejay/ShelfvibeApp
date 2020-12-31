@@ -9,11 +9,8 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native';
-import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import {fetchBooks} from '../../actions/bookActions';
 import Skeleton from '../../components/Skeleton';
 import AddPoll from '../../components/AddPoll';
 import EditPoll from '../../components/EditPoll';
@@ -57,7 +54,7 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
   showPollBooks = (item, index) => {
     return <View key={index} style={styles.progressSingle}>
       <Text numberOfLines={1} ellipsizeMode="tail">{item}</Text>
-      <Text>10%</Text>
+      {/* <Text>10%</Text> */}
     </View>
   };
 
@@ -139,6 +136,8 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
             <View style={styles.memberModalView}>
               <EditPoll
                 closeModal={handleOnCloseEditModal}
+                item={selectedItem}
+                clubId={clubid}
               />
             </View>
           </Modal>

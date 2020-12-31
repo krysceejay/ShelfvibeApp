@@ -39,10 +39,10 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
       };
 
     addPollAction = async () => {
-      if(book1 !== '') pollbooks.push(book1);
-      if(book2 !== '') pollbooks.push(book2);
-      if(book3 !== '') pollbooks.push(book3);
-      if(book4 !== '') pollbooks.push(book4);
+      if(book1 !== '' && book1 !== undefined && book1 !== null) pollbooks.push(book1);
+      if(book2 !== '' && book2 !== undefined && book2 !== null) pollbooks.push(book2);
+      if(book3 !== '' && book3 !== undefined && book3 !== null) pollbooks.push(book3);
+      if(book4 !== '' && book4 !== undefined && book4 !== null) pollbooks.push(book4);
 
       const userAddPoll = await addPoll({
         clubId,

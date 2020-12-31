@@ -1,4 +1,4 @@
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE} from '../actions/types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE, EDIT_POLL, REMOVE_POLL} from '../actions/types';
 
 const initialState = {
   polls: [],
@@ -26,6 +26,13 @@ const pollReducer = (state = initialState, action) => {
             poll.id === payload.id ? { ...poll, current: payload.current } : poll
          )
         };
+    case EDIT_POLL:
+        return {
+         ...state,
+         polls: state.polls.map(poll =>
+            poll.id === payload.id ? { ...poll, books: payload.books, pollName: payload.pollName } : poll
+         )
+        };
     case FETCH_POLL_VOTES:
         return {
             ...state,
@@ -40,6 +47,11 @@ const pollReducer = (state = initialState, action) => {
         return {
             ...state,
             votes: state.votes.filter(vote => vote.id !== payload)
+        };
+    case REMOVE_POLL:
+        return {
+            ...state,
+            polls: state.polls.filter(poll => poll.id !== payload)
         };
     default:
       return state;

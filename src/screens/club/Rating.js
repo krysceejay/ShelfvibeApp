@@ -93,55 +93,10 @@ const Rating = ({ navigation, ratings}) => {
               </View>
               <View style={styles.ratingProgress}>{progress}</View>
             </View>
-            {/* <View style={styles.ratingActionView}>
-              <View style={{alignSelf: 'center', marginVertical: 15}}>
-                <RatingStarGroup getRating={getUserRating} />
-                {rating !== '' && (
-                <Animatable.View animation="fadeInLeft" duration={500}>
-                  <Text style={styles.errorMessage}>{rating}</Text>
-                </Animatable.View>
-              )}
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  borderColor: '#ccc',
-                  borderWidth: 2,
-                }}>
-                <TextInput
-                  multiline
-                  numberOfLines={2}
-                  editable
-                  placeholder="Review comment"
-                  //maxLength={40}
-                  style={{
-                    backgroundColor: '#fff',
-                    paddingHorizontal: 10,
-                    paddingVertical: 10,
-                    fontSize: 15,
-                    color: '#333',
-                  }}
-                  value={userComment}
-                  onChangeText={onChange('userComment')}
-                />
-              </View>
-              {comment !== '' && (
-                <Animatable.View animation="fadeInLeft" duration={500}>
-                  <Text style={styles.errorMessage}>{comment}</Text>
-                </Animatable.View>
-              )}
-              <View style={{alignItems: 'flex-start'}}>
-                <TouchableOpacity onPress={rateClubAction}>
-                  <View style={styles.submit}>
-                    <Text style={styles.submitText}>Submit</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View> */}
             <Text style={styles.reviewTitle}>Reviews</Text>
           </View>
         }
-        data={ratings.slice(0, 3)}
+        data={ratings.slice(0, 5)}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={() => (
@@ -150,7 +105,7 @@ const Rating = ({ navigation, ratings}) => {
         contentContainerStyle={{marginVertical: 10}}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
-          ratings.length > 3 && (
+          ratings.length > 5 && (
             <BorderButton
               onpress={() => {
                 navigation.navigate('All Ratings', {

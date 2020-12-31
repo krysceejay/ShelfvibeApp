@@ -122,7 +122,7 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, remo
         <SafeAreaView style={styles.container}>
             <View style={styles.body}>
                 <Text style={styles.title}>{currentPoll.pollName}</Text>
-                <Text style={styles.shortText}>Wow another book finished!! And now it's time to decide an addition to our reading list. please vote for the book you would like us to read.</Text>
+                <Text style={styles.shortText}>Decide an addition to our reading list. Please vote for the book you would like us to read.</Text>
                 <View style={styles.progressContainer}>
                   {currentPoll.books.map(showPollBooks)}
                 </View>

@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE} from './types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE, EDIT_POLL, REMOVE_POLL} from './types';
 import api from '../utils/api';
 
 //Add Poll
@@ -12,6 +12,7 @@ export const addPoll = pollInput => async dispatch => {
         books
         pollName
         current
+        id
         }
       successful
       messages{
@@ -45,6 +46,60 @@ export const addPoll = pollInput => async dispatch => {
         return errorMessages;
       }
     } catch (err) {
+      Alert.alert(
+        'Error',
+        'Some error occured, please check your internet connection and retry.',
+      );
+      return 'failed';
+    }
+  }
+//Edit Poll
+export const editPoll = pollInput => async dispatch => {
+    const {clubId, pollId, pollname, pollbooks} = pollInput;
+    const query = `
+  mutation UpdatePoll($clubId: ID!, $pollId: ID!, $pollname: String!, $pollbooks: [String!]) {
+    updatePoll(clubId: $clubId, pollId: $pollId, input: {pollName: $pollname, books: $pollbooks}){
+      result{
+        books
+        pollName
+        current
+        id
+        }
+      successful
+      messages{
+        code
+        field
+        message
+      }
+    }
+  }
+  `
+;
+    try {
+      const editClubPoll = await api.post('/', {query,
+        variables: {
+            clubId,
+            pollId,
+            pollname,
+            pollbooks
+          }
+        });
+      if (editClubPoll.data.data.updatePoll.successful === true) {
+        dispatch({
+          type: EDIT_POLL,
+          payload: editClubPoll.data.data.updatePoll.result
+        });
+      } else {
+        const errorMessages = editClubPoll.data.data.updatePoll.messages;
+        console.log(errorMessages);
+        Alert.alert(
+          'Error',
+          'Please make sure you provide the required fields',
+        );
+        return errorMessages;
+      }
+    } catch (err) {
+      console.log(err);
       Alert.alert(
         'Error',
         'Some error occured, please check your internet connection and retry.',
@@ -209,4 +264,37 @@ export const removeVoteAction = voteId => async dispatch => {
       return 'failed';
     }
   }
+
+  //Remove Poll Action
+export const removePollAction = pollId => async dispatch => {
+  const query = `
+      mutation {
+          removePoll(pollId: ${pollId}){
+            books
+            current
+            pollName
+            id
+          }
+        }
+  `;
+  try {
+    const removePoll = await api.post('/', {query});
+    if (removePoll.data.data.removePoll !== null) {
+      dispatch({
+        type: REMOVE_POLL,
+        payload: removePoll.data.data.removePoll.id
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
+
   
