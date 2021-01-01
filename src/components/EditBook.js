@@ -1,12 +1,37 @@
-import React,{useState} from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Image} from 'react-native';
+import React,{useState} from 'react';
+import {connect} from 'react-redux';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Image, Alert} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-picker';
+import * as Animatable from 'react-native-animatable';
+import Config from 'react-native-config';
+import {editBookToList, removeListAction} from '../actions/bookListActions';
 
-const EditBook = ({closeModal}) => {
-    const [bookcover, setBookcover] = useState(null);
+const imgURL = Config.IMAGE_URL;
+
+const EditBook = ({closeModal, item, editBookToList, removeListAction, clubId}) => {
+    const [formData, setFormData] = useState({
+      booktitle: item.title,
+      bookcover: null,
+      bookcovername: item.bookcover
+    });
+ 
+    const {
+     booktitle,
+     bookcover,
+     bookcovername
+   } = formData;
+ 
+   const [errorMsg, setErrorMsg] = useState({
+     title: ''
+   });
+ 
+   const {title} = errorMsg;
+ 
+   const onChange = name => text => setFormData({...formData, [name]: text});
+
     const onClosePress = () => {
         closeModal();
       };
@@ -25,10 +50,60 @@ const EditBook = ({closeModal}) => {
           } else if (response.error) {
             return;
           } else {
-            setBookcover(response);
+              const bookcover = {
+                uri: response.uri,
+                type: response.type,
+                name: response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
+            };
+            setFormData({...formData, bookcover});
           }
         });
-      };
+      }; 
+
+      editBookListAction = async () => {
+        if(booktitle === '' || booktitle === undefined || booktitle === null) {
+          Alert.alert('Failed', 'Add a valid book title');
+          return;
+        }
+        const userEditBookToList = await editBookToList({
+          clubId,
+          listId: item.id,
+          booktitle,
+          bookcover,
+          bookcovername
+        });
+        if (userEditBookToList == 'failed' || Array.isArray(userEditBookToList)) {
+          if (Array.isArray(userEditBookToList)) {
+            const errMsges = {};
+            userEditBookToList.forEach(item => {
+              errMsges[item.field] = item.message;
+            });
+            setErrorMsg(errMsges);
+          }
+        } else {
+          onClosePress();
+        }
+      }; 
+
+      removeList = async () => {
+        await removeListAction(item.id);
+        onClosePress();
+      } 
+
+      const deleteListBtn = () =>
+        Alert.alert(
+          'Delete Book',
+          'Click OK to proceed?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => false,
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => removeList()},
+          ],
+          {cancelable: false},
+        );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -63,7 +138,13 @@ const EditBook = ({closeModal}) => {
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
                   <Text style={styles.textLabel}>Book Title</Text>
-                  <TextInput placeholder="Enter title" style={styles.textInput} />
+                  <TextInput placeholder="Enter title" style={styles.textInput} value={booktitle}
+              onChangeText={onChange('booktitle')} />
+              {title !== '' && (
+                  <Animatable.View animation="fadeInLeft" duration={500}>
+                    <Text style={styles.errorMessage}>{title}</Text>
+                  </Animatable.View>
+                )}
                 </View>
                 <View style={styles.singleInput}>
                     <Text style={styles.textLabel}>Book cover</Text>
@@ -81,19 +162,20 @@ const EditBook = ({closeModal}) => {
                         <View style={styles.showImage}>
                         {bookcover ? (
                             <Image source={{uri: bookcover.uri}} style={styles.bookCover} />
-                        ) : null}
+                        ) : <Image source={{ uri: `${imgURL}/bookcover/${bookcovername}`}} style={styles.bookCover}
+                      />}
                         
                         </View>
                     </View>
                 </View>
                 <View style={styles.singleInput}>
-                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6}>
+                  <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={editBookListAction}>
                     <Text style={styles.textSign}>Submit</Text>
                   </TouchableOpacity>
                 </View>
                 <Text style={styles.orText}>OR</Text>
                 <View style={styles.singleInput}>
-                  <TouchableOpacity style={styles.delete} activeOpacity={0.6}>
+                  <TouchableOpacity style={styles.delete} activeOpacity={0.6} onPress={deleteListBtn}>
                     <Text style={styles.deleteSign}>Delete</Text>
                   </TouchableOpacity>
                 </View>
@@ -103,7 +185,11 @@ const EditBook = ({closeModal}) => {
     
     )
 }
-export default EditBook;
+
+export default connect(
+  null,
+  {editBookToList, removeListAction},
+)(EditBook);
 
 const styles = StyleSheet.create({
     container: {

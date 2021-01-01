@@ -179,6 +179,8 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
             <View style={styles.memberModalView}>
               <EditBook
                 closeModal={handleOnCloseEditModal}
+                item={selectedItem}
+                clubId={clubid}
               />
             </View>
           </Modal>

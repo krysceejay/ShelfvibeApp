@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 
 const baseURL = Config.UPLOAD_URL;
 
-const fileUpload = async (photo, path) => {
+export const fileUpload = async (photo, path) => {
     let data = new FormData();
     data.append("photo", {type: photo.type, uri: photo.uri, name: photo.name});
     let url = `${baseURL + path}`;
@@ -15,7 +15,17 @@ const fileUpload = async (photo, path) => {
         });
 
         return imgUpload;
-    }   
+    } 
+    
+export const removeFile = async (path, filename) => {
+    let data = {filename}
+    let url = `${baseURL}delete/${path}`;
+    await axios({
+        method: 'post',
+        url,
+        data
+        });
 
-export default fileUpload;
+     return true;
+    }
 

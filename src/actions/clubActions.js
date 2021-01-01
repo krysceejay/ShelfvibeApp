@@ -4,7 +4,7 @@ import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB,
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
   SET_MEMBER, REMOVE_MEMBER} from './types';
 import api from '../utils/api';
-import fileUpload from '../utils/fileUpload';
+import {fileUpload} from '../utils/fileUpload';
 
 export const fetchClubs = () => async dispatch => {
   const query = `

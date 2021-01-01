@@ -270,9 +270,6 @@ export const removePollAction = pollId => async dispatch => {
   const query = `
       mutation {
           removePoll(pollId: ${pollId}){
-            books
-            current
-            pollName
             id
           }
         }

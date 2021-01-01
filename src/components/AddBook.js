@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Image} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Image, Alert} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -56,6 +56,10 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
     }; 
     
     addBookListAction = async () => {
+      if(booktitle === '' || booktitle === undefined || booktitle === null) {
+        Alert.alert('Failed', 'Add a valid book title');
+        return;
+      }
       const userAddBookToList = await addBookToList({
         clubId,
         booktitle,
