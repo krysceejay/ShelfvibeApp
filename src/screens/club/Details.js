@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TouchableWithoutFeedback,
-  Modal
+  Modal,
+  Alert
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
@@ -24,18 +25,20 @@ import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
-import {fetchClubMembers, getSingleClub} from '../../actions/clubActions';
+import {fetchClubMembers, getSingleClub, createMemberAction, checkMemberClub} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
 import {fetchClubReadList} from '../../actions/bookListActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
 import {getClubRatingsAction} from '../../actions/rateActions';
+import {AuthContext} from '../../utils/context';
 
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
-   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, getClubRatingsAction, 
-   members, userFavClub, bookLists, club, ratings}) => {
+   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, createMemberAction, checkMemberClub, 
+   getClubRatingsAction, members, userFavClub, bookLists, club, ratings, isMember}) => {
   const {item} = route.params;
+  const user = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
@@ -47,6 +50,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     getClubReadList(item.id);
     getClubPolls(item.id);
     checkFav(item.id);
+    checkMember(item.id);
   }, [item.id]);
 
   getClub = async clubid => {
@@ -71,6 +75,10 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   checkFav = async clubid => {
     await getFavByUserAndClub(clubid);
+  };
+
+  checkMember = async clubid => {
+    if(user !== null) await checkMemberClub(clubid);
   };
 
   let totalRatings = 0;
@@ -144,14 +152,47 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   const data = {ratingActual: calRating(), numberOfRev: ratings.length};
 
+  joinClub = async () => {
+    if(user === null){
+      Alert.alert('Login', 'Kindly login to join the club.');
+      return;
+    }
+    const userJoinClub = await createMemberAction({
+      clubId: item.id,
+      status: club.public
+    });
+
+    if (userJoinClub !== 'failed') {
+      if(club.public){
+        Alert.alert('Success', 'You have joined this club!!!');
+      }else{
+        Alert.alert('Success', 'The owner of this private book club has been notified. Kindly wait for approval. Thanks.');
+      }
+    }
+  }
+
+  const joinClubBtn = () =>
+      Alert.alert(
+        'Join Club',
+        'Click OK to proceed?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => false,
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => joinClub()},
+        ],
+        {cancelable: false},
+      );   
+
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => {}}
+      {user === null || isMember === false ? <TouchableOpacity onPress={joinClubBtn}
         style={styles.floatingBtn}
         activeOpacity={0.9}>
-        
         <Text style={styles.joinText}>Join</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> : null}
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#fff'}}>
@@ -363,6 +404,7 @@ const mapStateToProps = state => ({
   club: state.club.club,
   ratings: state.rate.ratings,
   members: state.club.members,
+  isMember: state.club.isMember,
   userFavClub: state.fav.userFavClub,
   polls: state.poll.polls,
   bookLists: state.booklist.bookLists,
@@ -371,7 +413,8 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {fetchClubPolls, fetchClubMembers, fetchClubReadList, 
-    getSingleClub, getFavByUserAndClub, getClubRatingsAction},
+    getSingleClub, getFavByUserAndClub, getClubRatingsAction,
+    createMemberAction, checkMemberClub},
 )(Details);
 
 const styles = StyleSheet.create({

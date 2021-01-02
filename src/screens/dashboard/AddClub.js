@@ -78,10 +78,11 @@ const AddClub = ({createClub, createMemberAction, navigation}) => {
       } else if (response.error) {
         return;
       } else {
+        console.log(response);
           const photo = {
             uri: response.uri,
             type: response.type,
-            name: response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
+            name: response.fileName || response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
         };
         setFormData({...formData, photo});
       }

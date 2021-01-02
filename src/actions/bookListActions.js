@@ -47,9 +47,10 @@ export const addBookToList = bookInput => async dispatch => {
               return 'failed';
             }
         } catch (error) {
+          //console.log(error);
           Alert.alert(
             'Error',
-            'Some error occured, file may be too large.',
+            'Some error occured, please try again.',
           );
           return 'failed';
         }

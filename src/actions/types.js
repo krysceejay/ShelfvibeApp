@@ -40,3 +40,4 @@ export const SET_MEMBER = 'SET_MEMBER';
 export const REMOVE_MEMBER = 'REMOVE_MEMBER';
 export const GET_CLUB_RATINGS = 'GET_CLUB_RATINGS';
 export const CHECK_RATING = 'CHECK_RATING';
+export const CHECK_MEMBER = 'CHECK_MEMBER';

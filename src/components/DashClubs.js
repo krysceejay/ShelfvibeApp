@@ -1,25 +1,10 @@
-import React from 'react'
-import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native'
-import * as Animatable from 'react-native-animatable';
-
-const zoomIn = {
-    0: {
-      opacity: 0,
-      scale: 0,
-    },
-    1: {
-      opacity: 1,
-      scale: 1,
-    },
-  };
+import React from 'react';
+import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native';
 
 const DashClubs = ({data}) => {
     _renderItem = ({item, index}) => {
         return (
-            <Animatable.View
-            duration={700}
-            delay={400 + index * 100}
-            animation={zoomIn}
+            <View
             style={{
               backgroundColor: '#fafafa',
               //paddingBottom: 10,
@@ -42,7 +27,7 @@ const DashClubs = ({data}) => {
             <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">16 members</Text>
             </View>
             
-          </Animatable.View>
+          </View>
         );
       };
 

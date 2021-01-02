@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
-  SET_MEMBER, REMOVE_MEMBER} from './types';
+  SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER} from './types';
 import api from '../utils/api';
 import {fileUpload} from '../utils/fileUpload';
 
@@ -77,6 +77,7 @@ export const createClub = clubInput => async dispatch => {
           if(uploadImage.status == 200){
             img = uploadImage.data.data;
           }else{
+            console.log(uploadImage);
             Alert.alert(
               'Error',
               'Some error occured, file may be too large.',
@@ -84,9 +85,10 @@ export const createClub = clubInput => async dispatch => {
             return 'failed';
           }
       } catch (error) {
+        console.log(error);
         Alert.alert(
           'Error',
-          'Some error occured, file may be too lage.',
+          'Some error occured, please try again.',
         );
         return 'failed';
       }
@@ -166,12 +168,13 @@ export const createMemberAction = memberInput => async dispatch => {
   mutation {
     createMember(clubId: ${clubId}, input: {status: ${status}}){
       result{
+        id
         user{
+          id
           username
+          propix
         }
-        club{
-          name
-        }
+        status
       }
       successful
       messages{
@@ -187,6 +190,7 @@ export const createMemberAction = memberInput => async dispatch => {
     if (createMember.data.data.createMember.successful === true) {
       dispatch({
         type: CREATE_MEMBER,
+        payload: createMember.data.data.createMember.result
       });
     } else {
       Alert.alert(
@@ -196,6 +200,7 @@ export const createMemberAction = memberInput => async dispatch => {
       return 'failed';
     }
   } catch (err) {
+    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
@@ -445,4 +450,27 @@ export const reportClubAction = reportInput => async dispatch => {
     return 'failed';
   }
 }
+
+  //Check If User Is Member
+  export const checkMemberClub = clubId => async dispatch => {
+    const query = `
+        query {
+          checkIfUserIsMember(clubId: ${clubId})
+        }
+    `;
+    try {
+      const checkMember = await api.post('/', {query});
+        dispatch({
+          type: CHECK_MEMBER,
+          payload: checkMember.data.data.checkIfUserIsMember
+        });
+       
+    } catch (err) {
+      Alert.alert(
+        'Error',
+        'Some error occured, please check your internet connection and retry.',
+      );
+      return 'failed';
+    }
+  }
 

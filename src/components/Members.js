@@ -145,7 +145,7 @@ const remove = (id) =>
         }
         </View>
       </View>
-      {user !== null && user.id === data.item.user.id && <Text style={styles.adminText}>Admin</Text>}
+      {owner === data.item.user.id && <Text style={styles.adminText}>Admin</Text>}
     </View>
     )
   }
@@ -203,12 +203,12 @@ const remove = (id) =>
                       //marginHorizontal: 10,
                     }}
                     onPress={() => {
-                      user !== null && user.id !== data.item.user.id && 
+                      user !== null && owner !== data.item.user.id && 
                       (data.item.status ? deActivate(data.item.user.id) : activate(data.item.user.id))
                       }
                       }>
                       {
-                      user !== null && user.id !== data.item.user.id && (data.item.status ? 
+                      user !== null && owner !== data.item.user.id && (data.item.status ? 
                       <Icon name="toggle-on" size={22} color="#444444" /> : 
                       <Icon name="toggle-off" size={22} color="#444444" />)
                       }
@@ -224,9 +224,9 @@ const remove = (id) =>
                       
                     }}
                     onPress={() => {
-                      user !== null && user.id !== data.item.user.id && remove(data.item.id)
+                      user !== null && owner !== data.item.user.id && remove(data.item.id)
                       }}>
-                    {user !== null && user.id !== data.item.user.id && 
+                    {user !== null && owner !== data.item.user.id && 
                     <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
                     }
                   </TouchableOpacity>

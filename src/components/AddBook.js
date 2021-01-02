@@ -48,7 +48,7 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
             const bookcover = {
               uri: response.uri,
               type: response.type,
-              name: response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
+              name: response.fileName || response.uri.substr(response.uri.lastIndexOf('/')).slice(1),
           };
           setFormData({...formData, bookcover});
         }
