@@ -77,7 +77,6 @@ export const createClub = clubInput => async dispatch => {
           if(uploadImage.status == 200){
             img = uploadImage.data.data;
           }else{
-            console.log(uploadImage);
             Alert.alert(
               'Error',
               'Some error occured, file may be too large.',
@@ -85,7 +84,6 @@ export const createClub = clubInput => async dispatch => {
             return 'failed';
           }
       } catch (error) {
-        console.log(error);
         Alert.alert(
           'Error',
           'Some error occured, please try again.',
@@ -200,7 +198,6 @@ export const createMemberAction = memberInput => async dispatch => {
       return 'failed';
     }
   } catch (err) {
-    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',

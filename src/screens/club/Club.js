@@ -19,7 +19,6 @@ import Skeleton from '../../components/Skeleton';
 
 const numColumns = 1;
 const imgURL = Config.IMAGE_URL;
-//const imgURL = 'http://127.0.0.1:4000/images/bookcover/';
 
 const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -182,9 +181,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bookDetails: {
-    padding: 18,
+    padding: 12,
     width: '100%',
     backgroundColor: '#fff',
+    marginBottom: 12
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: 'Nunito-Regular',
     fontSize: 13,
-    marginTop: 5,
+    marginTop: 8,
   },
   clubDate: {
     fontFamily: 'Nunito-Italic',

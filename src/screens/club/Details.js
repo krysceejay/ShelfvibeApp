@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   bookCoverContain: {
     //flex: 1,
     width: '100%',
-    height: 250,
+    height: 220,
   },
   bookCover: {
     height: '100%',

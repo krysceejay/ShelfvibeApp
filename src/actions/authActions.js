@@ -68,6 +68,9 @@ export const login = loginInput => async dispatch => {
         lastName
         status
         username
+        about
+        insertedAt
+        updatedAt
         role {
           name
         }

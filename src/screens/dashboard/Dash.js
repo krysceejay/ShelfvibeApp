@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashClubs from '../../components/DashClubs';
+import {AuthContext} from '../../utils/context';
 
 const dataList = [
   {key: 1},
@@ -12,6 +13,7 @@ const dataList = [
 ];
 
 const Dash = ({navigation}) => {
+  const user = useContext(AuthContext);
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             {/* <Ionicons name="md-menu" size={30} color="#444444" style={styles.icon} onPress={() => {
@@ -19,7 +21,7 @@ const Dash = ({navigation}) => {
             }} /> */}
             <View style={styles.userInfoSection}>
             <View>
-                <Text style={styles.welcome}>Welcome <Text style={styles.username}>Christopher,</Text></Text>
+                <Text style={styles.welcome}>Welcome <Text style={styles.username}>{user.firstName},</Text></Text>
                 
             </View>
                 {/* <View style={styles.infoRow}>
@@ -42,8 +44,7 @@ const Dash = ({navigation}) => {
             </View>
             <View style={{paddingHorizontal: 12}}>
                 <Text style={styles.briefBio}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                {user.about}
                 </Text>
             </View>
             <View style={styles.clubViews}>

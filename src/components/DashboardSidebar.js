@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   StyleSheet,
@@ -13,10 +13,13 @@ import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import moment from "moment";
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
+import {AuthContext} from '../utils/context';
 
 const DashboardSidebar = props => {
+  const user = useContext(AuthContext);
   logoutUser = async () => {
     await props.logout();
   };
@@ -63,9 +66,9 @@ const DashboardSidebar = props => {
               size={50}
             />
             <View style={{marginLeft: 15, width: '70%'}}>
-              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>Krys Diadem</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>@krysceejay</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.memberDate}>Member since: 2019-06-12</Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>{`${user.firstName} ${user.lastName}`}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>{user.username}</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.memberDate}>Member since: {moment(user.insertedAt).format("Do MMM YYYY")} </Text>
             </View>
           </View>
           <View style={styles.drawerSection}>
