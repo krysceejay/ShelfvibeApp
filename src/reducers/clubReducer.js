@@ -1,6 +1,6 @@
 import {FETCH_CLUBS, USER_CLUBS, CREATE_CLUB, FILTER_CLUB, 
-  CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
-  SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB, SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER} from '../actions/types';
+  CREATE_MEMBER, FETCH_CLUB_MEMBERS, SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, 
+  REPORT_CLUB, SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB} from '../actions/types';
 
 const initialState = {
   clubs: [],
@@ -24,6 +24,11 @@ const clubReducer = (state = initialState, action) => {
       return {
         ...state, 
         members: payload
+      };
+    case GET_USER_CLUBS:
+      return {
+        ...state, 
+        userClubs: payload
       };
     case SET_MEMBER:
       return {
@@ -53,11 +58,24 @@ const clubReducer = (state = initialState, action) => {
         club: payload
        };
 
+    case UPDATE_CLUB:
+      return {
+        ...state,
+        userClubs: state.userClubs.map(userClub =>
+          userClub.id === payload.id ? payload : userClub
+        ),
+        club: payload
+       };
+
     case USER_CLUBS:
       return {...state, userClubs: payload};
 
     case CREATE_CLUB:
-      return state;
+      return {
+        ...state,
+        userClubs: [payload, ...state.userClubs],
+        club: payload
+      }
 
     case FILTER_CLUB:
       return {...state, filterClub: payload};

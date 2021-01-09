@@ -17,6 +17,7 @@ import moment from "moment";
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
 import {AuthContext} from '../utils/context';
+import {stringToHslColor} from '../utils/theme';
 
 const DashboardSidebar = props => {
   const user = useContext(AuthContext);
@@ -60,11 +61,14 @@ const DashboardSidebar = props => {
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
+            {user.propix !== "noimage.png" ?
             <Image
               style={styles.avatar}
               source={require('../assets/img/avatar.jpg')}
               size={50}
-            />
+            /> : <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(user.username)}]}>
+            <Text style={styles.initial}>{user.username.charAt(0)}</Text>
+           </View>}
             <View style={{marginLeft: 15, width: '70%'}}>
           <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>{`${user.firstName} ${user.lastName}`}</Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>{user.username}</Text>
@@ -107,7 +111,7 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('ManageShelf');
               }}
             />
-            <DrawerItem
+            {/* <DrawerItem
               label="Add Club"
               labelStyle={{
                 fontSize: 16,
@@ -117,7 +121,7 @@ const DashboardSidebar = props => {
               onPress={() => {
                 props.navigation.navigate('AddClub');
               }}
-            />
+            /> */}
             <DrawerItem
               label="Joined Club"
               labelStyle={{
@@ -186,6 +190,22 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 25,
+  },
+  clubMembersSingle:{
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    overflow: 'hidden',
+    borderColor: '#f3fbfd',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initial: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 18,
+    color: '#fff',
+    textTransform: 'uppercase'
   },
   title: {
     fontSize: 16,

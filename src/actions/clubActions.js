@@ -2,9 +2,9 @@ import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
-  SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER} from './types';
+  SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB} from './types';
 import api from '../utils/api';
-import {fileUpload} from '../utils/fileUpload';
+import {fileUpload, removeFile} from '../utils/fileUpload';
 
 export const fetchClubs = () => async dispatch => {
   const query = `
@@ -19,15 +19,6 @@ export const fetchClubs = () => async dispatch => {
             description
             genre
             publish
-            rates{
-              rating
-              comment
-              updatedAt
-              user{
-                username
-                id
-              }
-            }
             user{
               username
               id
@@ -49,6 +40,52 @@ export const fetchClubs = () => async dispatch => {
     dispatch({
       type: FETCH_CLUBS,
       payload: allclubs.data.data.allclubs,
+    });
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+export const getUserClubs = id => async dispatch => {
+  const query = `
+      query {
+        user(id: ${id}){
+          clubs{
+            id
+            image
+            name
+            public
+            insertedAt
+            updatedAt
+            description
+            genre
+            publish
+            user{
+              username
+              id
+            }
+            members{
+              user{
+                username
+                propix
+                id
+              }
+              status
+            }
+          }
+        }
+      }
+  `;
+
+  try {
+    const userClubs = await api.post('/', {query});
+    dispatch({
+      type: GET_USER_CLUBS,
+      payload: userClubs.data.data.user.clubs,
     });
   } catch (err) {
     Alert.alert(
@@ -99,11 +136,25 @@ export const createClub = clubInput => async dispatch => {
     createClub(input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription}){
       result{
         id
-        name
         image
+        name
         public
+        insertedAt
+        updatedAt
+        description
+        genre
+        publish
         user{
           username
+          id
+        }
+        members{
+          user{
+            username
+            propix
+            id
+          }
+          status
         }
       }
       successful
@@ -130,10 +181,119 @@ export const createClub = clubInput => async dispatch => {
     if (createUserClub.data.data.createClub.successful === true) {
       dispatch({
         type: CREATE_CLUB,
+        payload: createUserClub.data.data.createClub.result
       });
       return createUserClub.data.data.createClub.result.id;
     } else {
       const errorMessages = createUserClub.data.data.createClub.messages;
+      Alert.alert(
+        'Error',
+        'Please make sure you provide the required fields',
+      );
+      return errorMessages;
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+//UPDATE CLUB
+export const updateClubAction = clubInput => async dispatch => {
+  const {clubId, clubname, clubgenre, photo, clubPhoto, isPublish, isPublic, clubdescription} = clubInput;
+  let img;
+  let cgen;
+
+  if (clubgenre.length == 0) {
+    cgen = null
+  }else{
+    cgen = clubgenre;
+  }
+
+  if(photo !== null) {
+        try {
+          const uploadImage = await fileUpload(photo, 'club');
+          if(uploadImage.status == 200){
+            if(clubPhoto !== "noimage.jpg"){
+              await removeFile('club', clubPhoto);
+            }
+            img = uploadImage.data.data;
+          }else{
+            Alert.alert(
+              'Error',
+              'Some error occured, file may be too large.',
+            );
+            return 'failed';
+          }
+      } catch (error) {
+        Alert.alert(
+          'Error',
+          'Some error occured, please try again.',
+        );
+        return 'failed';
+      }
+    }else{
+      img = clubPhoto;
+    }
+
+  const query = `
+  mutation UpdateClub($clubId: ID!, $clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+    updateClub(clubId: $clubId, input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription}){
+      result{
+        id
+        image
+        name
+        public
+        insertedAt
+        updatedAt
+        description
+        genre
+        publish
+        user{
+          username
+          id
+        }
+        members{
+          user{
+            username
+            propix
+            id
+          }
+          status
+        }
+      }
+      successful
+      messages{
+        code
+        field
+        message
+      }
+    }
+  }
+  `
+;
+  try {
+    const updateUserClub = await api.post('/', {query, 
+      variables: {
+        clubId,
+        clubname,
+        cgen,
+        isPublish,
+        isPublic,
+        clubdescription,
+        img
+      }
+    });
+    if (updateUserClub.data.data.updateClub.successful === true) {
+      dispatch({
+        type: UPDATE_CLUB,
+        payload: updateUserClub.data.data.updateClub.result
+      });
+    } else {
+      const errorMessages = updateUserClub.data.data.updateClub.messages;
       Alert.alert(
         'Error',
         'Please make sure you provide the required fields',

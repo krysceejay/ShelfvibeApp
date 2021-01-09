@@ -69,6 +69,7 @@ export const login = loginInput => async dispatch => {
         status
         username
         about
+        propix
         insertedAt
         updatedAt
         role {
