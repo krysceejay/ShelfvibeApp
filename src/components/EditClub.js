@@ -11,6 +11,7 @@ import {
     Image,
     SafeAreaView,
     Switch,
+    Alert
   } from 'react-native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,11 +21,11 @@ import {
   import Config from 'react-native-config';
   import ListGenre from './ListGenre';
   import Loader from './Loader';
-  import {updateClubAction} from '../actions/clubActions';
+  import {updateClubAction, deleteClubAction} from '../actions/clubActions';
 
   const imgURL = Config.IMAGE_URL;
 
-const EditClub = ({updateClubAction, closeModal, item}) => {
+const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
     const [formData, setFormData] = useState({
         clubname: item.name,
         clubgenre: item.genre,
@@ -110,6 +111,19 @@ const EditClub = ({updateClubAction, closeModal, item}) => {
    };
  
    updateClub = async () => {
+    if(clubname === '' || clubname === undefined || clubname === null) {
+      setErrorMsg({name: 'Name field cannot be empty'});
+      return;
+    }
+  if(clubgenre.length === 0) {
+      setErrorMsg({genre: 'Choose a genre for your club'});
+      return;
+  }
+  if(clubdescription === '' || clubdescription === undefined || clubdescription === null) {
+      setErrorMsg({description: 'Add a short description for your club'});
+      return;
+  } 
+
     setFormData({...formData, isLoading: true});
      const userUpdateClub = await updateClubAction({
         clubId: item.id,
@@ -134,6 +148,26 @@ const EditClub = ({updateClubAction, closeModal, item}) => {
         onClosePress();
      }
    };
+
+   deleteClub = async () => {
+    await deleteClubAction(item.id);
+    onClosePress();
+  } 
+
+  const deleteClubBtn = () =>
+    Alert.alert(
+      'Delete Club',
+      'Click OK to proceed?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => false,
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => deleteClub()},
+      ],
+      {cancelable: false},
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -312,7 +346,7 @@ const EditClub = ({updateClubAction, closeModal, item}) => {
             </View>
             <Text style={styles.orText}>OR</Text>
             <View style={styles.singleInput}>
-                <TouchableOpacity style={styles.delete} activeOpacity={0.6} onPress={() => {}}>
+                <TouchableOpacity style={styles.delete} activeOpacity={0.6} onPress={deleteClubBtn}>
                 <Text style={styles.deleteSign}>Delete</Text>
                 </TouchableOpacity>
             </View>
@@ -324,7 +358,7 @@ const EditClub = ({updateClubAction, closeModal, item}) => {
 }
  export default connect(
     null,
-    {updateClubAction},
+    {updateClubAction, deleteClubAction},
   )(EditClub);
 
 const styles = StyleSheet.create({

@@ -1,75 +1,60 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
   View,
-  Button,
   FlatList,
-  Dimensions,
   Image,
-  TouchableWithoutFeedback,
-  Modal,
   TouchableOpacity
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import {AuthContext} from '../../utils/context';
-import {getUserBooks} from '../../actions/bookActions';
+import moment from "moment";
+import {getUserJoinedClubs} from '../../actions/clubActions';
+import {stringToHslColor} from '../../utils/theme';
 import Skeleton from '../../components/Skeleton';
 import Empty from '../../components/Empty';
 
-const {width} = Dimensions.get('window');
+const numColumns = 1;
+const imgURL = Config.IMAGE_URL;
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-];
-
-const JoinedList = ({getUserBooks, userBooks, navigation}) => {
+const JoinedList = ({getUserJoinedClubs, joinedClub, navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
-  const user = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
-      const getUserShelf = await getUserBooks(user.id);
-      if (getUserShelf !== 'failed') {
+      const getJoined = await getUserJoinedClubs();
+      if (getJoined !== 'failed') {
         setIsLoading(false);
       }
     });
     return unsubscribe;
   }, [navigation]);
 
-  const numColumns = 1;
-  const imgURL = Config.IMAGE_URL;
-  //const imgURL = 'http://127.0.0.1:4000/images/bookcover/'
-
   _renderItem = ({item, index}) => {
     return (
-      
       <View style={styles.item}>
         
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details');
+              navigation.navigate('Details', {
+                item: item.club
+              });
             }}
             activeOpacity={0.9}>
           
-            {/* <Image
+          {item.club.image !== "noimage.jpg" ? <Image
                 source={{
-                  uri: `${imgURL + item.bookcover}`,
+                  uri: `${imgURL}/club/${item.club.image}`,
                 }}
                 style={styles.bookCover}
-              /> */}
-            <Image
-              style={styles.bookCover}
-              source={require('../../assets/img/showup.jpg')}
-            />
+              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.club.name)}]}>
+              <Text style={styles.initial}>{item.club.name}</Text>
+             </View> }
           </TouchableOpacity>
           
         </View>
@@ -77,7 +62,7 @@ const JoinedList = ({getUserBooks, userBooks, navigation}) => {
         <View style={styles.bookDetails}>
           <View style={styles.nameAndEdit}>
             <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
-              Club Name Club Name
+            {item.club.name}
             </Text>
             <TouchableOpacity
             style={{
@@ -93,17 +78,14 @@ const JoinedList = ({getUserBooks, userBooks, navigation}) => {
           </View>
           <View style={styles.afterName}>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-                16 members
+              {item.club.members.length} members
               </Text>
               <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-                Created on 2nd Jan 2020
+                Created on {moment(item.club.insertedAt).format("Do MMM YYYY")}
               </Text>
             </View>
             <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
-              Need custom logistic service? We got it covered. From overland,
-              air, rail and sea transportation. Fast, safe and accurate
-              shipment provided all over the globe. air, rail and sea transportation. Fast safe and accurate
-              shipment provided all over the globe
+              {item.club.description}
             </Text>
         </View>
       </View>
@@ -113,25 +95,27 @@ const JoinedList = ({getUserBooks, userBooks, navigation}) => {
 
   return (
     <View style={styles.container}>
+      {isLoading ? <Skeleton /> :
       <FlatList
-        data={dataList}
+        data={joinedClub}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 40}}
       />
+      }
     </View>
   );
 };
 
 const mapStateToProps = state => ({
-  userBooks: state.book.userBooks,
+  joinedClub: state.club.joinedClub,
 });
 
 export default connect(
   mapStateToProps,
-  {getUserBooks},
+  {getUserJoinedClubs},
 )(JoinedList);
 
 const styles = StyleSheet.create({
@@ -143,15 +127,15 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     marginTop: 12,
-    //marginHorizontal: 2,
+    marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     //height: width / 1.4,
     textAlign: 'center',
-    //borderRadius: 12,
+    borderRadius: 10,
     overflow: 'hidden',
-    //borderBottomWidth: 2,
-    //borderColor: '#f5f5f5',
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
   },
   bookCoverContain: {
     flex: 3,
@@ -215,16 +199,30 @@ const styles = StyleSheet.create({
     shadowRadius: 3.0,
     elevation: 4,
       },
-      afterName: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      },
-      description: {
-        fontFamily: 'Nunito-Regular',
-        fontSize: 13,
-        marginTop: 5,
-      },
+    afterName: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    description: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 13,
+      marginTop: 5,
+    },
+    clubNoImage:{
+      height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+      overflow: 'hidden',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    initial: {
+      fontFamily: 'Nunito-SemiBold',
+      fontSize: 19,
+      color: '#fff',
+      textTransform: 'uppercase'
+    },
 });
 
 

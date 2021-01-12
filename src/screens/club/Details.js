@@ -253,12 +253,15 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                   </TouchableOpacity>
               </Modal>
 
-              <Image
+              {item.image !== "noimage.jpg" ? <Image
                 source={{
                   uri: `${imgURL}/club/${item.image}`,
                 }}
                 style={styles.bookCover}
-              />
+              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
+              <Text style={styles.initial}>{item.name}</Text>
+             </View> }
+
         </View>
         <View style={styles.clubDetails}>
             <Text style={styles.bookTitle}>{item.name}</Text>
@@ -686,6 +689,20 @@ const styles = StyleSheet.create({
       marginTop: 20,
       marginBottom: 5,
       marginHorizontal: 12
-    }
+    },
+    clubNoImage:{
+      height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+      overflow: 'hidden',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    initial: {
+      fontFamily: 'Nunito-SemiBold',
+      fontSize: 19,
+      color: '#fff',
+      textTransform: 'uppercase'
+    },
   
 });

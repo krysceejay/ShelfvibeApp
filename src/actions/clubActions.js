@@ -2,10 +2,13 @@ import {Alert} from 'react-native';
 import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
-  SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB} from './types';
+  SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB,
+  DELETE_CLUB, USER_JOINED_CLUBS} from './types';
 import api from '../utils/api';
 import {fileUpload, removeFile} from '../utils/fileUpload';
 
+
+//FETCH ALL CLUBS
 export const fetchClubs = () => async dispatch => {
   const query = `
       query {
@@ -24,12 +27,7 @@ export const fetchClubs = () => async dispatch => {
               id
             }
             members{
-              user{
-                username
-                propix
-                id
-              }
-              status
+              id
             }
           }
         }
@@ -50,6 +48,7 @@ export const fetchClubs = () => async dispatch => {
   }
 };
 
+// GET USER ADDED CLUBS
 export const getUserClubs = id => async dispatch => {
   const query = `
       query {
@@ -69,12 +68,7 @@ export const getUserClubs = id => async dispatch => {
               id
             }
             members{
-              user{
-                username
-                propix
-                id
-              }
-              status
+              id
             }
           }
         }
@@ -96,6 +90,49 @@ export const getUserClubs = id => async dispatch => {
   }
 };
 
+// GET USER JOINED CLUBS
+export const getUserJoinedClubs = () => async dispatch => {
+  const query = `
+      query {
+        getJoinedClub{
+          club{
+            id
+            image
+            name
+            public
+            insertedAt
+            updatedAt
+            description
+            genre
+            publish
+            user{
+              username
+              id
+            }
+            members{
+              id
+            }
+          }
+        }
+      }
+    `;
+
+  try {
+    const userJoinedClubs = await api.post('/', {query});
+    dispatch({
+      type: USER_JOINED_CLUBS,
+      payload: userJoinedClubs.data.data.getJoinedClub,
+    });
+  } catch (err) {
+    console.log(err);
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
 //Add Club
 export const createClub = clubInput => async dispatch => {
   const {clubname, clubgenre, photo, isPublish, isPublic, clubdescription} = clubInput;
@@ -103,7 +140,7 @@ export const createClub = clubInput => async dispatch => {
   let cgen;
 
   if (clubgenre.length == 0) {
-    cgen = null
+    cgen = null;
   }else{
     cgen = clubgenre;
   }
@@ -149,12 +186,7 @@ export const createClub = clubInput => async dispatch => {
           id
         }
         members{
-          user{
-            username
-            propix
-            id
-          }
-          status
+          id
         }
       }
       successful
@@ -257,12 +289,7 @@ export const updateClubAction = clubInput => async dispatch => {
           id
         }
         members{
-          user{
-            username
-            propix
-            id
-          }
-          status
+          id
         }
       }
       successful
@@ -599,7 +626,6 @@ export const reportClubAction = reportInput => async dispatch => {
       return errorMessages;
     }
   } catch (err) {
-    console.log(err);
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
@@ -630,4 +656,37 @@ export const reportClubAction = reportInput => async dispatch => {
       return 'failed';
     }
   }
+
+//DELETE CLUB ACTION
+export const deleteClubAction = clubId => async dispatch => {
+  const query = `
+      mutation {
+        deleteClub(clubId: ${clubId}){
+           id
+           image
+          }
+        }
+  `;
+  try {
+    const deleteClub = await api.post('/', {query});
+    if (deleteClub.data.data.deleteClub !== null) {
+      if(deleteClub.data.data.deleteClub.image !== "noimage.jpg"){
+        await removeFile('club', deleteClub.data.data.deleteClub.image);
+      }
+      dispatch({
+        type: DELETE_CLUB,
+        payload: deleteClub.data.data.deleteClub.id
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}  
 

@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 const JoinedListStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="JoinedClub"
+      initialRouteName="Joined Club"
       screenOptions={() => ({
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
@@ -38,7 +38,7 @@ const JoinedListStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="JoinedClub" component={JoinedClub} />
+      <Stack.Screen name="Joined Club" component={JoinedClub} />
      
     </Stack.Navigator>
   );

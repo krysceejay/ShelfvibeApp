@@ -6,6 +6,7 @@ import pollReducer from './pollReducer';
 import booklistReducer from './booklistReducer';
 import favReducer from './favReducer';
 import rateReducer from './rateReducer';
+import genreReducer from './genreReducer';
 
 export default combineReducers({
   book: bookReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   poll: pollReducer,
   booklist: booklistReducer,
   fav: favReducer,
-  rate: rateReducer
+  rate: rateReducer,
+  genre: genreReducer
 });

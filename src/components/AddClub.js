@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     Image,
     SafeAreaView,
-    Switch,
+    Switch
   } from 'react-native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -57,6 +57,10 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
      const onClosePress = () => {
         closeModal();
       };
+     
+      const handleCloseGenreModal = () => {
+        setFormData({...formData, modalVisible: !modalVisible})
+      };  
        
      formatGenre = (item, index, arr) => {
          let gen;
@@ -105,6 +109,18 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
    };
  
    createClubAction = async () => {
+    if(clubname === '' || clubname === undefined || clubname === null) {
+        setErrorMsg({name: 'Name field cannot be empty'});
+        return;
+      }
+    if(clubgenre.length === 0) {
+        setErrorMsg({genre: 'Choose a genre for your club'});
+        return;
+    }
+    if(clubdescription === '' || clubdescription === undefined || clubdescription === null) {
+        setErrorMsg({description: 'Add a short description for your club'});
+        return;
+    }  
     setFormData({...formData, isLoading: true});
      const userCreateClub = await createClub({
        clubname,
@@ -130,7 +146,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
        });
        if (addUserAsMember !== 'failed') {
         onClosePress();
-      }
+       }
        
      }
    };
@@ -199,9 +215,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                 visible={modalVisible}>
                 <View style={styles.modalView}>
                   <ListGenre
-                    closeModal={() => {
-                      setFormData({...formData, modalVisible: !modalVisible})
-                    }}
+                    closeModal={handleCloseGenreModal}
                     item={getGenre}
                     items={clubgenre}
                   />

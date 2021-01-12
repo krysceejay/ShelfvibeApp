@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import {fetchClubs, filterClub} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
+import {stringToHslColor} from '../../utils/theme';
 
 const numColumns = 1;
 const imgURL = Config.IMAGE_URL;
@@ -59,12 +60,15 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
               });
             }}
             activeOpacity={0.9}>
-            <Image
+              {item.image !== "noimage.jpg" ? <Image
                 source={{
                   uri: `${imgURL}/club/${item.image}`,
                 }}
                 style={styles.bookCover}
-              />
+              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
+              <Text style={styles.initial}>{item.name}</Text>
+             </View> }
+
           </TouchableOpacity>
           
         </View>
@@ -158,15 +162,16 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     marginTop: 12,
-    //marginHorizontal: 2,
+    marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     //height: width / 1.4,
     textAlign: 'center',
-    //borderRadius: 12,
+    borderRadius: 10,
     overflow: 'hidden',
     //borderBottomWidth: 2,
-    //borderColor: '#f5f5f5',
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
     //backgroundColor: 'green',
   },
   bookCoverContain: {
@@ -184,7 +189,7 @@ const styles = StyleSheet.create({
     padding: 12,
     width: '100%',
     backgroundColor: '#fff',
-    marginBottom: 12
+    //marginBottom: 12
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
@@ -255,6 +260,20 @@ const styles = StyleSheet.create({
       fontSize: 15,
       paddingHorizontal: 12,
       marginTop: 15
+    },
+    clubNoImage:{
+      height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+      overflow: 'hidden',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    initial: {
+      fontFamily: 'Nunito-SemiBold',
+      fontSize: 19,
+      color: '#fff',
+      textTransform: 'uppercase'
     },
     
 });

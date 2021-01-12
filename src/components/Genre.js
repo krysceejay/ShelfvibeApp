@@ -1,51 +1,42 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default class Genre extends Component {
-  state = {
-    //isSelected: false,
-    genreListChild: this.props.genrelist,
-  };
-
-  render() {
-    const {genreListChild} = this.state;
-    const {item, genrelist} = this.props;
+const Genre = ({genrelist, item}) => {
+  const [genreListChild, setGenreListChild] = useState(genrelist);
+  
     const pushToList = () => {
-      if (!genreListChild.includes(item.title)) {
-        this.setState({
-          genreListChild: [...this.state.genreListChild, item.title],
-        });
-        genrelist.push(item.title);
+      if (!genreListChild.includes(item.name)) {
+        setGenreListChild([...genreListChild, item.name]);
+        genrelist.push(item.name);
       } else {
-        this.setState({
-          genreListChild: this.state.genreListChild.filter(
-            it => it != item.title,
-          ),
-        });
-        const a = genrelist.indexOf(item.title);
+        setGenreListChild(genreListChild.filter(it => it != item.name));
+        const a = genrelist.indexOf(item.name);
         genrelist.splice(a, 1);
       }
     };
+
     return (
       <View style={styles.genreContainer}>
         <TouchableOpacity onPress={pushToList}>
           <Ionicons
             name={
-              genreListChild.includes(item.title)
+              genreListChild.includes(item.name)
                 ? 'ios-checkbox-outline'
                 : 'ios-square-outline'
             }
             size={25}
-            color={genreListChild.includes(item.title) ? '#e91e63' : '#666666'}
+            color={genreListChild.includes(item.name) ? '#e91e63' : '#666666'}
             style={{width: 32}}
           />
         </TouchableOpacity>
-        <Text style={styles.genreText}>{item.title}</Text>
+        <Text style={styles.genreText}>{item.name}</Text>
       </View>
     );
-  }
+  
 }
+
+export default Genre;
 
 const styles = StyleSheet.create({
   genreContainer: {
