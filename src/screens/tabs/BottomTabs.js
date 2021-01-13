@@ -2,12 +2,13 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from '../stack/HomeStack';
+import BookStack from '../stack/BookStack';
 import ShelfStack from '../stack/ShelfStack';
 import AccountStack from '../stack/AccountStack';
 import NotificationStack from '../stack/NotificationStack';
 import DashDrawer from '../drawer/DashDrawer';
-import Notifications from '../Notifications';
 import {getLoginLocal} from '../../actions/authActions';
 import {AuthContext} from '../../utils/context';
 import setAuthToken from '../../utils/setAuthToken';
@@ -38,8 +39,15 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home';
             }
-            if (route.name === 'Club') {
+            if (route.name === 'Book') {
               iconName = focused ? 'book' : 'book';
+            }
+            if (route.name === 'Club') {
+              return <MaterialCommunityIcons
+                    name="cards-club"
+                    size={24}
+                    color={color}
+                  />
             }
             if (route.name === 'Notification') {
               iconName = focused ? 'bell' : 'bell';
@@ -65,6 +73,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
           keyboardHidesTabBar: true,
         }}>
         <Tab.Screen name="Home" children={HomeStack} />
+        <Tab.Screen name="Book" children={BookStack} />
         <Tab.Screen name="Club" children={ShelfStack} />
         <Tab.Screen name="Notification" children={NotificationStack} />
         {isLoggedIn ? (

@@ -13,13 +13,10 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import StarGroup from '../../components/StarGroup';
-import Topics from '../../components/Topics';
-import HtmlReader from '../../components/HtmlReader';
 import ReadingList from '../../components/ReadingList';
 import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
