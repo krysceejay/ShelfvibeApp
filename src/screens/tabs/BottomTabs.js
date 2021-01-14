@@ -27,6 +27,18 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
     await getLoginLocal();
   };
 
+  getTabBarVisibility = (route) => {
+    const routeName = route.state
+      ? route.state.routes[route.state.index].name
+      : '';
+  
+    if (routeName === 'FeaturedBooks') {
+      return false;
+    }
+  
+    return true;
+  }
+
   return (
     <AuthContext.Provider value={user}>
       <Tab.Navigator
@@ -72,8 +84,16 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal}) => {
           showLabel: false,
           keyboardHidesTabBar: true,
         }}>
-        <Tab.Screen name="Home" children={HomeStack} />
-        <Tab.Screen name="Book" children={BookStack} />
+        <Tab.Screen name="Home" children={HomeStack} 
+        // options={({ route }) => ({
+        // tabBarVisible: getTabBarVisibility(route)
+        //  })} 
+        />
+        <Tab.Screen name="Book" children={BookStack}
+        options={{
+          tabBarVisible: false,
+        }}
+         />
         <Tab.Screen name="Club" children={ShelfStack} />
         <Tab.Screen name="Notification" children={NotificationStack} />
         {isLoggedIn ? (

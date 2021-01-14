@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 //import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import HomePage from '../HomeP';
 import Details from '../DetailsP';
+//import FeaturedBooks from '../FeaturedBooks';
 
 const Stack = createStackNavigator();
 //const Stack = createSharedElementStackNavigator();
@@ -63,6 +64,13 @@ const HomeStack = () => {
         component={Details}
         options={options}
       />
+      {/* <Stack.Screen
+        name="FeaturedBooks"
+        component={FeaturedBooks}
+        options={{
+          headerShown: false,
+        }}
+      /> */}
     </Stack.Navigator>
   );
 };

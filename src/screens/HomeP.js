@@ -1,5 +1,6 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
+//import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FeaturedBooks from '../components/FeaturedBooks';
 
 const dataList = [
@@ -42,27 +43,35 @@ const HomeP = ({navigation}) => {
             <FlatList
             ListHeaderComponent={() => (
             <View>
-            <View style={styles.topView}>
-                <View style={styles.welcome}>
-                    <View style={styles.bookCoverContain}>
-                        <Image
-                        style={styles.bookCover}
-                        source={require('../assets/img/logodark.png')}
-                        />
+              <View style={styles.topView}>
+                  <View style={styles.welcome}>
+                      <View style={styles.bookCoverContain}>
+                          <Image
+                          style={styles.bookCover}
+                          source={require('../assets/img/logodark.png')}
+                          />
+                      </View>
+                      {/* <Text style={styles.textPrimary}>Hello!</Text> */}
+                      <Text style={styles.leading}>Talk about it if it's so interesting!!</Text>
+                  </View>
+              <View style={styles.bookStoreAndfeat}>
+                  <Text style={styles.listTitle}>Bookstores</Text>
+                  {/* <TouchableOpacity activeOpacity={0.9} style={styles.seeFeatBooks} onPress={() => {
+                    navigation.navigate('FeaturedBooks')
+                  }}>
+                    <View style={styles.iconContainer}>
+                      <FontAwesome name="book" size={16} color="#fff" />
                     </View>
-                    {/* <Text style={styles.textPrimary}>Hello!</Text> */}
-                    <Text style={styles.leading}>Talk about it if it's so interesting!!</Text>
-                </View>
-            <View style={styles.feat}>
-                <Text style={styles.listTitle}>Featured Books</Text>
-            </View>
-                <FeaturedBooks navigation={navigation} />
-            </View>
-            <View style={styles.bottomView}>
-                <View style={styles.feat}>
-                <Text style={styles.listTitle}>Featured Clubs</Text>
-                </View>
-            </View>
+                    <Text style={styles.featText}>Featured books</Text>
+                  </TouchableOpacity> */}
+              </View>
+                  <FeaturedBooks navigation={navigation} />
+              </View>
+              <View style={styles.bottomView}>
+                  <View style={styles.feat}>
+                  <Text style={styles.listTitle}>Featured Clubs</Text>
+                  </View>
+              </View>
             </View>
             
             )}
@@ -168,8 +177,39 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
       },
       publicContainer: {
-          paddingHorizontal: 10,
-          paddingVertical: 4,
-          borderRadius: 20
-      }
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20
+      },
+      seeFeatBooks: {
+        backgroundColor: '#00a2cc',
+        padding: 4,
+        paddingRight: 10,
+        borderRadius: 20,
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+      bookStoreAndfeat: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 12,
+        marginTop: 20,
+        //marginBottom: 5
+      },
+      iconContainer: {
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        //padding: 5,
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 3
+      },
+      featText: {
+        fontFamily: 'Nunito-SemiBold',
+        fontSize: 13,
+        color: "#fff"
+      },
 })

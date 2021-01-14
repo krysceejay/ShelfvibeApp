@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, {useRef} from 'react';
 import { StatusBar, FlatList, Image, Animated, Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const { width, height } = Dimensions.get('screen');
 
 const data = [
@@ -16,11 +17,82 @@ const data = [
 const imageW = width * 0.7;
 const imageH = imageW * 1.54;
 
-const FeaturedBooks = () => {
+const FeaturedBooks = ({navigation}) => {
+    const scrollX = useRef(new Animated.Value(0)).current;
     return (
-        <View style={{ flex: 1, backgroundColor: '#000' }}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <StatusBar hidden />
-            <Text>Hello</Text>
+            <View style={StyleSheet.absoluteFillObject}>
+                
+                {data.map((image, index) => {
+                    const inputRange = [
+                        (index - 1) * width,
+                        index * width,
+                        (index + 1) * width
+                    ];
+                    const opacity = scrollX.interpolate({
+                        inputRange,
+                        outputRange: [0, 1, 0]
+                    });
+                    return <Animated.Image 
+                    key={`image-${index}`}
+                    source={{uri: image}}
+                    style={[
+                        StyleSheet.absoluteFillObject,
+                        {opacity}
+                    ]}
+                    blurRadius={40}
+                    />
+                })}
+            </View>
+            {/* <Text>FEATURED</Text> */}
+            <TouchableOpacity
+            style={{
+              position: 'absolute',
+              top: 25,
+              left: 15,
+              zIndex: 2,
+              backgroundColor: '#fff',
+              borderRadius: 17,
+              width: 34,
+              height: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            activeOpacity={0.9}
+            onPress={navigation.goBack}>
+            <Ionicons name="md-arrow-back" size={22} color="#444444" />
+          </TouchableOpacity>
+            <Animated.FlatList
+            data={data}
+            onScroll={Animated.event(
+                [{nativeEvent: {contentOffset: {x: scrollX}}}],
+                {useNativeDriver: true}
+            )}
+            keyExtractor={(_, index) => index.toString()}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => {
+                return <View style={{ 
+                    width, justifyContent: 'center', alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOpacity: 0.5,
+                    shadowOffset: {
+                        width: 0,
+                        height: 0
+                    },
+                    shadowRadius: 20
+                    }}>
+                    <Image source={{uri: item}} style={{
+                        width: imageW, 
+                        height: imageH,
+                        resizeMode: 'cover',
+                        borderRadius: 16
+                    }} />
+                </View>
+            }}
+             />
         </View>
     );
 };
