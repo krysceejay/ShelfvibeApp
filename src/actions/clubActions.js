@@ -3,7 +3,7 @@ import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB,
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
   SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB,
-  DELETE_CLUB, USER_JOINED_CLUBS} from './types';
+  DELETE_CLUB, USER_JOINED_CLUBS, LEAVE_CLUB} from './types';
 import api from '../utils/api';
 import {fileUpload, removeFile} from '../utils/fileUpload';
 
@@ -689,4 +689,50 @@ export const deleteClubAction = clubId => async dispatch => {
     return 'failed';
   }
 }  
+
+//Remove Member Action
+export const leaveClubAction = clubId => async dispatch => {
+  const query = `
+      mutation {
+        leaveClub(clubId: ${clubId}){
+          club{
+              id
+              image
+              name
+              public
+              insertedAt
+              updatedAt
+              description
+              genre
+              publish
+              user{
+                username
+                id
+              }
+              members{
+                id
+              }
+            }
+          }
+      }
+  `;
+  try {
+    const leaveClub = await api.post('/', {query});
+    if (leaveClub.data.data.leaveClub !== null) {
+      dispatch({
+        type: LEAVE_CLUB,
+        payload: leaveClub.data.data.leaveClub.club.id
+      });
+    } else {
+      Alert.alert('Failed', 'Some error occured, please check your internet connection and retry.');
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+}
 

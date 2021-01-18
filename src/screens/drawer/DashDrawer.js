@@ -6,6 +6,7 @@ import ManageShelfStack from '../stack/ManageShelfStack';
 import AddToShelfStack from '../stack/AddToShelfStack';
 import JoinedListStack from '../stack/JoinedListStack';
 import ProfileStack from '../stack/ProfileStack';
+import ShelfStack from '../stack/ShelfStack';
 import DashboardSidebar from '../../components/DashboardSidebar';
 import Details from '../club/Details';
 

@@ -3,8 +3,8 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ManageClub from '../dashboard/ManageClub';
-import Rating from '../shelf/Rating';
-import AllRatings from '../shelf/AllRatings';
+import Rating from '../club/Rating';
+import AllRatings from '../club/AllRatings';
 
 const Stack = createStackNavigator();
 

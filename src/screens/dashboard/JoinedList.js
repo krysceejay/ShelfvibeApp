@@ -1,27 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   StyleSheet,
   View,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
-import {getUserJoinedClubs} from '../../actions/clubActions';
+import {getUserJoinedClubs, leaveClubAction} from '../../actions/clubActions';
 import {stringToHslColor} from '../../utils/theme';
 import Skeleton from '../../components/Skeleton';
-import Empty from '../../components/Empty';
+import {AuthContext} from '../../utils/context';
 
 const numColumns = 1;
 const imgURL = Config.IMAGE_URL;
 
-const JoinedList = ({getUserJoinedClubs, joinedClub, navigation}) => {
+const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,6 +35,25 @@ const JoinedList = ({getUserJoinedClubs, joinedClub, navigation}) => {
     });
     return unsubscribe;
   }, [navigation]);
+
+  leaveClub = async id => {
+    await leaveClubAction(id);
+  } 
+
+  const leaveClubBtn = clubId =>
+    Alert.alert(
+      'Leave Club',
+      'Click OK to proceed?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => false,
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => leaveClub(clubId)},
+      ],
+      {cancelable: false},
+    );
 
   _renderItem = ({item, index}) => {
     return (
@@ -64,17 +85,16 @@ const JoinedList = ({getUserJoinedClubs, joinedClub, navigation}) => {
             <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
             {item.club.name}
             </Text>
-            <TouchableOpacity
+            {user !== null && user.id !== item.club.user.id && <TouchableOpacity
             style={{
               zIndex: 2,
               width: 34,
               height: 34,
             }}
-            onPress={() => {
-            }}
+            onPress={() => leaveClubBtn(item.club.id)}
             activeOpacity={0.9}>
               <Ionicons name="md-remove-circle-outline" size={25} color="#444444" />
-          </TouchableOpacity>
+          </TouchableOpacity> }
           </View>
           <View style={styles.afterName}>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
@@ -115,7 +135,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {getUserJoinedClubs},
+  {getUserJoinedClubs, leaveClubAction},
 )(JoinedList);
 
 const styles = StyleSheet.create({

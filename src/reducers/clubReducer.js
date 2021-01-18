@@ -1,7 +1,7 @@
 import {FETCH_CLUBS, USER_CLUBS, CREATE_CLUB, FILTER_CLUB, 
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, 
   REPORT_CLUB, SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB, 
-  DELETE_CLUB, USER_JOINED_CLUBS} from '../actions/types';
+  DELETE_CLUB, USER_JOINED_CLUBS, LEAVE_CLUB} from '../actions/types';
 
 const initialState = {
   clubs: [],
@@ -36,6 +36,11 @@ const clubReducer = (state = initialState, action) => {
       return {
         ...state, 
         joinedClub: payload
+      };
+    case LEAVE_CLUB:
+      return {
+        ...state, 
+        joinedClub: state.joinedClub.filter(jclub => jclub.club.id !== payload)
       };
     case SET_MEMBER:
       return {
