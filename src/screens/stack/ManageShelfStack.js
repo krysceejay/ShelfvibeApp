@@ -3,8 +3,13 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ManageClub from '../dashboard/ManageClub';
+import Details from '../club/Details';
 import Rating from '../club/Rating';
 import AllRatings from '../club/AllRatings';
+import Poll from '../club/Poll';
+import ReadingList from '../club/ReadingList';
+import Report from '../club/Report';
+import AddReview from '../club/AddReview';
 
 const Stack = createStackNavigator();
 
@@ -39,27 +44,34 @@ const ManageShelfStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen
-        name="ManageClub"
-        component={ManageClub}
+      <Stack.Screen name="ManageClub" component={ManageClub} options={{ title: 'Manage Club', }} />
+      <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+      <Stack.Screen name="Rating" component={Rating}
         options={{
-          title: 'Manage Club',
+          headerRight: null
         }}
       />
-      <Stack.Screen
-        name="Rating"
-        component={Rating}
+      <Stack.Screen name="All Ratings" component={AllRatings}
         options={{
-          title: 'Rating',
+          headerRight: null
         }}
       />
-      <Stack.Screen
-        name="AllRatings"
-        component={AllRatings}
-        options={{
-          title: 'All Ratings',
-        }}
-      />
+      <Stack.Screen name="Poll" component={Poll} options={{
+       
+          headerRight: null
+        }} />
+      <Stack.Screen name="Reading List" component={ReadingList} options={{
+         
+          headerRight: null
+        }} />
+      <Stack.Screen name="Report" component={Report} options={{
+          
+          headerRight: null
+        }} />
+      <Stack.Screen name="Add Review" component={AddReview} options={{
+          
+          headerRight: null
+        }} />
     </Stack.Navigator>
   );
 };

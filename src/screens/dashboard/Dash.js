@@ -1,75 +1,83 @@
-import React, {useContext} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, {useState, useEffect, useContext} from 'react';
+import { SafeAreaView, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import {connect} from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashClubs from '../../components/DashClubs';
+import DashJoined from '../../components/DashJoined';
 import {AuthContext} from '../../utils/context';
+import {getUserClubs, getUserJoinedClubs} from '../../actions/clubActions';
+import Loader from '../../components/Loader';
 
-const dataList = [
-  {key: 1},
-  {key: 2},
-  {key: 3},
-  {key: 4},
-];
-
-const Dash = ({navigation}) => {
+const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedClub}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const user = useContext(AuthContext);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getUserShelf = await getUserClubs(user.id);
+      const getJoined = await getUserJoinedClubs();
+      if (getUserShelf !== 'failed' && getJoined !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            {/* <Ionicons name="md-menu" size={30} color="#444444" style={styles.icon} onPress={() => {
-                navigation.openDrawer();
-            }} /> */}
             <View style={styles.userInfoSection}>
             <View>
                 <Text style={styles.welcome}>Welcome <Text style={styles.username}>{user.firstName},</Text></Text>
-                
             </View>
-                {/* <View style={styles.infoRow}>
-                    <Image
-                        style={styles.avatar}
-                        source={require('../../assets/img/avatar.jpg')}
-                        size={50}
-                    />
-                </View> */}
                 <MaterialCommunityIcons name="account-edit" size={25} color="#444444" onPress={() => {}} />
-                {/* <View>
-                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.number}>2</Text>
-                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Clubs</Text>
-                </View>
-                <View>
-                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.number}>6</Text>
-                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>Joined</Text>
-                </View> */}
-                
             </View>
             <View style={{paddingHorizontal: 12}}>
                 <Text style={styles.briefBio}>
                 {user.about}
                 </Text>
             </View>
+            {isLoading ? <Loader /> :
             <View style={styles.clubViews}>
-            <View style={styles.clubs}>
-              <View style={styles.listTitleView}>
-                <Text style={styles.listTitle}>Your Clubs</Text>
+              <View style={styles.clubs}>
+                <View style={styles.listTitleView}>
+                  <Text style={styles.listTitle}>Your Clubs</Text>
+                </View>
+                <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                  navigation.navigate('ManageShelf');
+                }}>
+                  <Text style={styles.title}>See all</Text>
+                </TouchableOpacity>
               </View>
-              <Text style={styles.title}>See all</Text>
-            </View>
-            <DashClubs data={dataList} />
-            <View style={styles.clubs}>
-              <View style={styles.listTitleView}>
-                <Text style={styles.listTitle}>Joined Clubs</Text>
+              <DashClubs data={userClubs.slice(0, 4)} />
+              <View style={styles.clubs}>
+                <View style={styles.listTitleView}>
+                  <Text style={styles.listTitle}>Joined Clubs</Text>
+                </View>
+                <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                  navigation.navigate('JoinedList');
+                }}>
+                  <Text style={styles.title}>See all</Text>
+                </TouchableOpacity>
               </View>
-              <Text style={styles.title}>See all</Text>
-            </View>
-            <DashClubs data={dataList} />
-            </View>
-            
+              <DashJoined data={joinedClub.slice(0, 4)} />
+            </View> 
+            }
             {/* <TopTabs navigation={navigation} /> */}
         </ScrollView>
     )
 }
 
-export default Dash;
+const mapStateToProps = state => ({
+  userClubs: state.club.userClubs,
+  joinedClub: state.club.joinedClub,
+});
+
+export default connect(
+  mapStateToProps,
+  {getUserClubs, getUserJoinedClubs},
+)(Dash);
 
 const styles = StyleSheet.create({
     container: {

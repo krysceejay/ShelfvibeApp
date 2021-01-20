@@ -142,7 +142,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 40}}
         ListEmptyComponent={() => (
-          <Text style={styles.emptyText}>No club found</Text>
+          <Text style={styles.emptyText}>Looks like you have not added any club.</Text>
       )}
       />
       <Modal

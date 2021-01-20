@@ -50,6 +50,19 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     checkMember(item.id);
   }, [item.id]);
 
+  // useEffect(() => {
+  //   const unsubscribe = async () => {
+  //     getClub(item.id);
+  //     getClubRatings(item.id);
+  //     getClubMembers(item.id);
+  //     getClubReadList(item.id);
+  //     getClubPolls(item.id);
+  //     checkFav(item.id);
+  //     checkMember(item.id);
+  //   };
+  //   return unsubscribe;
+  // }, [item.id]);
+
   getClub = async clubid => {
     await getSingleClub(clubid);
   };

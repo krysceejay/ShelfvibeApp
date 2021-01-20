@@ -123,6 +123,9 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 40}}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyText}>You have not joined any club yet.</Text>
+      )}
       />
       }
     </View>

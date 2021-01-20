@@ -6,9 +6,7 @@ import ManageShelfStack from '../stack/ManageShelfStack';
 import AddToShelfStack from '../stack/AddToShelfStack';
 import JoinedListStack from '../stack/JoinedListStack';
 import ProfileStack from '../stack/ProfileStack';
-import ShelfStack from '../stack/ShelfStack';
 import DashboardSidebar from '../../components/DashboardSidebar';
-import Details from '../club/Details';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,7 +29,7 @@ const DashDrawer = () => {
       <Drawer.Screen name="AddClub" children={AddToShelfStack} />
       <Drawer.Screen name="JoinedList" children={JoinedListStack} />
       <Drawer.Screen name="Profile" children={ProfileStack} />
-      <Drawer.Screen name="Details" component={Details} />
+      
     </Drawer.Navigator>
   );
 };

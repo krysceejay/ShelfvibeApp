@@ -5,7 +5,7 @@ import {stringToHslColor} from '../utils/theme';
 
 const imgURL = Config.IMAGE_URL;
 
-const DashClubs = ({data}) => {
+const DashJoined = ({data}) => {
     _renderItem = ({item, index}) => {
         return (
             <View
@@ -19,18 +19,18 @@ const DashClubs = ({data}) => {
             overflow: 'hidden',
             marginBottom: 15,
             }}>
-                {item.image !== "noimage.jpg" ? <Image
+                {item.club.image !== "noimage.jpg" ? <Image
                   source={{
-                    uri: `${imgURL}/club/${item.image}`,
+                    uri: `${imgURL}/club/${item.club.image}`,
                   }}
                   style={{width: '100%', height: 120, resizeMode: 'cover'}}
-                /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
-                <Text style={styles.initial}>{item.name}</Text>
+                /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.club.name)}]}>
+                <Text style={styles.initial}>{item.club.name}</Text>
               </View> }
               <View style={styles.textContainer}>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.name}</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.club.name}</Text>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-              {item.members.length} member(s)
+              {item.club.members.length} member(s)
               </Text>
             </View>
             
@@ -55,7 +55,7 @@ const DashClubs = ({data}) => {
     )
 }
 
-export default DashClubs;
+export default DashJoined;
 
 const styles = StyleSheet.create({
     container: {
