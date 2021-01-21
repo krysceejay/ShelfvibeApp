@@ -1,37 +1,22 @@
-import React from 'react'
-import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native'
-import * as Animatable from 'react-native-animatable';
+import React from 'react';
+import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const zoomIn = {
-    0: {
-      opacity: 0,
-      scale: 0,
-    },
-    1: {
-      opacity: 1,
-      scale: 1,
-    },
-  };
-
-const FeaturedBooks = ({navigation}) => {
+const Bookstore = ({navigation}) => {
     _renderItem = ({item, index}) => {
         return (
           <TouchableOpacity activeOpacity={0.6} onPress={() => {
             navigation.navigate('Details')
             }}>
-            <Animatable.View
-            duration={700}
-            delay={400 + index * 100}
-            animation={zoomIn}
+            <View
             style={{
               //backgroundColor: 'red',
-              paddingBottom: 10,
-              width: 120,
-              height: 240,
+              padding: 0,
+              width: 100,
+              height: 100,
               marginRight: 12,
             borderRadius: 12,
-            overflow: 'visible',
+            overflow: 'hidden',
             //marginHorizontal: 10,
             }}>
             <Image
@@ -39,12 +24,9 @@ const FeaturedBooks = ({navigation}) => {
                 uri:
                   'https://images.unsplash.com/photo-1533292362155-d79af6b08b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1651&q=80',
               }}
-              style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 5,}}
+              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
             />
-            <View style={styles.textContainer}>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>Think Big</Text>
-            </View>
-          </Animatable.View>
+          </View>
           </TouchableOpacity>
         );
       };
@@ -63,7 +45,7 @@ const FeaturedBooks = ({navigation}) => {
     )
 }
 
-export default FeaturedBooks;
+export default Bookstore;
 
 const styles = StyleSheet.create({
     container: {

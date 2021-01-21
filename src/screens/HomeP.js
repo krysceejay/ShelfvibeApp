@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
 //import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FeaturedBooks from '../components/FeaturedBooks';
+import Bookstore from '../components/Bookstore';
 
 const dataList = [
     {key: 1},
@@ -65,7 +65,7 @@ const HomeP = ({navigation}) => {
                     <Text style={styles.featText}>Featured books</Text>
                   </TouchableOpacity> */}
               </View>
-                  <FeaturedBooks navigation={navigation} />
+                  <Bookstore navigation={navigation} />
               </View>
               <View style={styles.bottomView}>
                   <View style={styles.feat}>
