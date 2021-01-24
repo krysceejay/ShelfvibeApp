@@ -7,6 +7,7 @@ import booklistReducer from './booklistReducer';
 import favReducer from './favReducer';
 import rateReducer from './rateReducer';
 import genreReducer from './genreReducer';
+import featReducer from './featReducer';
 
 export default combineReducers({
   book: bookReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   booklist: booklistReducer,
   fav: favReducer,
   rate: rateReducer,
-  genre: genreReducer
+  genre: genreReducer,
+  feature: featReducer
 });

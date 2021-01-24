@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
-//import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {connect} from 'react-redux';
 import Bookstore from '../components/Bookstore';
+import {featBookstore} from '../actions/featActions';
+import Loader from '../components/Loader';
 
 const dataList = [
     {key: 1},
@@ -10,7 +12,20 @@ const dataList = [
     {key: 4},
   ];
 
-const HomeP = ({navigation}) => {
+const HomeP = ({navigation, featBookstore, bookstore}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getBookstore = await featBookstore();
+      if (getBookstore !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
     const renderItem = ({item}) => {
         return(
         <View style={styles.userInfoSection}>
@@ -65,7 +80,9 @@ const HomeP = ({navigation}) => {
                     <Text style={styles.featText}>Featured books</Text>
                   </TouchableOpacity> */}
               </View>
-                  <Bookstore navigation={navigation} />
+              {isLoading ? <Loader /> :
+                  <Bookstore navigation={navigation} data={bookstore} />
+                  }
               </View>
               <View style={styles.bottomView}>
                   <View style={styles.feat}>
@@ -94,7 +111,14 @@ const HomeP = ({navigation}) => {
     )
 }
 
-export default HomeP;
+const mapStateToProps = state => ({
+  bookstore: state.feature.bookstore,
+});
+
+export default connect(
+  mapStateToProps,
+  {featBookstore},
+)(HomeP);
 
 const styles = StyleSheet.create({
     container: {
@@ -129,7 +153,6 @@ const styles = StyleSheet.create({
       feat: {
         marginHorizontal: 12,
         marginTop: 20,
-        marginBottom: 5
       },
       listTitle: {
         fontFamily: 'Nunito-SemiBold',
@@ -140,7 +163,8 @@ const styles = StyleSheet.create({
           backgroundColor: '#fff'
       },
       topView: {
-          backgroundColor: '#fafafa'
+          backgroundColor: '#fafafa',
+          paddingBottom: 5,
       },
       userInfoSection: {
         flexDirection: 'row',

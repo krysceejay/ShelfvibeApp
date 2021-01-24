@@ -60,14 +60,12 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
               });
             }}
             activeOpacity={0.9}>
-              {item.image !== "noimage.jpg" ? <Image
+              <Image
                 source={{
                   uri: `${imgURL}/club/${item.image}`,
                 }}
                 style={styles.bookCover}
-              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
-              <Text style={styles.initial}>{item.name}</Text>
-             </View> }
+              /> 
 
           </TouchableOpacity>
           

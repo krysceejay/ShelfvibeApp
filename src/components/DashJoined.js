@@ -19,14 +19,12 @@ const DashJoined = ({data}) => {
             overflow: 'hidden',
             marginBottom: 15,
             }}>
-                {item.club.image !== "noimage.jpg" ? <Image
+                <Image
                   source={{
                     uri: `${imgURL}/club/${item.club.image}`,
                   }}
                   style={{width: '100%', height: 120, resizeMode: 'cover'}}
-                /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.club.name)}]}>
-                <Text style={styles.initial}>{item.club.name}</Text>
-              </View> }
+                /> 
               <View style={styles.textContainer}>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.club.name}</Text>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">

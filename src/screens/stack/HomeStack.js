@@ -3,7 +3,8 @@ import {Easing} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 //import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import HomePage from '../HomeP';
-import Details from '../DetailsP';
+//import Details from '../DetailsP';
+import Details from '../Details';
 //import FeaturedBooks from '../FeaturedBooks';
 
 const Stack = createStackNavigator();

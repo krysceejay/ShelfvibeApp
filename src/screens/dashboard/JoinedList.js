@@ -68,14 +68,12 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
             }}
             activeOpacity={0.9}>
           
-          {item.club.image !== "noimage.jpg" ? <Image
+              <Image
                 source={{
                   uri: `${imgURL}/club/${item.club.image}`,
                 }}
                 style={styles.bookCover}
-              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.club.name)}]}>
-              <Text style={styles.initial}>{item.club.name}</Text>
-             </View> }
+              />
           </TouchableOpacity>
           
         </View>

@@ -19,14 +19,12 @@ const DashClubs = ({data}) => {
             overflow: 'hidden',
             marginBottom: 15,
             }}>
-                {item.image !== "noimage.jpg" ? <Image
+                <Image
                   source={{
                     uri: `${imgURL}/club/${item.image}`,
                   }}
                   style={{width: '100%', height: 120, resizeMode: 'cover'}}
-                /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
-                <Text style={styles.initial}>{item.name}</Text>
-              </View> }
+                />
               <View style={styles.textContainer}>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.name}</Text>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">

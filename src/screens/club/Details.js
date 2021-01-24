@@ -24,7 +24,6 @@ import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
 import {fetchClubMembers, getSingleClub, createMemberAction, checkMemberClub} from '../../actions/clubActions';
 import {fetchClubPolls} from '../../actions/pollActions';
-import {fetchClubReadList} from '../../actions/bookListActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
 import {getClubRatingsAction} from '../../actions/rateActions';
 import {AuthContext} from '../../utils/context';
@@ -32,8 +31,8 @@ import {AuthContext} from '../../utils/context';
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
-   fetchClubReadList, fetchClubPolls, getFavByUserAndClub, createMemberAction, checkMemberClub, 
-   getClubRatingsAction, members, userFavClub, bookLists, club, ratings, isMember}) => {
+    fetchClubPolls, getFavByUserAndClub, createMemberAction, checkMemberClub, 
+   getClubRatingsAction, members, userFavClub, club, ratings, isMember}) => {
   const {item} = route.params;
   const user = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,7 +43,6 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     getClub(item.id);
     getClubRatings(item.id);
     getClubMembers(item.id);
-    getClubReadList(item.id);
     getClubPolls(item.id);
     checkFav(item.id);
     checkMember(item.id);
@@ -77,10 +75,6 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 
   getClubMembers = async clubid => {
     await fetchClubMembers(clubid);
-  };
-
-  getClubReadList = async clubid => {
-    await fetchClubReadList(clubid);
   };
 
   checkFav = async clubid => {
@@ -263,14 +257,12 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                   </TouchableOpacity>
               </Modal>
 
-              {item.image !== "noimage.jpg" ? <Image
+              <Image
                 source={{
                   uri: `${imgURL}/club/${item.image}`,
                 }}
                 style={styles.bookCover}
-              /> : <View style={[styles.clubNoImage, {backgroundColor: stringToHslColor(item.name)}]}>
-              <Text style={styles.initial}>{item.name}</Text>
-             </View> }
+              /> 
 
         </View>
         <View style={styles.clubDetails}>
@@ -337,7 +329,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
               </TouchableWithoutFeedback> */}
               
             </View>
-              <ReadingList readList={bookLists} />
+              <ReadingList clubId={item.id} />
           </View>
           <View style={styles.clubMembersContainer}>
           <Text style={styles.listTitle}>Club Members</Text>
@@ -420,12 +412,11 @@ const mapStateToProps = state => ({
   isMember: state.club.isMember,
   userFavClub: state.fav.userFavClub,
   polls: state.poll.polls,
-  bookLists: state.booklist.bookLists,
 });
 
 export default connect(
   mapStateToProps,
-  {fetchClubPolls, fetchClubMembers, fetchClubReadList, 
+  {fetchClubPolls, fetchClubMembers,
     getSingleClub, getFavByUserAndClub, getClubRatingsAction,
     createMemberAction, checkMemberClub},
 )(Details);
@@ -656,7 +647,7 @@ const styles = StyleSheet.create({
   },
   pollTitle: {
     fontFamily: 'Nunito-SemiBold',
-    fontSize: 18,
+    fontSize: 15,
     marginRight: 15
   },
   bookPollBtn: {

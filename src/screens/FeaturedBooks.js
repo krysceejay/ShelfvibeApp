@@ -1,30 +1,37 @@
-import React, {useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { StatusBar, FlatList, Image, Animated, Text, View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const { width, height } = Dimensions.get('screen');
-
-const data = [
-    'https://cdn.dribbble.com/users/3281732/screenshots/11192830/media/7690704fa8f0566d572a085637dd1eee.jpg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/13130602/media/592ccac0a949b39f058a297fd1faa38e.jpg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/9165292/media/ccbfbce040e1941972dbc6a378c35e98.jpg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/11205211/media/44c854b0a6e381340fbefe276e03e8e4.jpg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/7003560/media/48d5ac3503d204751a2890ba82cc42ad.jpg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/6727912/samji_illustrator.jpeg?compress=1&resize=1200x1200',
-    'https://cdn.dribbble.com/users/3281732/screenshots/13661330/media/1d9d3cd01504fa3f5ae5016e5ec3a313.jpg?compress=1&resize=1200x1200'
-
-];
+import Config from 'react-native-config';
+import {featBooks} from '../actions/featActions';
+import Loader from '../components/Loader';
+const { width } = Dimensions.get('screen');
 
 const imageW = width * 0.7;
 const imageH = imageW * 1.54;
+const imgURL = Config.IMAGE_URL;
 
-const FeaturedBooks = ({navigation}) => {
+const FeaturedBooks = ({navigation, featBooks, books}) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setIsLoading(true);
+        const unsubscribe = navigation.addListener('focus', async () => {
+          const getBooks = await featBooks();
+          if (getBooks !== 'failed') {
+            setIsLoading(false);
+          }
+        });
+        return unsubscribe;
+      }, [navigation]);
+
     const scrollX = useRef(new Animated.Value(0)).current;
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{ flex: 1, backgroundColor: '#ccc' }}>
             <StatusBar hidden />
             <View style={StyleSheet.absoluteFillObject}>
                 
-                {data.map((image, index) => {
+                {books.map((item, index) => {
                     const inputRange = [
                         (index - 1) * width,
                         index * width,
@@ -36,7 +43,7 @@ const FeaturedBooks = ({navigation}) => {
                     });
                     return <Animated.Image 
                     key={`image-${index}`}
-                    source={{uri: image}}
+                    source={{uri: `${imgURL}/featured/${item.bookcover}`}}
                     style={[
                         StyleSheet.absoluteFillObject,
                         {opacity}
@@ -45,7 +52,7 @@ const FeaturedBooks = ({navigation}) => {
                     />
                 })}
             </View>
-            {/* <Text>FEATURED</Text> */}
+            
             <TouchableOpacity
             style={{
               position: 'absolute',
@@ -63,8 +70,21 @@ const FeaturedBooks = ({navigation}) => {
             onPress={navigation.goBack}>
             <Ionicons name="md-arrow-back" size={22} color="#444444" />
           </TouchableOpacity>
+            <View style={styles.header}>
+             <Text style={styles.headerText}>FEATURED BOOKS</Text>
+            </View>
+            {isLoading ? <Loader 
+            style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}/> :
             <Animated.FlatList
-            data={data}
+            data={books}
             onScroll={Animated.event(
                 [{nativeEvent: {contentOffset: {x: scrollX}}}],
                 {useNativeDriver: true}
@@ -73,6 +93,9 @@ const FeaturedBooks = ({navigation}) => {
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={() => (
+                <Text style={styles.emptyText}>No club yet</Text>
+            )}
             renderItem={({item}) => {
                 return <View style={{ 
                     width, justifyContent: 'center', alignItems: 'center',
@@ -84,7 +107,7 @@ const FeaturedBooks = ({navigation}) => {
                     },
                     shadowRadius: 20
                     }}>
-                    <Image source={{uri: item}} style={{
+                    <Image source={{uri: `${imgURL}/featured/${item.bookcover}`}} style={{
                         width: imageW, 
                         height: imageH,
                         resizeMode: 'cover',
@@ -92,9 +115,35 @@ const FeaturedBooks = ({navigation}) => {
                     }} />
                 </View>
             }}
-             />
+             />}
         </View>
     );
 };
 
-export default FeaturedBooks;
+const mapStateToProps = state => ({
+    books: state.feature.books,
+  });
+  
+  export default connect(
+    mapStateToProps,
+    {featBooks},
+  )(FeaturedBooks);
+
+  const styles = StyleSheet.create({
+    emptyText: {
+        fontFamily: 'Nunito-Regular',
+        fontSize: 15,
+        paddingHorizontal: 12,
+      },
+      header: {
+        position: 'absolute',
+        top: 25,
+        zIndex: 2,
+        alignSelf: 'center',
+      },
+      headerText: {
+        fontFamily: 'Nunito-Bold',
+        fontSize: 20,
+        letterSpacing: 1
+      }
+  })

@@ -1,30 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import Config from 'react-native-config';
 
-const Bookstore = ({navigation}) => {
+const imgURL = Config.IMAGE_URL;
+
+const Bookstore = ({navigation, data}) => {
     _renderItem = ({item, index}) => {
         return (
           <TouchableOpacity activeOpacity={0.6} onPress={() => {
-            navigation.navigate('Details')
+              navigation.navigate('Details',{
+                item
+              })
             }}>
             <View
             style={{
               //backgroundColor: 'red',
               padding: 0,
-              width: 100,
-              height: 100,
+              width: 60,
+              height: 60,
               marginRight: 12,
-            borderRadius: 12,
-            overflow: 'hidden',
+             borderRadius: 30,
+             overflow: 'hidden',
             //marginHorizontal: 10,
             }}>
             <Image
-              source={{
-                uri:
-                  'https://images.unsplash.com/photo-1533292362155-d79af6b08b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1651&q=80',
-              }}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+             source={{uri: `${imgURL}/featured/${item.displayimg}`}}
+             style={{width: '100%', height: '100%', resizeMode: 'cover'}}
             />
           </View>
           </TouchableOpacity>
@@ -34,12 +35,15 @@ const Bookstore = ({navigation}) => {
     return (
         <View style={styles.container}>
         <FlatList
-        data={[...Array(8).keys()]}
+        data={data}
           keyExtractor={item => String(item)}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={_renderItem}
           contentContainerStyle={{paddingLeft: 12}}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyText}>No store found</Text>
+        )}
         />
         </View>
     )
@@ -49,7 +53,7 @@ export default Bookstore;
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 15,
+        marginVertical: 15,
     },
     textContainer: {
         padding: 5,
@@ -62,5 +66,9 @@ const styles = StyleSheet.create({
     readingMonth: {
         fontFamily: 'Nunito-Regular',
         fontSize: 11,
-    }
+    },
+    emptyText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 15,
+    },
 })

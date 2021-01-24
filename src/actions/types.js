@@ -46,3 +46,5 @@ export const CHECK_MEMBER = 'CHECK_MEMBER';
 export const GET_ALL_GENRES = 'GET_ALL_GENRES';
 export const USER_JOINED_CLUBS = 'USER_JOINED_CLUBS';
 export const LEAVE_CLUB = 'LEAVE_CLUB';
+export const GET_FEAT_BOOKS = 'GET_FEAT_BOOKS';
+export const GET_FEAT_BOOKSTORE = 'GET_FEAT_BOOKSTORE';

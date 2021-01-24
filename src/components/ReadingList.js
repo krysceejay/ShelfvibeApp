@@ -1,7 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
+import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Config from 'react-native-config';
+import {fetchClubReadList} from '../actions/bookListActions';
 
 const zoomIn = {
     0: {
@@ -15,7 +17,16 @@ const zoomIn = {
   };
 const imgURL = Config.IMAGE_URL;
 
-const ReadingList = ({readList}) => {
+const ReadingList = ({fetchClubReadList, bookLists, clubId}) => {
+
+   useEffect(() => {
+    getClubReadList(clubId);
+  }, [clubId]);
+
+  getClubReadList = async clubid => {
+    await fetchClubReadList(clubid);
+  };
+
     _renderItem = ({item, index}) => {
         return (
             <Animatable.View
@@ -36,7 +47,7 @@ const ReadingList = ({readList}) => {
                 source={{
                   uri: `${imgURL}/bookcover/${item.bookcover}`,
                 }}
-                style={{width: '100%', height: '85%', resizeMode: 'cover', borderRadius: 12,}}
+                style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 12,}}
               />
             <View style={styles.textContainer}>
               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
@@ -51,7 +62,7 @@ const ReadingList = ({readList}) => {
     return (
         <View style={styles.container}>
         <FlatList
-        data={readList}
+        data={bookLists}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -65,14 +76,21 @@ const ReadingList = ({readList}) => {
     )
 }
 
-export default ReadingList;
+const mapStateToProps = state => ({
+  bookLists: state.booklist.bookLists,
+});
+
+export default connect(
+  mapStateToProps,
+  {fetchClubReadList},
+)(ReadingList);
 
 const styles = StyleSheet.create({
     container: {
         marginTop: 15,
     },
     textContainer: {
-        height: '15%',
+        height: '20%',
         marginTop: 3,
         paddingHorizontal: 10,
     },
@@ -81,8 +99,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     readingMonth: {
-        fontFamily: 'Nunito-Regular',
-        fontSize: 11,
+        fontFamily: 'Nunito-SemiBoldItalic',
+        fontSize: 12,
     },
     emptyText: {
       fontFamily: 'Nunito-Regular',

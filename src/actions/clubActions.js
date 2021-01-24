@@ -165,7 +165,7 @@ export const createClub = clubInput => async dispatch => {
         return 'failed';
       }
     }else{
-      img = "noimage.jpg";
+      img = "noimage.png";
     }
 
   const query = `
@@ -249,7 +249,7 @@ export const updateClubAction = clubInput => async dispatch => {
         try {
           const uploadImage = await fileUpload(photo, 'club');
           if(uploadImage.status == 200){
-            if(clubPhoto !== "noimage.jpg"){
+            if(clubPhoto !== "noimage.png"){
               await removeFile('club', clubPhoto);
             }
             img = uploadImage.data.data;
@@ -670,7 +670,7 @@ export const deleteClubAction = clubId => async dispatch => {
   try {
     const deleteClub = await api.post('/', {query});
     if (deleteClub.data.data.deleteClub !== null) {
-      if(deleteClub.data.data.deleteClub.image !== "noimage.jpg"){
+      if(deleteClub.data.data.deleteClub.image !== "noimage.png"){
         await removeFile('club', deleteClub.data.data.deleteClub.image);
       }
       dispatch({
