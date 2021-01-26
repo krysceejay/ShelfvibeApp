@@ -124,7 +124,7 @@ export const getUserJoinedClubs = () => async dispatch => {
       payload: userJoinedClubs.data.data.getJoinedClub,
     });
   } catch (err) {
-    console.log(err);
+    
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
