@@ -5,34 +5,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Share from 'react-native-share';
-import {updateClubPublic, updateClubPublish} from '../actions/clubActions';
 import {favClubAction, removeFavClubAction} from '../actions/favActions';
 import {checkRateClub} from '../actions/rateActions';
 import {AuthContext} from '../utils/context';
 
 
-const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClubPublish, 
-  publicStatus, publishStatus, userFav, favClubAction, removeFavClubAction, owner, checkRateClub}) => {
+const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, removeFavClubAction, checkRateClub}) => {
 
   const user = useContext(AuthContext);
 
     onClosePress = () => {
         closeModal();
       };
-
-      goToPoll = () => {
-        navigation.navigate('Poll', {
-            clubid
-          });
-        closeModal();
-      }
-
-      goToReadingList = () => {
-        navigation.navigate('Reading List', {
-            clubid
-          });
-        closeModal();
-      }
 
       goToReport = () => {
         navigation.navigate('Report', {
@@ -46,16 +30,6 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
         navigation.navigate('Add Review', {
             clubid
           });
-        closeModal();
-      }
-
-      setClubPublic = async () => {
-        await updateClubPublic(clubid);
-        closeModal();
-      }
-
-      setClubPublish = async () => {
-        await updateClubPublish(clubid);
         closeModal();
       }
 
@@ -107,37 +81,6 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
             <View style={styles.body}>
             {user !== null ?
                 <View style={styles.actionContainer}>
-                  {user.id === owner ?
-                  <View>
-                    <TouchableOpacity onPress={goToPoll}>
-                        <View style={styles.actionSingle}>
-                            <MaterialCommunityIcons name="poll" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Poll</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={goToReadingList}>
-                        <View style={styles.actionSingle}>
-                        <MaterialCommunityIcons name="playlist-plus" size={22} color="#444444" />
-                            <Text style={styles.actionText}>Reading List</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={setClubPublish}>
-                        <View style={styles.actionSingle}>
-                        <MaterialCommunityIcons name="file-eye" size={22} color="#444444" />
-                            <Text style={styles.actionText}>
-                                {publishStatus ? "Set as Draft" : "Set as publish"}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={setClubPublic}>
-                        <View style={styles.actionSingle}>
-                        <MaterialCommunityIcons name="security" size={22} color="#444444" />
-                            <Text style={styles.actionText}>
-                                {publicStatus ? "Set as private" : "Set as public"}   
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    </View>:
                     <View>
                     {/* <TouchableOpacity onPress={shareBtn}>
                         <View style={styles.actionSingle}>
@@ -169,7 +112,7 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
                             <Text style={styles.actionText}>Report</Text>
                         </View>
                     </TouchableOpacity>
-                    </View>}
+                    </View>
 
                     <TouchableOpacity onPress={goToAddReview}>
                         <View style={styles.actionSingle}>
@@ -195,7 +138,7 @@ const AdminComp = ({navigation, closeModal, clubid, updateClubPublic, updateClub
 
 export default connect(
   null,
-    {updateClubPublic, updateClubPublish, favClubAction, removeFavClubAction, checkRateClub},
+    {favClubAction, removeFavClubAction, checkRateClub},
   )(AdminComp);
 
 const styles = StyleSheet.create({

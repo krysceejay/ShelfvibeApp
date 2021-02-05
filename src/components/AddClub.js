@@ -174,7 +174,6 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             </Text>
             <TouchableOpacity onPress={onClosePress}
             style={{
-                zIndex: 2,
                 backgroundColor: '#fff',
                 borderRadius: 15,
                 width: 30,

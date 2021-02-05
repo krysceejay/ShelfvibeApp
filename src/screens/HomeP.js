@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Modal } from 'react-native';
 import {connect} from 'react-redux';
 import Bookstore from '../components/Bookstore';
-import {featBookstore} from '../actions/featActions';
+import {featBookstore, featBooks} from '../actions/featActions';
 import Loader from '../components/Loader';
+import FeaturedBooks from '../components/FeaturedBooks';
 
 const dataList = [
     {key: 1},
@@ -12,19 +13,25 @@ const dataList = [
     {key: 4},
   ];
 
-const HomeP = ({navigation, featBookstore, bookstore}) => {
+const HomeP = ({navigation, featBookstore, featBooks, books, bookstore}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
       const getBookstore = await featBookstore();
-      if (getBookstore !== 'failed') {
+      const getBooks = await featBooks();
+      if (getBookstore !== 'failed' && getBooks !== 'failed') {
         setIsLoading(false);
       }
     });
     return unsubscribe;
   }, [navigation]);
+
+  handleOnCloseModal = () => {
+    setModalVisible(false);
+  };
 
     const renderItem = ({item}) => {
         return(
@@ -83,6 +90,30 @@ const HomeP = ({navigation, featBookstore, bookstore}) => {
               {isLoading ? <Loader /> :
                   <Bookstore navigation={navigation} data={bookstore} />
                   }
+                  <TouchableOpacity onPress={() => {
+                      setModalVisible(true);
+                    }}
+                    style={{
+                      backgroundColor: 'red',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    activeOpacity={0.9}
+                    >
+                <Text>See fetured books</Text>
+              </TouchableOpacity>
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}>
+                <View style={styles.memberModalView}>
+                  <FeaturedBooks
+                    closeModal={handleOnCloseModal}
+                    data={books}
+                  />
+                </View>
+              </Modal>
               </View>
               <View style={styles.bottomView}>
                   <View style={styles.feat}>
@@ -113,11 +144,12 @@ const HomeP = ({navigation, featBookstore, bookstore}) => {
 
 const mapStateToProps = state => ({
   bookstore: state.feature.bookstore,
+  books: state.feature.books
 });
 
 export default connect(
   mapStateToProps,
-  {featBookstore},
+  {featBookstore, featBooks},
 )(HomeP);
 
 const styles = StyleSheet.create({
@@ -235,5 +267,17 @@ const styles = StyleSheet.create({
         fontFamily: 'Nunito-SemiBold',
         fontSize: 13,
         color: "#fff"
+      },
+      memberModalView: {
+        flex: 1,
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
       },
 })

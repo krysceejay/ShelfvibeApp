@@ -61,13 +61,17 @@ const clubReducer = (state = initialState, action) => {
     case UPDATE_CLUB_PUBLIC:
       return {
         ...state,
-        club: payload
+        userClubs: state.userClubs.map(userClub =>
+          userClub.id === payload.id ? { ...userClub, public: payload.public } : userClub
+        ),
        };
 
     case UPDATE_CLUB_PUBLISH:
       return {
         ...state,
-        club: payload
+        userClubs: state.userClubs.map(userClub =>
+          userClub.id === payload.id ? { ...userClub, publish: payload.publish } : userClub
+        ),
        };
 
     case UPDATE_CLUB:

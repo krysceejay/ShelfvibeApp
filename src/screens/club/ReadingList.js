@@ -37,7 +37,7 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
   useEffect(() => {
     setIsLoading(true);
     getClubReadList(clubid);
-  }, []);
+  }, [clubid]);
 
   getClubReadList = async clubid => {
     const getReadList = await fetchClubReadList(clubid);

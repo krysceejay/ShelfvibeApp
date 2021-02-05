@@ -30,7 +30,7 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
   useEffect(() => {
     setIsLoading(true);
     getClubPolls(clubid);
-  }, []);
+  }, [clubid]);
 
   getClubPolls = async clubid => {
     const getPolls = await fetchClubPolls(clubid);

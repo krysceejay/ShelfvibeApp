@@ -10,16 +10,15 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import {AuthContext} from '../../utils/context';
 import {getUserClubs} from '../../actions/clubActions';
 import AddClub from '../../components/AddClub';
 import EditClub from '../../components/EditClub';
-import {stringToHslColor} from '../../utils/theme';
+import Manage from '../../components/Manage';
 import Skeleton from '../../components/Skeleton';
-import Empty from '../../components/Empty';
 
 const numColumns = 1;
 const imgURL = Config.IMAGE_URL;
@@ -89,7 +88,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
             }}
             activeOpacity={0.9}
             onPress={() => {handleOnSelectItem(item)}}>
-            <FontAwesome name="edit" size={22} color="#444444" />
+            <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
           </TouchableOpacity>
           </View>
           <View style={styles.afterName}>
@@ -143,7 +142,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           <Text style={styles.emptyText}>Looks like you have not added any club.</Text>
       )}
       />
-      <Modal
+      {/* <Modal
         animationType="fade"
         transparent={true}
         visible={selectedItem ? true : false}>
@@ -153,6 +152,18 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
             item={selectedItem}
           />
         </View>
+      </Modal> */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={selectedItem ? true : false}>
+          <TouchableOpacity onPress={handleOnCloseEditModal} activeOpacity={1} style={styles.modalView}>
+            <Manage
+            closeModal = {handleOnCloseEditModal}
+            item={selectedItem}
+            navigation={navigation}
+            />
+          </TouchableOpacity>
       </Modal>
       </>
       }
@@ -284,5 +295,11 @@ const styles = StyleSheet.create({
       fontSize: 15,
       paddingHorizontal: 12,
       marginTop: 15
+    },
+    modalView: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+     justifyContent: 'center',
+     alignItems: 'center'
     },
 });

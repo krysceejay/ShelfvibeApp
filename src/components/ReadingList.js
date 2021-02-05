@@ -1,9 +1,7 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
-import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Config from 'react-native-config';
-import {fetchClubReadList} from '../actions/bookListActions';
 
 const zoomIn = {
     0: {
@@ -17,15 +15,7 @@ const zoomIn = {
   };
 const imgURL = Config.IMAGE_URL;
 
-const ReadingList = ({fetchClubReadList, bookLists, clubId}) => {
-
-   useEffect(() => {
-    getClubReadList(clubId);
-  }, [clubId]);
-
-  getClubReadList = async clubid => {
-    await fetchClubReadList(clubid);
-  };
+const ReadingList = ({ bookLists}) => {
 
     _renderItem = ({item, index}) => {
         return (
@@ -76,14 +66,7 @@ const ReadingList = ({fetchClubReadList, bookLists, clubId}) => {
     )
 }
 
-const mapStateToProps = state => ({
-  bookLists: state.booklist.bookLists,
-});
-
-export default connect(
-  mapStateToProps,
-  {fetchClubReadList},
-)(ReadingList);
+export default ReadingList;
 
 const styles = StyleSheet.create({
     container: {

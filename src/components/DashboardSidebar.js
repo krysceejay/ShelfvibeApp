@@ -14,10 +14,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from "moment";
+import Config from 'react-native-config';
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
 import {AuthContext} from '../utils/context';
 import {stringToHslColor} from '../utils/theme';
+
+const proURL = Config.IMAGE_URL;
 
 const DashboardSidebar = props => {
   const user = useContext(AuthContext);
@@ -64,7 +67,9 @@ const DashboardSidebar = props => {
             {user.propix !== "noimage.png" ?
             <Image
               style={styles.avatar}
-              source={require('../assets/img/avatar.jpg')}
+              source={{
+                uri: `${proURL}/profiles/${user.propix}`,
+              }}
               size={50}
             /> : <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(user.username)}]}>
             <Text style={styles.initial}>{user.username.charAt(0)}</Text>

@@ -6,8 +6,6 @@ import Rating from '../club/Rating';
 import AllRatings from '../club/AllRatings';
 import Club from '../club/Club';
 import Details from '../club/Details';
-import Poll from '../club/Poll';
-import ReadingList from '../club/ReadingList';
 import Report from '../club/Report';
 import AddReview from '../club/AddReview';
 
@@ -55,8 +53,6 @@ const ShelfStack = () => {
           );
         },
       }}/> */}
-      <Stack.Screen name="Poll" component={Poll} />
-      <Stack.Screen name="Reading List" component={ReadingList} />
       <Stack.Screen name="Rating" component={Rating} />
       <Stack.Screen name="All Ratings" component={AllRatings} />
       <Stack.Screen name="Report" component={Report} />

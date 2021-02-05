@@ -29,6 +29,18 @@ export const fetchClubs = () => async dispatch => {
             members{
               id
             }
+            polls{
+              books
+              current
+              pollName
+              id
+            }
+            lists{
+              title
+              bookcover
+              current
+              id
+            }
           }
         }
     `;
@@ -68,6 +80,18 @@ export const getUserClubs = id => async dispatch => {
               id
             }
             members{
+              id
+            }
+            polls{
+              books
+              current
+              pollName
+              id
+            }
+            lists{
+              title
+              bookcover
+              current
               id
             }
           }
@@ -110,6 +134,18 @@ export const getUserJoinedClubs = () => async dispatch => {
               id
             }
             members{
+              id
+            }
+            polls{
+              books
+              current
+              pollName
+              id
+            }
+            lists{
+              title
+              bookcover
+              current
               id
             }
           }
@@ -186,6 +222,18 @@ export const createClub = clubInput => async dispatch => {
           id
         }
         members{
+          id
+        }
+        polls{
+          books
+          current
+          pollName
+          id
+        }
+        lists{
+          title
+          bookcover
+          current
           id
         }
       }
@@ -289,6 +337,18 @@ export const updateClubAction = clubInput => async dispatch => {
           id
         }
         members{
+          id
+        }
+        polls{
+          books
+          current
+          pollName
+          id
+        }
+        lists{
+          title
+          bookcover
+          current
           id
         }
       }
@@ -535,8 +595,6 @@ export const updateClubPublic = clubId => async dispatch => {
         clubPublic(clubId: ${clubId}){
           id
           public
-          publish
-          name
         }
       }
   `;
@@ -566,9 +624,7 @@ export const updateClubPublish = clubId => async dispatch => {
       mutation {
         clubPublish(clubId: ${clubId}){
           id
-          public
           publish
-          name
         }
       }
   `;
@@ -697,21 +753,6 @@ export const leaveClubAction = clubId => async dispatch => {
         leaveClub(clubId: ${clubId}){
           club{
               id
-              image
-              name
-              public
-              insertedAt
-              updatedAt
-              description
-              genre
-              publish
-              user{
-                username
-                id
-              }
-              members{
-                id
-              }
             }
           }
       }

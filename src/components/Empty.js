@@ -14,8 +14,8 @@ const Empty = props => {
     <View style={styles.container}>
       <Svg
         data-name="Layer 1"
-        height={300}
-        width={300}
+        height="100%"
+        width="100%"
         viewBox="0 0 1009.54 789.93"
         {...props}>
         <Defs>
@@ -304,11 +304,8 @@ export default Empty;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    //backgroundColor: 'red',
+    alignSelf: 'center',
+    height: 350,
+    width: 350
   },
 });

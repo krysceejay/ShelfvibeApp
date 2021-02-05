@@ -91,7 +91,6 @@ const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
             </Text>
             <TouchableOpacity onPress={onClosePress}
             style={{
-                zIndex: 2,
                 backgroundColor: '#fff',
                 borderRadius: 15,
                 width: 30,

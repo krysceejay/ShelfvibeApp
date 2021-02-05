@@ -7,8 +7,6 @@ import JoinedClub from '../dashboard/JoinedList';
 import Details from '../club/Details';
 import Rating from '../club/Rating';
 import AllRatings from '../club/AllRatings';
-import Poll from '../club/Poll';
-import ReadingList from '../club/ReadingList';
 import Report from '../club/Report';
 import AddReview from '../club/AddReview';
 
@@ -57,12 +55,6 @@ const JoinedListStack = ({navigation}) => {
           headerRight: null
         }}
       />
-      <Stack.Screen name="Poll" component={Poll} options={{
-          headerRight: null
-        }} />
-      <Stack.Screen name="Reading List" component={ReadingList} options={{
-          headerRight: null
-        }} />
       <Stack.Screen name="Report" component={Report} options={{
 
           headerRight: null

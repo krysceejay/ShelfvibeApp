@@ -22,17 +22,15 @@ import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
 import {stringToHslColor} from '../../utils/theme';
-import {fetchClubMembers, getSingleClub, createMemberAction, checkMemberClub} from '../../actions/clubActions';
-import {fetchClubPolls} from '../../actions/pollActions';
+import {fetchClubMembers, createMemberAction, checkMemberClub} from '../../actions/clubActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
 import {getClubRatingsAction} from '../../actions/rateActions';
 import {AuthContext} from '../../utils/context';
 
 const imgURL = Config.IMAGE_URL;
 
-const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
-    fetchClubPolls, getFavByUserAndClub, createMemberAction, checkMemberClub, 
-   getClubRatingsAction, members, userFavClub, club, ratings, isMember}) => {
+const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, createMemberAction, checkMemberClub, 
+   getClubRatingsAction, members, userFavClub, ratings, isMember}) => {
   const {item} = route.params;
   const user = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,37 +38,24 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
   const [adminModal, setAdminModal] = useState(false);
 
   useEffect(() => {
-    getClub(item.id);
     getClubRatings(item.id);
     getClubMembers(item.id);
-    getClubPolls(item.id);
     checkFav(item.id);
     checkMember(item.id);
-  }, [item.id]);
+  }, [navigation, item.id]);
 
   // useEffect(() => {
   //   const unsubscribe = async () => {
-  //     getClub(item.id);
   //     getClubRatings(item.id);
-  //     getClubMembers(item.id);
-  //     getClubReadList(item.id);
-  //     getClubPolls(item.id);
-  //     checkFav(item.id);
-  //     checkMember(item.id);
+  //    getClubMembers(item.id);
+  //    checkFav(item.id);
+  //    checkMember(item.id);
   //   };
   //   return unsubscribe;
-  // }, [item.id]);
-
-  getClub = async clubid => {
-    await getSingleClub(clubid);
-  };
+  // }, [navigation, item.id]);
 
   getClubRatings = async clubid => {
     await getClubRatingsAction(clubid);
-  };
-
-  getClubPolls = async clubid => {
-    await fetchClubPolls(clubid);
   };
 
   getClubMembers = async clubid => {
@@ -137,8 +122,8 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     return actualRating;
   };
 
-  if (polls.length !== 0) {
-    currentPoll = polls.find(poll => {
+  if (item.polls.length !== 0) {
+    currentPoll = item.polls.find(poll => {
       return poll.current == true; 
     });
     if(currentPoll == undefined) currentPoll = {};
@@ -163,11 +148,11 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
     }
     const userJoinClub = await createMemberAction({
       clubId: item.id,
-      status: club.public
+      status: item.public
     });
 
     if (userJoinClub !== 'failed') {
-      if(club.public){
+      if(item.public){
         Alert.alert('Success', 'You have joined this club!!!');
       }else{
         Alert.alert('Success', 'The owner of this private book club has been notified. Kindly wait for approval. Thanks.');
@@ -248,11 +233,8 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                     <AdminComp
                       closeModal={handleOnCloseAdmin}
                       navigation={navigation}
-                      clubid={item.id}
-                      publicStatus={club.public}
-                      publishStatus={club.publish}
                       userFav={userFavClub}
-                      owner={item.user.id}
+                      clubid = {item.id}
                     />
                   </TouchableOpacity>
               </Modal>
@@ -302,7 +284,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
                     size={22}
                     color="#373435"
                   />
-                  {club.public ? 
+                  {item.public ? 
                     <View style={styles.detailsTextPublic}>
                       <Text style={styles.justTextPublic}>public</Text>
                     </View> :
@@ -329,7 +311,7 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
               </TouchableWithoutFeedback> */}
               
             </View>
-              <ReadingList clubId={item.id} />
+              <ReadingList bookLists={item.lists} />
           </View>
           <View style={styles.clubMembersContainer}>
           <Text style={styles.listTitle}>Club Members</Text>
@@ -406,18 +388,15 @@ const Details = ({route, navigation, polls, fetchClubMembers, getSingleClub,
 };
 
 const mapStateToProps = state => ({
-  club: state.club.club,
   ratings: state.rate.ratings,
   members: state.club.members,
   isMember: state.club.isMember,
   userFavClub: state.fav.userFavClub,
-  polls: state.poll.polls,
 });
 
 export default connect(
   mapStateToProps,
-  {fetchClubPolls, fetchClubMembers,
-    getSingleClub, getFavByUserAndClub, getClubRatingsAction,
+  {fetchClubMembers, getFavByUserAndClub, getClubRatingsAction,
     createMemberAction, checkMemberClub},
 )(Details);
 

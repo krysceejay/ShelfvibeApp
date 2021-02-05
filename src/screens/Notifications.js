@@ -1,81 +1,182 @@
-import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Dimensions} from 'react-native';
+import moment from "moment";
+import Config from 'react-native-config';
+import {userNotificationAction, userSeenNoteAction} from '../actions/notificationActions';
+import Empty from '../components/Empty';
+import {stringToHslColor} from '../utils/theme';
 
-const dataList = [
-  {key: "1"},
-  {key: "2"},
-  {key: "3"},
-  {key: "4"},
-  {key: "5"},
-  {key: "6"},
-  {key: "7"},
-  {key: "8"},
-  {key: "9"},
-  {key: "10"},
-];
+const proURL = Config.IMAGE_URL;
 
-const Notifications = () => {
+const { width, height } = Dimensions.get('screen');
+
+const Notifications = ({userNotificationAction, userSeenNoteAction, notifications, navigation}) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      await userSeenNoteAction();
+      const getNotify = await userNotificationAction();
+      if (getNotify !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const Message = ({data}) => {
+    const {type, senderUser, club} = data;
+    let msg;
+    switch (type) {
+      case 'JOIN_CLUB':
+          msg = <View style={styles.message}>
+            <TouchableOpacity style={{marginHorizontal: 3}}>
+              <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+              </TouchableOpacity>
+              <Text>has joined your club</Text>
+              <TouchableOpacity style={{marginHorizontal: 3}}
+              onPress={() => {
+                navigation.navigate('Details', {
+                  item: club
+                });
+              }}>
+              <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+              </TouchableOpacity>
+                 </View>
+        break;
+
+      case 'LIKE_CLUB':
+          msg = <View style={styles.message}>
+                  <TouchableOpacity style={{marginHorizontal: 3}}>
+                   <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                  </TouchableOpacity>
+                  <Text>has liked your club</Text>
+                  <TouchableOpacity style={{marginHorizontal: 4}}
+                  onPress={() => {
+                    navigation.navigate('Details', {
+                      item: club
+                    });
+                  }}>
+                  <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                </TouchableOpacity>
+                </View>
+        break;
+    
+      default:
+        break;
+    }
+    return msg;
+  }
 
   const renderItem = ({item}) => {
-    return ( <TouchableOpacity activeOpacity={0.6} onPress={() => {}} style={styles.userInfoSection}>
-        <View style={{flexDirection: 'row', width: '100%'}}>
-          <Image
+    return ( <View style={styles.userInfoSection}>
+          {item.senderUser.propix !== "noimage.png" ?
+            <Image
               style={styles.avatar}
-              source={require('../assets/img/avatar.jpg')}
-            />
-        <View style={{width: '85%', paddingHorizontal: 10}}>
-          <Text style={styles.username}>Kryso has joined your club Designer's 1 Club benm
-          Krysomm has joined your club Designer's Club</Text>
-          <Text style={styles.caption}>2 min ago</Text>
-        </View>
-        </View>
-      </TouchableOpacity>
+              source={{
+                uri: `${proURL}/profiles/${item.senderUser.propix}`,
+              }}
+            /> : <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(item.senderUser.username)}]}>
+            <Text style={styles.initial}>{item.senderUser.username.charAt(0)}</Text>
+           </View>}
+
+            <View style={{paddingLeft: 10, maxWidth: '90%'}}>
+              <Message data={item} />
+              <Text style={styles.caption}> {moment(item.insertedAt).startOf('second').fromNow()}</Text>
+            </View>
+      </View>
       )
     };
 
   return (
     <View style={styles.center}>
       <FlatList
-          data={dataList}
+          data={notifications}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => (
-            <Text style={styles.reviewText}>No notifications yet</Text>
+            <View style={{
+              position: 'absolute', 
+              top: height/5,
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              width
+              }}>
+              <Empty />
+              <Text style={styles.textBody}>No notifications yet</Text>
+            </View>
           )}
         /> 
     </View>
   );
 };
 
-export default Notifications;
+const mapStateToProps = state => ({
+  notifications: state.notify.notifications
+});
+
+export default connect(
+  mapStateToProps,
+  {userNotificationAction, userSeenNoteAction},
+)(Notifications);
 
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    //marginHorizontal: 12,
-    backgroundColor: '#fff'
+    backgroundColor: '#eee'
   },
   userInfoSection: {
-    paddingVertical: 5,
+    flexDirection: 'row',
+    paddingVertical: 15,
+    paddingHorizontal: 12,
     marginVertical: 6,
     marginHorizontal: 12,
     backgroundColor: '#fff',
-    width: '100%',
+    borderRadius: 10,
+    //width: '100%',
   },
   avatar: {
     height: 40,
     width: 40,
     borderRadius: 20,
   },
-  username: {
-    fontSize: 14,
+  message: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    // fontSize: 14,
     marginBottom: 3,
-    //fontWeight: 'bold',
-    fontFamily: 'Nunito-Regular',
+    // //fontWeight: 'bold',
+    // fontFamily: 'Nunito-Regular',
+    //backgroundColor: 'red'
   },
   caption: {
     fontSize: 13,
     fontFamily: 'Nunito-Light',
   },
+  textBody: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 18,
+    marginVertical: 5,
+  },
+  clubMembersSingle:{
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderColor: '#f3fbfd',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initial: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 18,
+    color: '#fff',
+    textTransform: 'uppercase'
+  }
 });
