@@ -1,4 +1,4 @@
-import {GET_NOTIFICATIONS, NOT_SEEN_NOTIFICATIONS, SEEN_NOTIFICATIONS} from './types';
+import {GET_NOTIFICATIONS, NOT_SEEN_NOTIFICATIONS, SEEN_NOTIFICATIONS, SEND_NOTIFICATION} from './types';
 import api from '../utils/api';
 
 //GET USER NOTIFICATION
@@ -97,3 +97,33 @@ export const userSeenNoteAction = () => async dispatch => {
       return 'failed';
     }
   };
+
+  //SEND USER NOTIFICATION
+export const sendNotificationAction = notificationInput => async dispatch => {
+    const {clubId, receiverUserId, type} = notificationInput;
+    const query = `
+    mutation CreateClub($clubId: ID!, $receiverUserId: ID!, $type: String!){
+        sendNotification(clubId: $clubId, receiverUserId: $receiverUserId, input: {type: $type}){
+          id
+        }
+      }
+    `;
+    try {
+      const sendNote = await api.post('/', {query,
+        variables: {
+            clubId,
+            receiverUserId,
+            type
+          }
+        });
+      if (sendNote.data.data.sendNotification !== null) {
+        dispatch({
+          type: SEND_NOTIFICATION
+        });
+      } else {
+        return 'failed';
+      }
+    } catch (err) {
+      return 'failed';
+    }
+  }

@@ -304,8 +304,7 @@ export default Empty;
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: 'center',
-    height: 350,
-    width: 350
+    height: 150,
+    width: 150
   },
 });

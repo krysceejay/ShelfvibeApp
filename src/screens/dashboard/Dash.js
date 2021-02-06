@@ -47,7 +47,7 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 <TouchableOpacity activeOpacity={0.6} onPress={() => {
                   navigation.navigate('ManageShelf');
                 }}>
-                  <Text style={styles.title}>See all</Text>
+                  <Text style={styles.title}>View</Text>
                 </TouchableOpacity>
               </View>
               <DashClubs data={userClubs.slice(0, 4)} />
@@ -58,7 +58,7 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 <TouchableOpacity activeOpacity={0.6} onPress={() => {
                   navigation.navigate('JoinedList');
                 }}>
-                  <Text style={styles.title}>See all</Text>
+                  <Text style={styles.title}>View</Text>
                 </TouchableOpacity>
               </View>
               <DashJoined data={joinedClub.slice(0, 4)} />

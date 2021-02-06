@@ -13,7 +13,6 @@ import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import {getUserJoinedClubs, leaveClubAction} from '../../actions/clubActions';
-import {stringToHslColor} from '../../utils/theme';
 import Skeleton from '../../components/Skeleton';
 import {AuthContext} from '../../utils/context';
 
@@ -122,7 +121,9 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 40}}
         ListEmptyComponent={() => (
+          <View style={{flex: 1, justifyContent: 'center', alignSelf: 'center', height: 600}}>
           <Text style={styles.emptyText}>You have not joined any club yet.</Text>
+          </View>
       )}
       />
       }
@@ -243,6 +244,14 @@ const styles = StyleSheet.create({
       fontSize: 19,
       color: '#fff',
       textTransform: 'uppercase'
+    },
+    emptyText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 25,
+      paddingHorizontal: 12,
+      marginTop: 15,
+      textAlign: 'center',
+      color: '#bbb'
     },
 });
 

@@ -25,12 +25,13 @@ import {stringToHslColor} from '../../utils/theme';
 import {fetchClubMembers, createMemberAction, checkMemberClub} from '../../actions/clubActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
 import {getClubRatingsAction} from '../../actions/rateActions';
+import {sendNotificationAction} from '../../actions/notificationActions';
 import {AuthContext} from '../../utils/context';
 
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, createMemberAction, checkMemberClub, 
-   getClubRatingsAction, members, userFavClub, ratings, isMember}) => {
+   getClubRatingsAction, sendNotificationAction, members, userFavClub, ratings, isMember}) => {
   const {item} = route.params;
   const user = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -97,7 +98,9 @@ const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, crea
       return <View key={index} style={[styles.clubMembersSingle, {left}]}>
           <Image
             style={styles.memberAvatar}
-            source={require('../../assets/img/avatar.jpg')}
+            source={{
+              uri: `${imgURL}/profiles/${item.user.propix}`,
+            }}
           />
       </View>
     }else{
@@ -152,6 +155,11 @@ const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, crea
     });
 
     if (userJoinClub !== 'failed') {
+      await sendNotificationAction({
+        clubId: item.id,
+        receiverUserId: item.user.id,
+        type: "JOIN_CLUB"
+      })
       if(item.public){
         Alert.alert('Success', 'You have joined this club!!!');
       }else{
@@ -397,7 +405,7 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {fetchClubMembers, getFavByUserAndClub, getClubRatingsAction,
-    createMemberAction, checkMemberClub},
+    createMemberAction, checkMemberClub, sendNotificationAction},
 )(Details);
 
 const styles = StyleSheet.create({

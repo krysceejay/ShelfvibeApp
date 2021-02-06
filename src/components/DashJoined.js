@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
 import Config from 'react-native-config';
-import {stringToHslColor} from '../utils/theme';
 
 const imgURL = Config.IMAGE_URL;
 
@@ -46,7 +45,9 @@ const DashJoined = ({data}) => {
           renderItem={_renderItem}
           contentContainerStyle={{paddingLeft: 12}}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>No club yet</Text>
+            <View style={{ paddingBottom: 30}}>
+          <Text style={styles.emptyText}>You have not joined any club yet.</Text>
+          </View>
         )}
         />
         </View>
@@ -89,5 +90,12 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: '#fff',
       textTransform: 'uppercase'
+    },
+    emptyText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 20,
+      paddingHorizontal: 12,
+      marginTop: 15,
+      color: '#bbb'
     },
 })

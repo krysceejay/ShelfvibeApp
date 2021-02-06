@@ -16,7 +16,6 @@ import moment from "moment";
 import {AuthContext} from '../../utils/context';
 import {getUserClubs} from '../../actions/clubActions';
 import AddClub from '../../components/AddClub';
-import EditClub from '../../components/EditClub';
 import Manage from '../../components/Manage';
 import Skeleton from '../../components/Skeleton';
 
@@ -139,7 +138,9 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 40}}
         ListEmptyComponent={() => (
+          <View style={{flex: 1, justifyContent: 'center', alignSelf: 'center', height: 600}}>
           <Text style={styles.emptyText}>Looks like you have not added any club.</Text>
+          </View>
       )}
       />
       {/* <Modal
@@ -292,9 +293,11 @@ const styles = StyleSheet.create({
     },
     emptyText: {
       fontFamily: 'Nunito-Regular',
-      fontSize: 15,
+      fontSize: 25,
       paddingHorizontal: 12,
-      marginTop: 15
+      marginTop: 15,
+      textAlign: 'center',
+      color: '#bbb'
     },
     modalView: {
       flex: 1,

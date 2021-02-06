@@ -5,6 +5,7 @@ import moment from "moment";
 import Config from 'react-native-config';
 import {userNotificationAction, userSeenNoteAction} from '../actions/notificationActions';
 import Empty from '../components/Empty';
+import EmptyIcon from '../components/EmptyIcon';
 import {stringToHslColor} from '../utils/theme';
 
 const proURL = Config.IMAGE_URL;
@@ -100,11 +101,9 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => (
             <View style={{
-              position: 'absolute', 
-              top: height/5,
               justifyContent: 'center', 
-              alignItems: 'center', 
-              width
+              alignItems: 'center',
+              height: 500
               }}>
               <Empty />
               <Text style={styles.textBody}>No notifications yet</Text>

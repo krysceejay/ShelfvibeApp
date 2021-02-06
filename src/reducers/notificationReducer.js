@@ -1,4 +1,4 @@
-import {GET_NOTIFICATIONS, NOT_SEEN_NOTIFICATIONS, SEEN_NOTIFICATIONS} from '../actions/types';
+import {GET_NOTIFICATIONS, NOT_SEEN_NOTIFICATIONS, SEEN_NOTIFICATIONS, SEND_NOTIFICATION} from '../actions/types';
   
   const initialState = {
     notifications: [],
@@ -27,6 +27,9 @@ import {GET_NOTIFICATIONS, NOT_SEEN_NOTIFICATIONS, SEEN_NOTIFICATIONS} from '../
             ...state, 
             notSeenNote: []
          };
+
+    case SEND_NOTIFICATION:
+        return state;
   
       default:
         return state;
