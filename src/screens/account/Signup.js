@@ -82,6 +82,7 @@ const Signup = ({signup, navigation}) => {
         <KeyboardAwareScrollView
           resetScrollToCoords={{x: 0, y: 0}}
           scrollEnabled={true}
+          extraHeight={10}
           showsVerticalScrollIndicator={false}>
           <View style={styles.action}>
             <Ionicons name="ios-person" color="#333" size={25} />

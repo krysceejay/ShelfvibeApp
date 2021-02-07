@@ -3,6 +3,7 @@ import {
   LOGOUT,
   STILL_LOGGEDIN,
   USER_SIGNUP,
+  USER_UPDATE
 } from '../actions/types';
 
 const initialState = {
@@ -13,11 +14,12 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const { type, payload } = action;
+  switch (type) {
     case SET_LOGIN_STATE:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       };
 
     case LOGOUT:
@@ -31,7 +33,7 @@ const authReducer = (state = initialState, action) => {
     case STILL_LOGGEDIN:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       };
 
     case USER_SIGNUP:
@@ -39,6 +41,12 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isLoggedIn: false,
       };
+
+    case USER_UPDATE:
+      return {
+        ...state,
+        user: payload
+      };  
 
     default:
       return state;

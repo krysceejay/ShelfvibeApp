@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashClubs from '../../components/DashClubs';
@@ -47,7 +47,9 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 <TouchableOpacity activeOpacity={0.6} onPress={() => {
                   navigation.navigate('ManageShelf');
                 }}>
-                  <Text style={styles.title}>View</Text>
+                  {userClubs.length > 4 &&
+                  <Text style={styles.title}>See all</Text>
+                  }
                 </TouchableOpacity>
               </View>
               <DashClubs data={userClubs.slice(0, 4)} />
@@ -58,7 +60,9 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 <TouchableOpacity activeOpacity={0.6} onPress={() => {
                   navigation.navigate('JoinedList');
                 }}>
-                  <Text style={styles.title}>View</Text>
+                  {joinedClub.length > 4 &&
+                  <Text style={styles.title}>See all</Text>
+                  }
                 </TouchableOpacity>
               </View>
               <DashJoined data={joinedClub.slice(0, 4)} />

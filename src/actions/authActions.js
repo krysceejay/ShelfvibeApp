@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN, USER_SIGNUP} from './types';
+import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN, USER_SIGNUP, USER_UPDATE} from './types';
 import api from '../utils/api';
 
 export const setLoginState = loginData => {
@@ -14,10 +14,17 @@ const setLoginLocal = async loginData => {
   try {
     await AsyncStorage.setItem('loginData', JSON.stringify(loginData));
   } catch (err) {
-    Alert.alert(
-      'Error',
-      'Some error occured, please check your internet connection and retry',
-    );
+    return 'failed';
+  }
+};
+const updateLocalStorage = async userData => {
+  try {
+    const storedData = await AsyncStorage.getItem('loginData');
+    const storedDataParse = JSON.parse(storedData);
+    const newData = {...storedDataParse, user: userData};
+    await AsyncStorage.setItem('loginData', JSON.stringify(newData));
+  } catch (err) {
+    return 'failed';
   }
 };
 
@@ -37,10 +44,7 @@ export const getLoginLocal = () => async dispatch => {
       });
     }
   } catch (err) {
-    Alert.alert(
-      'Error',
-      'Some error occured, please check your internet connection and retry',
-    );
+    return 'failed';
   }
 };
 
@@ -140,6 +144,69 @@ export const signup = signupInput => async dispatch => {
       const errorMessages = signUpUser.data.data.registerUser.messages;
       Alert.alert(
         'Signup Failed',
+        'Please make sure you provide the required data',
+      );
+      return errorMessages;
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+//UPDATE USER
+export const updateUserAction = updateInput => async dispatch => {
+  const {firstname, lastname, userName, aboutMe} = updateInput;
+  const query = `
+    mutation UpdateUser($aboutMe: String!, $firstname: String!, $lastname: String!, $userName: String!){
+      updateUser(input: {about: $aboutMe, firstName: $firstname, lastName: $lastname, username: $userName}){
+        result{
+          id
+          email
+          firstName
+          lastName
+          status
+          username
+          about
+          propix
+          insertedAt
+          updatedAt
+          role {
+            name
+          }
+        }
+        successful
+        messages{
+          code
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  try {
+    const updateUser = await api.post('/', {query,
+      variables: {
+        firstname, 
+        lastname, 
+        userName, 
+        aboutMe
+      }
+    });
+    if (updateUser.data.data.updateUser.successful === true) {
+      updateLocalStorage(updateUser.data.data.updateUser.result); // update local storage
+      dispatch({
+        type: USER_UPDATE,
+        payload: updateUser.data.data.updateUser.result
+      });
+    } else {
+      const errorMessages = updateUser.data.data.updateUser.messages;
+      Alert.alert(
+        'Update Failed',
         'Please make sure you provide the required data',
       );
       return errorMessages;

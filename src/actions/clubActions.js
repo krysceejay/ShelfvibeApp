@@ -106,10 +106,6 @@ export const getUserClubs = id => async dispatch => {
       payload: userClubs.data.data.user.clubs,
     });
   } catch (err) {
-    Alert.alert(
-      'Error',
-      'Some error occured, please check your internet connection and retry.',
-    );
     return 'failed';
   }
 };
@@ -160,11 +156,6 @@ export const getUserJoinedClubs = () => async dispatch => {
       payload: userJoinedClubs.data.data.getJoinedClub,
     });
   } catch (err) {
-    
-    Alert.alert(
-      'Error',
-      'Some error occured, please check your internet connection and retry.',
-    );
     return 'failed';
   }
 };

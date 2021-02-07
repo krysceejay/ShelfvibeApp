@@ -138,7 +138,7 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('JoinedList');
               }}
             />
-            {/* <DrawerItem
+            <DrawerItem
               label="Profile"
               labelStyle={{
                 fontSize: 16,
@@ -148,7 +148,7 @@ const DashboardSidebar = props => {
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
-            /> */}
+            />
           </View>
         </View>
       </DrawerContentScrollView>
