@@ -10,7 +10,8 @@ import {checkRateClub} from '../actions/rateActions';
 import {AuthContext} from '../utils/context';
 
 
-const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, removeFavClubAction, checkRateClub}) => {
+const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, 
+  removeFavClubAction, checkRateClub, ownerId}) => {
 
   const user = useContext(AuthContext);
 
@@ -28,7 +29,8 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, remo
       goToAddReview = async () => {
         await checkRateClub(clubid);
         navigation.navigate('Add Review', {
-            clubid
+            clubid,
+            ownerId
           });
         closeModal();
       }
@@ -92,7 +94,7 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, remo
                       <View style={styles.actionSingle}>
                       <FontAwesome name="heart" size={22} color="#444444" />
                           <Text style={styles.actionText}>
-                            UnFavorite
+                            Unlike
                           </Text>
                       </View>
                     </TouchableOpacity> : 
@@ -100,7 +102,7 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, remo
                       <View style={styles.actionSingle}>
                       <FontAwesome name="heart-o" size={22} color="#444444" />
                           <Text style={styles.actionText}>
-                            Favorite
+                            Like
                           </Text>
                       </View>
                     </TouchableOpacity>

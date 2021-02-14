@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import RatingStarGroup from '../../components/RatingStarGroup';
 import {rateClub, updateRateClub} from '../../actions/rateActions';
+import {sendNotificationAction} from '../../actions/notificationActions';
+import {AuthContext} from '../../utils/context';
 
 
-const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation}) => {
-    const {clubid} = route.params;
+const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation, sendNotificationAction}) => {
+    const {clubid, ownerId} = route.params;
+    const user = useContext(AuthContext);
     const [formData, setFormData] = useState({
         userRating: 0,
         userComment: '',
@@ -56,6 +59,13 @@ const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation}) => {
               setErrorMsg(errMsges);
             }
           } else {
+            if(ownerId !== user.id){
+              await sendNotificationAction({
+                clubId: clubid,
+                receiverUserId: ownerId,
+                type: "ADD_REVIEW"
+              })
+            }
             Alert.alert(
               'Success!',
               'Your review was added successfully',
@@ -121,7 +131,7 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    {rateClub, updateRateClub},
+    {rateClub, updateRateClub, sendNotificationAction},
   )(AddReview);
 
 const styles = StyleSheet.create({

@@ -14,7 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {resendVerifyAction} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
-const Forgotpass = ({resendVerifyAction, navigation}) => {
+const ResendCode = ({resendVerifyAction, navigation}) => {
   const [formData, setFormData] = useState({
     useremail: '',
     isLoading: false,
@@ -34,7 +34,7 @@ const Forgotpass = ({resendVerifyAction, navigation}) => {
     if (resendCode == 'failed') {
       setFormData({...formData, isLoading: false});
     }else {
-      navigation.navigate('Verify', {useremail, screen: 'forgotpass'});
+      navigation.navigate('Verify', {useremail, screen: 'resend'});
     } 
   };
 
@@ -50,8 +50,8 @@ const Forgotpass = ({resendVerifyAction, navigation}) => {
               <TextInput
                 placeholder="Your email..."
                 style={styles.textInput}
-                autoCapitalize="none"
                 value={useremail}
+                autoCapitalize="none"
                 onChangeText={onChange('useremail')}
               />
             </View>
@@ -59,7 +59,7 @@ const Forgotpass = ({resendVerifyAction, navigation}) => {
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={resendCodeAction}>
-              <Text style={styles.textSign}>Submit</Text>
+              <Text style={styles.textSign}>Resend Code</Text>
             </TouchableOpacity>
           </View>
         </Animatable.View>
@@ -85,7 +85,7 @@ const Forgotpass = ({resendVerifyAction, navigation}) => {
   export default connect(
     null,
     {resendVerifyAction},
-  )(Forgotpass);
+  )(ResendCode); 
 
 const styles = StyleSheet.create({
   container: {

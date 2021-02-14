@@ -39,12 +39,18 @@ export const userNotificationAction = () => async dispatch => {
                     current
                     id
                 }
-            }
-            senderUser{
-              id
-              username
-              propix
-            }
+              }
+              senderUser{
+                id
+                email
+                firstName
+                lastName
+                status
+                username
+                about
+                propix
+                insertedAt
+              }
             }
           }
       `;

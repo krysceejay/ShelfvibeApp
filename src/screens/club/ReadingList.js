@@ -14,9 +14,7 @@ import {
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import {fetchBooks} from '../../actions/bookActions';
-import Skeleton from '../../components/Skeleton';
+import Loader from '../../components/Loader';
 import AddBook from '../../components/AddBook';
 import EditBook from '../../components/EditBook';
 import {AuthContext} from '../../utils/context';
@@ -135,24 +133,6 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
               color="#fff"
             />
           </TouchableOpacity>
-        {/* <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={0.9}
-            onPress={navigation.goBack}>
-            <Ionicons name="md-arrow-back" size={25} color="#444444" />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Reading List (21)</Text>
-          <TouchableOpacity onPress={() => {
-            setAddBookShow(true);
-            }}
-            activeOpacity={0.9}>
-            <Ionicons
-              name="ios-add"
-              size={30}
-              color="#444444"
-            />
-          </TouchableOpacity>
-        </View> */}
         <Modal
         animationType="fade"
         transparent={true}
@@ -161,6 +141,17 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
             <AddBook closeModal={handleOnCloseModal} clubId={clubid} />
         </View>
         </Modal>
+        {isLoading ? <Loader 
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}/> :
+      <>
       <FlatList
           data={bookLists}
           renderItem={_renderItem}
@@ -184,6 +175,8 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
               />
             </View>
           </Modal>
+          </>
+          }
     </View>
   );
 };

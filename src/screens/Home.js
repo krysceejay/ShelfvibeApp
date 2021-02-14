@@ -1,172 +1,169 @@
-import React, {useRef} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Button,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  Animated,
-} from 'react-native';
-import {SharedElement} from 'react-navigation-shared-element';
-import {tutorial2Spec} from '../utils/theme';
+import React, {useState, useEffect} from 'react'
+import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, ScrollView, Modal } from 'react-native'
+import {connect} from 'react-redux';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Bookstore from '../components/Bookstore';
+import FeatClub from '../components/FeatClub';
+import {featBookstore, featBooks} from '../actions/featActions';
+import {fetchFeaturedClubs} from '../actions/clubActions';
+import FeaturedBooks from '../components/FeaturedBooks';
+import Loader from '../components/Loader';
 
-const {ITEM_HEIGHT, ITEM_WIDTH, RADIUS, SPACING, FULL_SIZE} = tutorial2Spec;
+const Home = ({navigation, featBookstore, featBooks, fetchFeaturedClubs, books, bookstore, featured}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-const data = [
-  {
-    key: '1',
-    location: 'Abuja',
-    numberOfDays: 9,
-    image:
-      'https://images.unsplash.com/photo-1533292362155-d79af6b08b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1651&q=80',
-    color: '#0c212D',
-  },
-  {
-    key: '2',
-    location: 'Kano',
-    numberOfDays: 10,
-    image:
-      'https://images.unsplash.com/45/eDLHCtzRR0yfFtU0BQar_sylwiabartyzel_themap.jpg?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1657&q=80',
-    color: '#0c212D',
-  },
-  {
-    key: '3',
-    location: 'Lagos',
-    numberOfDays: 11,
-    image:
-      'https://images.unsplash.com/photo-1567018823138-6380fc976b0c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1651&q=80',
-    color: '#0c212D',
-  },
-  {
-    key: '4',
-    location: 'Edo',
-    numberOfDays: 12,
-    image:
-      'https://images.unsplash.com/photo-1547030129-2cefb92ed257?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-    color: '#0c212D',
-  },
-  {
-    key: '5',
-    location: 'Abia',
-    numberOfDays: 13,
-    image:
-      'https://images.unsplash.com/photo-1504273066284-53fb4c703113?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2103&q=80',
-    color: '#0c212D',
-  },
-];
+  useEffect(() => {
+    setIsLoading(true);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getBookstore = await featBookstore();
+      const getBooks = await featBooks();
+      const getFeatClubs = await fetchFeaturedClubs();
+      if (getBookstore !== 'failed' && getBooks !== 'failed' && getFeatClubs !== 'failed') {
+        setIsLoading(false);
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-const Home = ({navigation}) => {
-  const scrollX = useRef(new Animated.Value(0)).current;
+  handleOnCloseModal = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Animated.FlatList
-        data={data}
-        keyExtractor={item => item.key}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={FULL_SIZE}
-        decelerationRate="fast"
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: true},
-        )}
-        renderItem={({item, index}) => {
-          const inputRange = [
-            (index - 1) * FULL_SIZE,
-            index * FULL_SIZE,
-            (index + 1) * FULL_SIZE,
-          ];
-          const translateX = scrollX.interpolate({
-            inputRange,
-            outputRange: [ITEM_WIDTH, 0, -ITEM_WIDTH],
-          });
-
-          const scale = scrollX.interpolate({
-            inputRange,
-            outputRange: [1, 1.1, 1],
-          });
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.push('TravelListDetails', {item});
-              }}
-              style={styles.itemContainer}>
-              <SharedElement
-                id={`item.${item.key}.photo`}
-                style={[StyleSheet.absoluteFill]}>
-                <View
-                  style={[
-                    StyleSheet.absoluteFill,
-                    {overflow: 'hidden', borderRadius: RADIUS},
-                  ]}>
-                  <Animated.Image
-                    source={{uri: item.image}}
-                    style={[
-                      StyleSheet.absoluteFill,
-                      {resizeMode: 'cover', transform: [{scale}]},
-                    ]}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ImageBackground
+        source={require('../assets/img/banner.jpg')}
+        style={styles.image}
+        >
+         <View style={styles.imgContent}>
+          <View style={styles.welcome}>
+              <View style={styles.bookCoverContain}>
+                  <Image
+                  style={styles.bookCover}
+                  source={require('../assets/img/logodark.png')}
+                  />
+              </View>
+              <Text style={styles.leading}>...let the shelf vibe!!!</Text>
+            </View>
+            {isLoading ? <Loader /> :
+           <TouchableOpacity activeOpacity={0.9} style={styles.seeFeatBooks} 
+           onPress={() => {
+            setModalVisible(true);
+           }}>
+              <View style={styles.iconContainer}>
+                <FontAwesome name="book" size={16} color="#000" />
+              </View>
+              <Text style={styles.featText}>See Featured Books</Text>
+            </TouchableOpacity> 
+            }
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}>
+                <View style={styles.memberModalView}>
+                  <FeaturedBooks
+                    closeModal={handleOnCloseModal}
+                    data={books}
                   />
                 </View>
-              </SharedElement>
-              <SharedElement
-                id={`item.${item.key}.location`}
-                style={[StyleSheet.absoluteFill]}>
-                <Animated.Text
-                  style={[styles.location, {transform: [{translateX}]}]}>
-                  {item.location}
-                </Animated.Text>
-              </SharedElement>
-              <View style={styles.days}>
-                <Text style={styles.daysValue}>{item.numberOfDays}</Text>
-                <Text style={styles.daysLabel}>days</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </SafeAreaView>
-  );
-};
+              </Modal>
+         </View> 
+        </ImageBackground>
+        <View style={styles.bottomView}>
+        {isLoading ? <Loader /> :
+          <>
+          <Bookstore navigation={navigation} data={bookstore} />
+          <FeatClub navigation={navigation} data={featured} />
+          </>
+          }
+        </View>
+      </ScrollView>
+  )
+}
+const mapStateToProps = state => ({
+  bookstore: state.feature.bookstore,
+  books: state.feature.books,
+  featured: state.club.featured,
+});
 
-export default Home;
+export default connect(
+  mapStateToProps,
+  {featBookstore, featBooks, fetchFeaturedClubs},
+)(Home);
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    width: ITEM_WIDTH,
-    height: ITEM_HEIGHT,
-    margin: SPACING,
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    height: 300,
   },
-  location: {
-    fontSize: 30,
-    color: '#fff',
-    fontWeight: '800',
-    width: ITEM_WIDTH * 0.8,
-    textTransform: 'uppercase',
-    position: 'absolute',
-    top: SPACING * 2,
-    left: SPACING,
+  imgContent: {
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.03)'
   },
-  days: {
-    position: 'absolute',
-    bottom: SPACING,
-    left: SPACING,
-    width: 52,
-    height: 52,
-    backgroundColor: 'tomato',
-    borderRadius: 26,
-    justifyContent: 'center',
+  welcome: {
+    marginTop: 50,
+    marginHorizontal: 12,
+   },
+   bookCoverContain: {
+    //flex: 1,
+    width: '45%',
+    height: 45,
+    //backgroundColor: 'rgba(0,0,0,0.3)'
+  },
+bookCover: {
+    height: '100%',
+    width: '100%',
+    alignSelf: 'center',
+    resizeMode: 'contain',
+  },
+  leading: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 15,
+    color: '#000'
+  },
+  bottomView: {
+    marginTop: 20,
+    //backgroundColor: 'red'
+  },
+  iconContainer: {
+    backgroundColor: 'transparent',
+    //padding: 5,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10
   },
-  daysValue: {
-    fontWeight: '800',
-    color: '#fff',
-    fontSize: 18,
+  featText: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 15,
+    color: '#000'
   },
-  daysLabel: {
-    color: '#fff',
-    fontSize: 10,
+  seeFeatBooks: {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    padding: 4,
+    paddingRight: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '50%',
+    marginTop: 30,
+    marginHorizontal: 12
   },
-});
+  memberModalView: {
+    flex: 1,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  
+})

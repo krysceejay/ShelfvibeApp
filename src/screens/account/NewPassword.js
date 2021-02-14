@@ -11,54 +11,90 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {resendVerifyAction} from '../../actions/authActions';
+import {enterNewpasswordAction} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
-const Forgotpass = ({resendVerifyAction, navigation}) => {
+const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
+    const {useremail} = route.params;
   const [formData, setFormData] = useState({
-    useremail: '',
+    password: '',
+    secureTextEntry: true,
     isLoading: false,
   });
 
-  const {useremail, isLoading} = formData;
+  const [errorMsg, setErrorMsg] = useState({
+    passwordfield: ''
+  });
+
+  const {password, secureTextEntry, isLoading} = formData;
+
+  const {passwordfield} = errorMsg;
 
   const onChange = name => text => setFormData({...formData, [name]: text});
 
-  resendCodeAction = async () => {
-    if(useremail === '' || useremail === undefined || useremail === null) {
-        Alert.alert('Failed', 'Enter your email address');
+  newPasswordAction = async () => {
+    if(password === '' || password === undefined || password === null) {
+        Alert.alert('Failed', 'Enter a new password');
         return;
       }
     setFormData({...formData, isLoading: true});
-    const resendCode = await resendVerifyAction(useremail);
-    if (resendCode == 'failed') {
+    const newPassword = await enterNewpasswordAction({
+        useremail,
+        password
+    });
+    if (newPassword == 'failed' || Array.isArray(newPassword)) {
       setFormData({...formData, isLoading: false});
+      if (Array.isArray(newPassword)) {
+        const errMsges = {};
+        newPassword.forEach(item => {
+          errMsges[item.field] = item.message;
+        });
+        setErrorMsg(errMsges);
+      }
     }else {
-      navigation.navigate('Verify', {useremail, screen: 'forgotpass'});
+      navigation.navigate('Login');
     } 
   };
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.textHeader}>Please enter your email.</Text>
+          <Text style={styles.textHeader}>Kindly choose a new password.</Text>
         </View>
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
           <KeyboardAvoidingView behavior="padding">
-            <View style={styles.action}>
-              <Ionicons name="ios-mail" color="#333" size={25} />
-              <TextInput
-                placeholder="Your email..."
-                style={styles.textInput}
-                autoCapitalize="none"
-                value={useremail}
-                onChangeText={onChange('useremail')}
-              />
-            </View>
+          <View style={styles.action}>
+            <Ionicons name="ios-lock" color="#333" size={25} />
+            <TextInput
+              placeholder="Your password..."
+              secureTextEntry={secureTextEntry}
+              style={styles.textInput}
+              value={password}
+              minLen
+              onChangeText={onChange('password')}
+            />
+
+            <TouchableOpacity
+              onPress={() =>
+                setFormData({...formData, secureTextEntry: !secureTextEntry})
+              }>
+              {secureTextEntry ? (
+                <Ionicons name="md-eye-off" color="#000" size={25} />
+              ) : (
+                <Ionicons name="md-eye" color="#000" size={25} />
+              )}
+            </TouchableOpacity>
+          </View>
+          {passwordfield == '' ? 
+           <Text style={styles.fieldMessage}>not less than 6 characters</Text> : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errorMessage}>{passwordfield}</Text>
+            </Animatable.View>
+          )}
           </KeyboardAvoidingView>
 
           <View style={styles.button}>
-            <TouchableOpacity style={styles.signIn} onPress={resendCodeAction}>
+            <TouchableOpacity style={styles.signIn} onPress={newPasswordAction}>
               <Text style={styles.textSign}>Submit</Text>
             </TouchableOpacity>
           </View>
@@ -84,8 +120,8 @@ const Forgotpass = ({resendVerifyAction, navigation}) => {
 
   export default connect(
     null,
-    {resendVerifyAction},
-  )(Forgotpass);
+    {enterNewpasswordAction},
+  )(NewPassword);
 
 const styles = StyleSheet.create({
   container: {
@@ -172,5 +208,12 @@ const styles = StyleSheet.create({
   signUpBtnText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 15,
+  },
+  errorMessage: {
+    fontSize: 13,
+    color: 'red',
+  },
+  fieldMessage: {
+    fontSize: 13,
   },
 });

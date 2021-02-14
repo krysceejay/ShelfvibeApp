@@ -67,7 +67,7 @@ const Signup = ({signup, navigation}) => {
         setErrorMsg(errMsges);
       }
     } else {
-      navigation.navigate('Confirm', {
+      navigation.navigate('Verify', {
         useremail,
       });
     }
@@ -165,7 +165,8 @@ const Signup = ({signup, navigation}) => {
               )}
             </TouchableOpacity>
           </View>
-          {passwordfield == '' ? null : (
+          {passwordfield == '' ? 
+          <Text style={styles.fieldMessage}>not less than 6 characters</Text> : (
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errorMessage}>{passwordfield}</Text>
             </Animatable.View>
@@ -296,5 +297,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 13,
     color: 'red',
+  },
+  fieldMessage: {
+    fontSize: 13,
   },
 });

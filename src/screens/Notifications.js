@@ -1,20 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
-import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal} from 'react-native';
 import moment from "moment";
 import Config from 'react-native-config';
 import {userNotificationAction, userSeenNoteAction} from '../actions/notificationActions';
 import Empty from '../components/Empty';
-import EmptyIcon from '../components/EmptyIcon';
+import Loader from '../components/Loader';
+import Profile from '../components/Profile';
 import {stringToHslColor} from '../utils/theme';
 
 const proURL = Config.IMAGE_URL;
 
-const { width, height } = Dimensions.get('screen');
-
 const Notifications = ({userNotificationAction, userSeenNoteAction, notifications, navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,33 +28,64 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
     return unsubscribe;
   }, [navigation]);
 
+  handleOnSelectItem = item => {
+    setSelectedItem(item);
+  };
+
+  handleOnCloseEditModal = () => {
+    setSelectedItem(null);
+  };
+
   const Message = ({data}) => {
     const {type, senderUser, club} = data;
     let msg;
     switch (type) {
       case 'JOIN_CLUB':
           msg = <View style={styles.message}>
-            <TouchableOpacity style={{marginHorizontal: 3}}>
-              <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
-              </TouchableOpacity>
-              <Text>has joined your club</Text>
-              <TouchableOpacity style={{marginHorizontal: 3}}
-              onPress={() => {
-                navigation.navigate('Details', {
-                  item: club
-                });
+              <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
+                handleOnSelectItem(senderUser);
               }}>
-              <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
-              </TouchableOpacity>
-                 </View>
+                <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                </TouchableOpacity>
+                <Text>has joined your club</Text>
+                <TouchableOpacity style={{marginHorizontal: 3}}
+                onPress={() => {
+                  navigation.navigate('Details', {
+                    item: club
+                  });
+                }}>
+                <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                </TouchableOpacity>
+              </View>
         break;
 
       case 'LIKE_CLUB':
           msg = <View style={styles.message}>
-                  <TouchableOpacity style={{marginHorizontal: 3}}>
+                  <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
+                handleOnSelectItem(senderUser);
+              }}>
                    <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
                   </TouchableOpacity>
                   <Text>has liked your club</Text>
+                  <TouchableOpacity style={{marginHorizontal: 4}}
+                  onPress={() => {
+                    navigation.navigate('Details', {
+                      item: club
+                    });
+                  }}>
+                  <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                </TouchableOpacity>
+                </View>
+        break;
+
+      case 'ADD_REVIEW':
+          msg = <View style={styles.message}>
+                  <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
+                handleOnSelectItem(senderUser);
+              }}>
+                   <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                  </TouchableOpacity>
+                  <Text>has added a review to your club</Text>
                   <TouchableOpacity style={{marginHorizontal: 4}}
                   onPress={() => {
                     navigation.navigate('Details', {
@@ -85,7 +116,7 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
            </View>}
 
             <View style={{paddingLeft: 10, maxWidth: '90%'}}>
-              <Message data={item} />
+                <Message data={item} />
               <Text style={styles.caption}> {moment(item.insertedAt).startOf('second').fromNow()}</Text>
             </View>
       </View>
@@ -94,6 +125,17 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
 
   return (
     <View style={styles.center}>
+      {isLoading ? <Loader 
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}/> :
+      <>
       <FlatList
           data={notifications}
           renderItem={renderItem}
@@ -110,6 +152,19 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
             </View>
           )}
         /> 
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={selectedItem ? true : false}>
+            <View style={styles.memberModalView}>
+              <Profile
+                closeModal={handleOnCloseEditModal}
+                user={selectedItem}
+              />
+            </View>
+          </Modal>
+         </> 
+        }
     </View>
   );
 };
@@ -177,5 +232,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#fff',
     textTransform: 'uppercase'
-  }
+  },
+  memberModalView: {
+    flex: 1,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
 });

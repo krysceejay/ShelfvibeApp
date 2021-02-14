@@ -99,7 +99,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             />
           </View>
           {firstName == '' ? null : (
-            <Animatable.View animation="fadeInLeft" duration={500}>
+            <Animatable.View animation="fadeInLeft" duration={500} style={{paddingHorizontal: 15}}>
               <Text style={styles.errorMessage}>{firstName}</Text>
             </Animatable.View>
           )}
@@ -113,7 +113,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             />
           </View>
           {lastName == '' ? null : (
-            <Animatable.View animation="fadeInLeft" duration={500}>
+            <Animatable.View animation="fadeInLeft" duration={500} style={{paddingHorizontal: 15}}>
               <Text style={styles.errorMessage}>{lastName}</Text>
             </Animatable.View>
           )}
@@ -138,7 +138,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             />
           </View>
           {username == '' ? null : (
-            <Animatable.View animation="fadeInLeft" duration={500}>
+            <Animatable.View animation="fadeInLeft" duration={500} style={{paddingHorizontal: 15}}>
               <Text style={styles.errorMessage}>{username}</Text>
             </Animatable.View>
           )}
@@ -206,8 +206,7 @@ const styles = StyleSheet.create({
         //marginTop: 5,
         borderBottomWidth: 1,
         borderBottomColor: '#f2f2f2',
-        paddingVertical: 20,
-        paddingHorizontal: 15,
+        padding: 15,
       },
       textInput: {
         flex: 1,

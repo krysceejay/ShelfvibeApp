@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Skeleton from '../../components/Skeleton';
+import Loader from '../../components/Loader';
 import AddPoll from '../../components/AddPoll';
 import EditPoll from '../../components/EditPoll';
 import {fetchClubPolls, setPollAction} from '../../actions/pollActions';
@@ -119,6 +119,17 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
             <AddPoll closeModal={handleOnCloseModal} clubId={clubid} />
         </View>
         </Modal>
+        {isLoading ? <Loader 
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}/> :
+      <>
       <FlatList
           data={polls}
           renderItem={_renderItem}
@@ -141,6 +152,8 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
               />
             </View>
           </Modal>
+          </>
+          }
     </View>
   );
 };

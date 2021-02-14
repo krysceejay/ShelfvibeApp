@@ -26,8 +26,7 @@ const ReadingList = ({ bookLists}) => {
             style={{
               //backgroundColor: 'red',
               paddingBottom: 10,
-              width: 130,
-              height: 240,
+              width: 110,
               marginRight: 12,
             borderRadius: 12,
             overflow: 'visible',
@@ -37,7 +36,7 @@ const ReadingList = ({ bookLists}) => {
                 source={{
                   uri: `${imgURL}/bookcover/${item.bookcover}`,
                 }}
-                style={{width: '100%', height: '80%', resizeMode: 'cover', borderRadius: 12,}}
+                style={{width: '100%', height: 165, resizeMode: 'cover', borderRadius: 12,}}
               />
             <View style={styles.textContainer}>
               <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     textContainer: {
-        height: '20%',
+        //height: '20%',
         marginTop: 3,
         paddingHorizontal: 10,
     },

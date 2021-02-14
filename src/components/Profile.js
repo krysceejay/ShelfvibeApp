@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,34 +6,44 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Modal
+  SafeAreaView
 } from 'react-native';
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
-import {AuthContext} from '../../utils/context';
-import {stringToHslColor} from '../../utils/theme';
-import EditProfile from '../../components/EditProfile';
-import ProImage from '../../components/ProImage';
+import {stringToHslColor} from '../utils/theme';
 
 const proURL = Config.IMAGE_URL;
-const Profile = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editImg, setEditImg] = useState(false);
-  const user = useContext(AuthContext);
+const Profile = ({user, closeModal}) => {
 
-  handleOnCloseModal = () => {
-    setModalVisible(false);
-  };
-
-  handleCloseEditPix = () => {
-    setEditImg(false);
-  };
+    const onClosePress = () => {
+        closeModal();
+      };
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: '#fff'}}>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+      <TouchableOpacity
+            style={{
+              //paddingHorizontal: 12,
+              position: 'absolute',
+              top: 25,
+              left: 15,
+              zIndex: 2,
+              backgroundColor: '#fff',
+              borderRadius: 17,
+              width: 34,
+              height: 34,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            activeOpacity={0.9}
+            onPress={onClosePress}>
+            <Ionicons name="md-arrow-back" size={22} color="#444444" />
+          </TouchableOpacity>
+        <View style={styles.body}>
           <View style={styles.avatarContainer}>
           {user.propix !== "noimage.png" ?
             <Image
@@ -45,26 +55,6 @@ const Profile = () => {
             /> : <View style={[styles.clubMembersSingle, {backgroundColor: stringToHslColor(user.username)}]}>
             <Text style={styles.initial}>{user.username.charAt(0)}</Text>
            </View>}
-           <TouchableOpacity
-            style={{
-              //paddingHorizontal: 12,
-              position: 'absolute',
-              bottom: 0,
-              right: 15,
-              zIndex: 2,
-              backgroundColor: '#fff',
-              borderRadius: 17,
-              width: 34,
-              height: 34,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            activeOpacity={0.9}
-            onPress={() => {
-              setEditImg(true)
-            }}>
-            <MaterialCommunityIcons name="account-edit" size={25} color="#444444" />
-          </TouchableOpacity>
           </View>
 
           <View style={styles.row}>
@@ -73,13 +63,6 @@ const Profile = () => {
               <Text style={styles.userName}>{user.username}</Text>
               <Text style={styles.userName}>Member Since: {moment(user.insertedAt).format("Do MMM YYYY")}</Text>
             </View>
-            <TouchableOpacity onPress={() => {
-              setModalVisible(true);
-            }}>
-              <View style={styles.iconContainer}>
-                <FontAwesome name="pencil" size={20} color="#3a4155" />
-              </View>
-            </TouchableOpacity>
           </View>
           <View style={styles.aboutContainer}>
             <Text style={styles.aboutHeader}>ABOUT</Text>
@@ -87,33 +70,9 @@ const Profile = () => {
               {user.about}
             </Text>
           </View>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}>
-            <View style={styles.memberModalView}>
-              <EditProfile
-                closeModal={handleOnCloseModal}
-                user={user}
-              />
-            </View>
-          </Modal>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={editImg}>
-            <View style={styles.memberModalView}>
-              <ProImage
-                closeModal={handleCloseEditPix}
-                userimg={user.propix}
-              />
-            </View>
-          </Modal>
-
         </View>
       </ScrollView>
+      </SafeAreaView>
     );
   
 }
@@ -121,11 +80,15 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+    container: {
+        flex: 1,
+    backgroundColor: '#fff',
+    },
+
+  body: {
     backgroundColor: '#fafafa',
     marginHorizontal: 12,
-    marginTop: 90,
+    marginTop: 100,
     marginBottom: 20,
     paddingTop: 15,
     paddingBottom: 20,

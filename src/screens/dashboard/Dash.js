@@ -30,42 +30,62 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
             <View style={styles.userInfoSection}>
             <View>
                 <Text style={styles.welcome}>Welcome <Text style={styles.username}>{user.firstName},</Text></Text>
+                
             </View>
-                <MaterialCommunityIcons name="account-edit" size={25} color="#444444" onPress={() => {}} />
             </View>
-            <View style={{paddingHorizontal: 12}}>
-                <Text style={styles.briefBio}>
-                {user.about}
-                </Text>
-            </View>
+                {/* <Text style={styles.briefBio}>
+                Books read
+                </Text> */}
             {isLoading ? <Loader /> :
             <View style={styles.clubViews}>
+              <View style={styles.stats}>
+              <TouchableOpacity activeOpacity={0.6} 
+              onPress={() => {navigation.navigate('ManageShelf')}}
+              style={styles.statsSingleOne}>
+                <View>
+                  <Text style={styles.number}>{userClubs.length}</Text>
+                  <Text style={styles.text}>Clubs Started</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} 
+              onPress={() => {navigation.navigate('JoinedList')}}
+              style={styles.statsSingle}>
+               <View>
+                  <Text style={styles.number}>{joinedClub.length}</Text>
+                  <Text style={styles.text}>Clubs Joined</Text>
+               </View>
+               </TouchableOpacity>
+               
+                {/* <Text style={styles.briefBio}>
+                Books read
+                </Text> */}
+            </View>
               <View style={styles.clubs}>
                 <View style={styles.listTitleView}>
                   <Text style={styles.listTitle}>Your Clubs</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.6} onPress={() => {
-                  navigation.navigate('ManageShelf');
-                }}>
-                  {userClubs.length > 4 &&
-                  <Text style={styles.title}>See all</Text>
-                  }
-                </TouchableOpacity>
+                {userClubs.length > 4 &&
+                  <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                    navigation.navigate('ManageShelf');
+                  }}>
+                    <Text style={styles.title}>See all</Text>
+                  </TouchableOpacity>
+                }
               </View>
-              <DashClubs data={userClubs.slice(0, 4)} />
+              <DashClubs data={userClubs.slice(0, 4)} navigation={navigation} />
               <View style={styles.clubs}>
                 <View style={styles.listTitleView}>
                   <Text style={styles.listTitle}>Joined Clubs</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.6} onPress={() => {
-                  navigation.navigate('JoinedList');
-                }}>
-                  {joinedClub.length > 4 &&
-                  <Text style={styles.title}>See all</Text>
-                  }
-                </TouchableOpacity>
+                {joinedClub.length > 4 &&
+                  <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                    navigation.navigate('JoinedList');
+                  }}>
+                    <Text style={styles.title}>See all</Text>
+                  </TouchableOpacity>
+                }
               </View>
-              <DashJoined data={joinedClub.slice(0, 4)} />
+              <DashJoined data={joinedClub.slice(0, 4)} navigation={navigation} />
             </View> 
             }
             {/* <TopTabs navigation={navigation} /> */}
@@ -101,12 +121,12 @@ const styles = StyleSheet.create({
     } ,
     userInfoSection: {
         flexDirection: 'row',
-        //marginVertical: 15,
+        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#fff',
-        width: '100%',
-        height: 60,
+        //backgroundColor: 'red',
+        //width: '100%',
+        //height: 60,
         paddingHorizontal: 12
       }, 
       infoRow: {
@@ -139,10 +159,15 @@ const styles = StyleSheet.create({
         marginTop: 5
       },
       number: {
-        fontSize: 18,
+        fontSize: 20,
         marginBottom: 3,
         fontFamily: 'Nunito-Bold',
         textAlign: 'center'
+      },
+      text: {
+        fontSize: 14,
+        fontFamily: 'Nunito-Regular',
+        color: '#444444',
       },
       title: {
         fontSize: 15,
@@ -187,5 +212,27 @@ const styles = StyleSheet.create({
         bottom: 0, 
         left: 35, 
         width: '94%'
+      },
+      stats: {
+        flexDirection: 'row',
+        marginHorizontal: 12,
+        marginBottom: 30,
+        padding: 15,
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        //justifyContent: 'space-around',
+        alignItems: 'center',
+        borderRadius: 12
+      },
+      statsSingle: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      statsSingleOne: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRightWidth: 1,
+        borderRightColor: 'rgba(0,0,0,0.2)'
       }
 })

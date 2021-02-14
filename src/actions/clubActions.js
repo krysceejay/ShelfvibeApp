@@ -3,7 +3,7 @@ import {FETCH_CLUBS, CREATE_CLUB, FILTER_CLUB,
   CREATE_MEMBER, FETCH_CLUB_MEMBERS, 
   SINGLE_CLUB, UPDATE_CLUB_PUBLIC, UPDATE_CLUB_PUBLISH, REPORT_CLUB,
   SET_MEMBER, REMOVE_MEMBER, CHECK_MEMBER, GET_USER_CLUBS, UPDATE_CLUB,
-  DELETE_CLUB, USER_JOINED_CLUBS, LEAVE_CLUB} from './types';
+  DELETE_CLUB, USER_JOINED_CLUBS, LEAVE_CLUB, FEATURED_CLUBS} from './types';
 import api from '../utils/api';
 import {fileUpload, removeFile} from '../utils/fileUpload';
 
@@ -767,4 +767,52 @@ export const leaveClubAction = clubId => async dispatch => {
     return 'failed';
   }
 }
+
+//FETCH FEATURED CLUBS
+export const fetchFeaturedClubs = () => async dispatch => {
+  const query = `
+      query {
+        featuredClubs{
+            id
+            image
+            name
+            public
+            insertedAt
+            updatedAt
+            description
+            genre
+            publish
+            user{
+              username
+              id
+            }
+            members{
+              id
+            }
+            polls{
+              books
+              current
+              pollName
+              id
+            }
+            lists{
+              title
+              bookcover
+              current
+              id
+            }
+          }
+        }
+    `;
+
+  try {
+    const featClubs = await api.post('/', {query});
+    dispatch({
+      type: FEATURED_CLUBS,
+      payload: featClubs.data.data.featuredClubs,
+    });
+  } catch (err) {
+    return 'failed';
+  }
+};
 

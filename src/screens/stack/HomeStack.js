@@ -2,10 +2,13 @@ import React from 'react';
 import {Easing} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 //import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import HomePage from '../HomeP';
-//import Details from '../DetailsP';
+import HomePage from '../Home';
 import Details from '../Details';
-//import FeaturedBooks from '../FeaturedBooks';
+import Detail from '../club/Details';
+import Rating from '../club/Rating';
+import AllRatings from '../club/AllRatings';
+import Report from '../club/Report';
+import AddReview from '../club/AddReview';
 
 const Stack = createStackNavigator();
 //const Stack = createSharedElementStackNavigator();
@@ -47,11 +50,9 @@ const HomeStack = () => {
           //color: '#fff',
           fontSize: 20,
         },
-
         headerTitleAlign: 'left',
         headerBackTitleVisible: false,
         headerTintColor: '#000',
-        
         //headerLeft: null,
       })}
       >
@@ -61,17 +62,21 @@ const HomeStack = () => {
           }}
        />
       <Stack.Screen
-        name="Details"
+        name="Detail"
         component={Details}
         options={options}
       />
-      {/* <Stack.Screen
-        name="FeaturedBooks"
-        component={FeaturedBooks}
+      <Stack.Screen
+        name="Details"
+        component={Detail}
         options={{
           headerShown: false,
         }}
-      /> */}
+      />
+      <Stack.Screen name="Rating" component={Rating} />
+      <Stack.Screen name="All Ratings" component={AllRatings} />
+      <Stack.Screen name="Report" component={Report} />
+      <Stack.Screen name="Add Review" component={AddReview} />
     </Stack.Navigator>
   );
 };

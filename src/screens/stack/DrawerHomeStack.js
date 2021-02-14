@@ -2,8 +2,12 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Dashboard from '../dashboard/Dashboard';
 import Dash from '../dashboard/Dash';
+import Report from '../club/Report';
+import AddReview from '../club/AddReview';
+import Details from '../club/Details';
+import Rating from '../club/Rating';
+import AllRatings from '../club/AllRatings';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +56,25 @@ const DrawerHomeStack = ({navigation}) => {
           },
         }}
       />
+      <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+      <Stack.Screen name="Rating" component={Rating}
+        options={{
+          headerRight: null
+        }}
+      />
+      <Stack.Screen name="All Ratings" component={AllRatings}
+        options={{
+          headerRight: null
+        }}
+      />
+      <Stack.Screen name="Report" component={Report} options={{
+
+          headerRight: null
+        }} />
+      <Stack.Screen name="Add Review" component={AddReview} options={{
+          
+          headerRight: null
+        }} />
     </Stack.Navigator>
   );
 };

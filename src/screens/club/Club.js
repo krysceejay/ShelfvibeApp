@@ -16,10 +16,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import {fetchClubs, filterClub} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
-import {stringToHslColor} from '../../utils/theme';
 
-const numColumns = 1;
+
+const numColumns = 2;
 const imgURL = Config.IMAGE_URL;
+const {width} = Dimensions.get('window');
 
 const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -51,7 +52,7 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
   _renderItem = ({item}) => {
     return (
       <View style={styles.item}>
-        
+        <View style={styles.itemContain}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
@@ -72,23 +73,13 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
         </View>
         
         <View style={styles.bookDetails}>
-          <View>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
               {item.name}
             </Text>
-            <View style={styles.afterName}>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-                {item.members.length} member(s)
+                {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
               </Text>
-              <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-                Created on {moment(item.insertedAt).format("Do MMM YYYY")} 
-              </Text>
-            </View>
-            <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
-              {item.description}
-            </Text>
-          </View>
-          
+        </View>
         </View>
       </View>
       
@@ -129,7 +120,7 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 40}}
+        contentContainerStyle={{paddingBottom: 50, paddingTop: 12}}
         ListEmptyComponent={() => (
           <Text style={styles.emptyText}>No club found</Text>
       )}
@@ -154,29 +145,23 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingTop: 5,
     backgroundColor: '#fff'
   },
   item: {
-    flex: 1,
-    marginTop: 12,
-    marginHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    //height: width / 1.4,
-    textAlign: 'center',
-    borderRadius: 10,
-    overflow: 'hidden',
-    //borderBottomWidth: 2,
-    borderWidth: 2,
+    marginBottom: 12,
+    width: width * 0.5,
+  },
+  itemContain: {
+    borderRadius: 8,
+    marginHorizontal: 4,
+    borderWidth: 1,
     borderColor: '#f5f5f5',
-    //backgroundColor: 'green',
+    overflow: 'hidden',
+    //backgroundColor: 'red',
   },
   bookCoverContain: {
-    flex: 3,
     width: '100%',
-    height: 200
-    //backgroundColor: 'green',
+    height: 120,
   },
   bookCover: {
     height: '100%',
@@ -184,20 +169,19 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bookDetails: {
-    padding: 12,
-    width: '100%',
+    paddingTop: 6,
+    paddingBottom: 12,
+    paddingHorizontal: 8,
     backgroundColor: '#fff',
     //marginBottom: 12
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
-    fontSize: 17,
-    maxWidth: '90%'
-    //textAlign: 'center',
+    fontSize: 14,
   },
   members: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 13,
+    fontSize: 12,
     color: '#444444',
     //marginTop: 3,
   },
@@ -247,11 +231,6 @@ const styles = StyleSheet.create({
     headerText: {
     fontSize: 18,
     fontFamily: 'Nunito-Bold',
-    },
-    afterName: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center'
     },
     emptyText: {
       fontFamily: 'Nunito-Regular',

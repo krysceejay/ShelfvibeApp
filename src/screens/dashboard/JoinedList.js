@@ -6,18 +6,19 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from "moment";
 import {getUserJoinedClubs, leaveClubAction} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 import {AuthContext} from '../../utils/context';
 
-const numColumns = 1;
+const numColumns = 2;
 const imgURL = Config.IMAGE_URL;
+const {width} = Dimensions.get('window');
 
 const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation}) => {
 
@@ -57,7 +58,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        
+        <View style={styles.itemContain}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
@@ -74,36 +75,26 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
                 style={styles.bookCover}
               />
           </TouchableOpacity>
-          
         </View>
         
         <View style={styles.bookDetails}>
           <View style={styles.nameAndEdit}>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
             {item.club.name}
             </Text>
             {user !== null && user.id !== item.club.user.id && <TouchableOpacity
             style={{
-              zIndex: 2,
-              width: 34,
-              height: 34,
+              justifyContent: 'flex-end'
             }}
             onPress={() => leaveClubBtn(item.club.id)}
             activeOpacity={0.9}>
-              <Ionicons name="md-remove-circle-outline" size={25} color="#444444" />
+              <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
           </TouchableOpacity> }
           </View>
-          <View style={styles.afterName}>
-              <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-              {item.club.members.length} members
-              </Text>
-              <Text style={styles.clubDate} numberOfLines={1} ellipsizeMode="tail">
-                Created on {moment(item.club.insertedAt).format("Do MMM YYYY")}
-              </Text>
-            </View>
-            <Text style={styles.description} numberOfLines={3} ellipsizeMode="tail">
-              {item.club.description}
+            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+             {item.club.members.length} {item.club.members.length > 1 ? 'members' : 'member'}
             </Text>
+        </View>
         </View>
       </View>
       
@@ -119,7 +110,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 40}}
+        contentContainerStyle={{paddingBottom: 50, paddingTop: 12}}
         ListEmptyComponent={() => (
           <View style={{flex: 1, justifyContent: 'center', alignSelf: 'center', height: 600}}>
           <Text style={styles.emptyText}>You have not joined any club yet.</Text>
@@ -147,23 +138,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   item: {
-    flex: 1,
-    marginTop: 12,
-    marginHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    //height: width / 1.4,
-    textAlign: 'center',
-    borderRadius: 10,
-    overflow: 'hidden',
-    borderWidth: 2,
+    marginBottom: 12,
+    width: width * 0.5,
+  },
+  itemContain: {
+    borderRadius: 8,
+    marginHorizontal: 4,
+    borderWidth: 1,
     borderColor: '#f5f5f5',
+    overflow: 'hidden',
+    //backgroundColor: 'red',
   },
   bookCoverContain: {
-    flex: 3,
     width: '100%',
-    height: 200
-    //backgroundColor: 'green',
+    height: 120
   },
   bookCover: {
     height: '100%',
@@ -171,8 +159,9 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   bookDetails: {
-    padding: 18,
-    width: '100%',
+    paddingTop: 6,
+    paddingBottom: 12,
+    paddingHorizontal: 8,
     backgroundColor: '#fff',
   },
   nameAndEdit: {
@@ -183,13 +172,13 @@ const styles = StyleSheet.create({
   },
   bookTitle: {
     fontFamily: 'Nunito-Bold',
-    fontSize: 17,
+    fontSize: 14,
     maxWidth: '90%'
     //textAlign: 'center',
   },
   members: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 13,
+    fontSize: 12,
     color: '#444444',
   },
   clubDate: {

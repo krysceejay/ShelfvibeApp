@@ -11,7 +11,6 @@ const Details = ({navigation, route}) => {
   const {item} = route.params;
   return (
       <View style={styles.container}>
-        <StatusBar hidden />
         <ImageBackground 
         source={{uri: `${imgURL}/featured/${item.displayimg}`}}
         style={styles.image}>
@@ -22,7 +21,7 @@ const Details = ({navigation, route}) => {
             style={{
               //paddingHorizontal: 12,
               position: 'absolute',
-              top: 25,
+              top: 50,
               left: 15,
               zIndex: 3,
               backgroundColor: '#fff',

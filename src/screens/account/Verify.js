@@ -1,5 +1,6 @@
-import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, StyleSheet, View, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {connect} from 'react-redux';
 import Svg, {
   Defs,
   LinearGradient,
@@ -8,9 +9,78 @@ import Svg, {
   G,
   Circle,
 } from 'react-native-svg';
+import {resendVerifyAction, checkVerifyAction} from '../../actions/authActions';
+import Loader from '../../components/Loader';
 
-const Confirm = ({route}) => {
-  const {useremail} = route.params;
+const Verify = ({route, navigation, resendVerifyAction, checkVerifyAction}) => {
+  const {useremail, screen} = route.params;
+  const [pincode, setPincode] = useState({
+    pin1: '',
+    pin2: '',
+    pin3: '',
+    pin4: '',
+    isLoading: false,
+  });
+
+  const pin1Ref = useRef();
+  const pin2Ref = useRef();
+  const pin3Ref = useRef();
+  const pin4Ref = useRef();
+
+  const {pin1, pin2, pin3, pin4, isLoading} = pincode;
+
+  const onChange = (name, ref) => text => {
+    setPincode({...pincode, [name]: text});
+    if(text != "") ref.current.focus();
+  };
+
+  useEffect(() => {
+    pin1Ref.current.focus();
+  }, [])
+
+  resendCodeAction = async () => {
+    if(useremail === '' || useremail === undefined || useremail === null) {
+        Alert.alert('Failed', 'No email address');
+        return;
+      }
+    setPincode({...pincode, isLoading: true});
+    const resendCode = await resendVerifyAction(useremail);
+    if (resendCode == 'failed') {
+      setPincode({...pincode, isLoading: false});
+    }else {
+      Alert.alert('Success', 'Please check your email for your verification code.');
+      return;
+    } 
+  };
+
+  checkCodeAction = async () => {
+    const token = `${pin1 + pin2 + pin3 + pin4}`;
+    if(useremail === '' || useremail === undefined || useremail === null) {
+        Alert.alert('Failed', 'No email address');
+        return;
+      }
+    setPincode({...pincode, isLoading: true});
+    const checkCode = await checkVerifyAction({
+      useremail,
+      token
+    });
+    if (checkCode == 'failed') {
+      setPincode({...pincode, isLoading: false});
+    }else {
+      if (checkCode){
+        if (screen === 'forgotpass'){
+          navigation.navigate('New Password', {useremail});
+        }else {
+          navigation.navigate('Login');
+        }
+      } else{
+        Alert.alert('Failed', 'Incorrect verification code.');
+        setPincode({...pincode, isLoading: false});
+        return;
+      }
+    } 
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -339,31 +409,107 @@ const Confirm = ({route}) => {
             />
           </Svg>
         </View>
-
-        <Text style={styles.textHeader}>Sign-up Successful</Text>
+        {/* <Text style={styles.textHeader}>Sign-up Successful</Text> */}
         <Text style={styles.textBody}>
-          Kindly go to{' '}
-          <Text style={{color: '#00a2cc', fontFamily: 'Nunito-SemiBold'}}>
-            {useremail}
-          </Text>{' '}
-          to verify your account.
+          Enter the verification code we just sent to your email address.
         </Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={pin1Ref}
+            style={pin1 != '' ? styles.textInput : styles.textInputEmpty}
+            maxLength={1}
+            keyboardType="numeric"
+            value={pin1}
+            onChangeText={onChange('pin1', pin2Ref)}
+            selectionColor='#fff'
+          />
+          <TextInput
+            ref={pin2Ref}
+            style={pin2 != '' ? styles.textInput : styles.textInputEmpty}
+            maxLength={1}
+            keyboardType="numeric"
+            value={pin2}
+            onChangeText={onChange('pin2', pin3Ref)}
+            selectionColor='#fff'
+          />
+          <TextInput
+            ref={pin3Ref}
+            style={pin3 != '' ? styles.textInput : styles.textInputEmpty}
+            maxLength={1}
+            keyboardType="numeric"
+            value={pin3}
+            onChangeText={onChange('pin3', pin4Ref)}
+            selectionColor='#fff'
+          />
+          <TextInput
+            ref={pin4Ref}
+            style={pin4 != '' ? styles.textInput : styles.textInputEmpty}
+            maxLength={1}
+            keyboardType="numeric"
+            value={pin4}
+            onChangeText={onChange('pin4', pin4Ref)}
+            selectionColor='#fff'
+          />
+        </View>
+        <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={checkCodeAction}>
+            <Text style={styles.textSign}>Verify</Text>
+        </TouchableOpacity>
+        <View style={styles.verify}>
+          <Text style={styles.textVerify}> If you didn't receive a code!</Text>
+          <TouchableOpacity
+            style={styles.verifyBtn}
+            activeOpacity={0.6}
+            onPress={resendCodeAction}>
+            <Text style={styles.verifyBtnText}>Resend</Text>
+          </TouchableOpacity>
+          </View>
+        <View style={styles.verify}>
+          <Text style={styles.textVerify}> Already verified?</Text>
+          <TouchableOpacity
+            style={styles.verifyBtn}
+            activeOpacity={0.6}
+            onPress={() => {
+              navigation.navigate('Login');
+            }}>
+            <Text style={styles.verifyBtnText}>Login</Text>
+          </TouchableOpacity>
+          </View>
       </View>
+      {isLoading ? (
+        <Loader
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          }}
+        />
+      ) : null}
     </View>
   );
 };
-export default Confirm;
+
+export default connect(
+  null,
+  {resendVerifyAction, checkVerifyAction},
+)(Verify);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f3fbfd',
+    //backgroundColor: '#f3fbfd',
+    backgroundColor: '#fff'
   },
   header: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 15,
+    //backgroundColor: 'red'
   },
   textHeader: {
     fontFamily: 'Nunito-SemiBold',
@@ -372,13 +518,74 @@ const styles = StyleSheet.create({
   },
   textBody: {
     fontFamily: 'Nunito-Regular',
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
     marginVertical: 5,
+    paddingHorizontal: 12
   },
   avatarContainer: {
-    height: 300,
-    width: 300,
+    height: 150,
+    width: 150,
     alignSelf: 'center',
+    //backgroundColor: 'blue'
+  },
+  textInput: {
+    backgroundColor: '#00a2cc',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    fontFamily: 'Nunito-Bold',
+    fontSize: 25,
+    textAlign: 'center',
+    margin: 10,
+    color: '#fff',
+  },
+  textInputEmpty: {
+    backgroundColor: '#ccc',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    fontFamily: 'Nunito-Bold',
+    fontSize: 25,
+    textAlign: 'center',
+    margin: 10,
+    color: '#fff',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  verify: {
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  textVerify: {
+    fontSize: 18,
+    fontFamily: 'Nunito-Regular',
+    color: 'grey',
+  },
+  verifyBtn: {
+    marginLeft: 5,
+  },
+  verifyBtnText: {
+    fontFamily: 'Nunito-Bold',
+    fontSize: 18,
+  },
+  textSign: {
+    fontSize: 20,
+    fontFamily: 'Nunito-Bold',
+  },
+  signIn: {
+    width: '50%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    borderColor: '#00a2cc',
+    borderWidth: 1,
+    marginTop: 20
   },
 });

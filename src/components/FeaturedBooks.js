@@ -42,7 +42,7 @@ const FeaturedBooks = ({closeModal, data}) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#ccc' }}>
-            <StatusBar hidden />
+            {/* <StatusBar hidden /> */}
             <View style={StyleSheet.absoluteFillObject}>
                 
                 {data.map((item, index) => {
@@ -70,7 +70,7 @@ const FeaturedBooks = ({closeModal, data}) => {
             <TouchableOpacity
             style={{
               position: 'absolute',
-              top: 25,
+              top: 50,
               left: 15,
               zIndex: 2,
               backgroundColor: '#fff',
@@ -129,10 +129,7 @@ const FeaturedBooks = ({closeModal, data}) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             style={{
-              
-              // position: 'absolute',
-              // bottom: IMAGE_SIZE,
-              
+              height: 30
             }}
             contentContainerStyle={{paddingHorizontal: SPACING}}
             renderItem={({item, index}) => {

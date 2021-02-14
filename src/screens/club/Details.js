@@ -243,6 +243,7 @@ const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, crea
                       navigation={navigation}
                       userFav={userFavClub}
                       clubid = {item.id}
+                      ownerId={item.user.id}
                     />
                   </TouchableOpacity>
               </Modal>
@@ -323,21 +324,21 @@ const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, crea
           </View>
           <View style={styles.clubMembersContainer}>
           <Text style={styles.listTitle}>Club Members</Text>
-          <View style={styles.membersAndExcess}>
-            <View style={styles.clubMembers}>
-              {members.slice(0, 5).map(showMembers)}
+            <View style={styles.membersAndExcess}>
+              <View style={styles.clubMembers}>
+                {members.slice(0, 5).map(showMembers)}
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
+                {members.length > 5 && 
+                <Text style={styles.extra}>+{members.length - 5}</Text>
+                }
+                <TouchableWithoutFeedback onPress={() => {
+                  setModalVisible(true);
+                }}>
+                    <Text style={styles.seeAll}>View</Text>
+                  </TouchableWithoutFeedback>
+              </View>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-              {members.length > 5 && 
-              <Text style={styles.extra}>+{members.length - 5}</Text>
-              }
-              <TouchableWithoutFeedback onPress={() => {
-                setModalVisible(true);
-              }}>
-                  <Text style={styles.seeAll}>See all</Text>
-                </TouchableWithoutFeedback>
-            </View>
-          </View>
 
           <Modal
             animationType="fade"

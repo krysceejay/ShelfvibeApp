@@ -81,12 +81,20 @@ const Login = ({login, navigation}) => {
           </View>
         </KeyboardAvoidingView>
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Forgot Password');
-          }}>
-          <Text style={styles.forgotPass}> Forgot password ?</Text>
-        </TouchableOpacity>
+        <View style={styles.underLogin}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Forgot Password');
+            }}>
+            <Text style={styles.forgotPass}> Forgot password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Verification');
+            }}>
+            <Text style={styles.forgotPass}>Verify?</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.button}>
           <TouchableOpacity style={styles.signIn} onPress={loginAction}>
             <Text style={styles.textSign}>Sign In</Text>
@@ -213,4 +221,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     fontSize: 15,
   },
+  underLogin: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center'
+  }
 });

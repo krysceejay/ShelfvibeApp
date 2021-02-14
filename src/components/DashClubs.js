@@ -1,13 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Config from 'react-native-config';
 
 const imgURL = Config.IMAGE_URL;
 
-const DashClubs = ({data}) => {
+const DashClubs = ({data, navigation}) => {
     _renderItem = ({item, index}) => {
         return (
-            <View
+          <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => {
+          navigation.navigate('Details', {
+              item
+              })
+            }}
             style={{
               backgroundColor: '#fafafa',
               //paddingBottom: 10,
@@ -27,11 +33,11 @@ const DashClubs = ({data}) => {
               <View style={styles.textContainer}>
               <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.name}</Text>
               <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
-              {item.members.length} member(s)
+              {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
               </Text>
             </View>
             
-          </View>
+          </TouchableOpacity>
         );
       };
 

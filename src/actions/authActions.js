@@ -1,7 +1,8 @@
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN, USER_SIGNUP, USER_UPDATE} from './types';
+import {SET_LOGIN_STATE, LOGOUT, STILL_LOGGEDIN, USER_SIGNUP, USER_UPDATE, UPDATE_PROPIX} from './types';
 import api from '../utils/api';
+import {fileUpload, removeFile} from '../utils/fileUpload';
 
 export const setLoginState = loginData => {
   return {
@@ -22,6 +23,17 @@ const updateLocalStorage = async userData => {
     const storedData = await AsyncStorage.getItem('loginData');
     const storedDataParse = JSON.parse(storedData);
     const newData = {...storedDataParse, user: userData};
+    await AsyncStorage.setItem('loginData', JSON.stringify(newData));
+  } catch (err) {
+    return 'failed';
+  }
+};
+
+const updateLocalStorageImg = async propix => {
+  try {
+    const storedData = await AsyncStorage.getItem('loginData');
+    const storedDataParse = JSON.parse(storedData);
+    const newData = {...storedDataParse, user: { ...storedDataParse.user, propix }};
     await AsyncStorage.setItem('loginData', JSON.stringify(newData));
   } catch (err) {
     return 'failed';
@@ -95,7 +107,8 @@ export const login = loginInput => async dispatch => {
       setLoginLocal(o); // storing in local storage for next launch
       dispatch(setLoginState(o)); // dispatch action here
     } else {
-      Alert.alert('Login Failed', 'Username or Password is incorrect');
+      const msg = loginUser.data.errors[0].message;
+      Alert.alert('Login Failed', msg);
       return 'failed';
     }
   } catch (err) {
@@ -152,6 +165,102 @@ export const signup = signupInput => async dispatch => {
     Alert.alert(
       'Error',
       'Some error occured, please check your internet connection and retry.',
+    );
+    return 'failed';
+  }
+};
+
+//RESEND VERIFICATION CODE
+export const resendVerifyAction = email => async () => {
+  const query = `
+      query {
+        resendCode(email: "${email}"){
+          email
+        }
+      }
+  `;
+  
+  try {
+    const resendVerify = await api.post('/', {query});
+    if (resendVerify.data.data.resendCode !== null) {
+      return 'success';
+    } else {
+      const msg = resendVerify.data.errors[0].message;
+      Alert.alert('Verification', msg);
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured',
+    );
+    return 'failed';
+  }
+};
+
+//NEW PASSWORD
+export const enterNewpasswordAction = input => async () => {
+  const {useremail, password} = input;
+  const query = `
+      mutation {
+        newPassword(email: "${useremail}", password: "${password}"){
+          result{
+            email
+          }
+          successful
+          messages{
+            code
+            field
+            message
+          }
+        }
+      }
+  `;
+  
+  try {
+    const newUserPassword = await api.post('/', {query});
+    if (newUserPassword.data.data.newPassword.successful === true) {
+      return 'success';
+    } else {
+      const errorMessages = newUserPassword.data.data.newPassword.messages;
+      Alert.alert(
+        'Password Reset Failed',
+        'Please make sure you provide the required data',
+      );
+      return errorMessages;
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please try again.',
+    );
+    return 'failed';
+  }
+};
+
+//CHECK VERIFICATION CODE
+export const checkVerifyAction = input => async () => {
+  const {useremail, token} = input;
+  const query = `
+    query {
+      checkCode(email: "${useremail}", token: "${token}")
+    }
+  `;
+
+  try {
+    const checkVerify = await api.post('/', {query});
+    if (checkVerify.data.data.checkCode !== null) {
+      const res = checkVerify.data.data.checkCode;
+      return res;
+    } else {
+      const msg = checkVerify.data.errors[0].message;
+      Alert.alert('Verification', msg);
+      return 'failed';
+    }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured',
     );
     return 'failed';
   }
@@ -219,3 +328,59 @@ export const updateUserAction = updateInput => async dispatch => {
     return 'failed';
   }
 };
+
+//UPDATE PROFILE PIX
+export const updateProPixAction = photoInput => async dispatch => {
+  const {proimage, proimagename} = photoInput;
+
+  if(proimage !== null) {
+    try {
+      const uploadImage = await fileUpload(proimage, 'profiles');
+      if(uploadImage.status == 200){
+        const query = `
+          mutation {
+            updatePropix(input: "${uploadImage.data.data}")
+          }
+        `;
+
+        try {
+          const newPropix = await api.post('/', {query});
+          if (newPropix.data.data.updatePropix === true) {
+            if(proimagename !== "noimage.png"){
+              await removeFile('profiles', proimagename);
+            }
+            updateLocalStorageImg(uploadImage.data.data);
+            dispatch({
+              type: UPDATE_PROPIX,
+              payload: uploadImage.data.data
+            });
+          } else {
+            Alert.alert(
+              'Error',
+              'Some error occured, please try again.',
+            );
+          }
+        } catch (err) {
+          Alert.alert(
+            'Error',
+            'Some error occured, please try again.',
+          );
+          return 'failed';
+        }
+      }else{
+        Alert.alert(
+          'Error',
+          'Some error occured, file may be too large.',
+        );
+        return 'failed';
+      }
+  } catch (err) {
+    Alert.alert(
+      'Error',
+      'Some error occured, please try again.',
+    );
+    return 'failed';
+  }
+  }
+}
+

@@ -33,17 +33,28 @@ const Skeleton = props => {
     outputRange: [-width, width],
   });
 
-  const dataList = [{key: 1}, {key: 1}, {key: 1}, {key: 1}];
+  const dataList = [
+    {key: 1}, 
+    {key: 2}, 
+    {key: 3}, 
+    {key: 4}, 
+    {key: 5}, 
+    {key: 6},
+    {key: 7}, 
+    {key: 8}
+  ];
 
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
+        <View style={styles.itemContain}>
         <View style={styles.bookCoverContain} />
 
         {/* <View style={styles.bookDetails}>
           <Text style={styles.bookTitle} />
           <Text style={styles.bookAuthor} />
         </View> */}
+        </View>
       </View>
     );
   };
@@ -63,8 +74,9 @@ const Skeleton = props => {
         data={dataList}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
-        numColumns={1}
+        numColumns={2}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingTop: 12}}
       />
     </View>
   );
@@ -80,15 +92,17 @@ const styles = StyleSheet.create({
     width: width,
   },
   item: {
-    flex: 1,
-    marginVertical: 10,
-    borderColor: '#ccc',
+    marginBottom: 12,
+    width: width * 0.5,
+  },
+  itemContain: {
+    borderRadius: 8,
+    marginHorizontal: 4,
     borderWidth: 1,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: width / 1.4,
-    textAlign: 'center',
+    borderColor: '#bbb',
+    overflow: 'hidden',
+    height: 200,
+    //backgroundColor: 'red',
   },
   bookCoverContain: {
     //backgroundColor: 'green',

@@ -24,10 +24,6 @@ export const featBooks = () => async dispatch => {
         payload: books.data.data.allFeaturedBooks,
       });
     } catch (err) {
-      Alert.alert(
-        'Error',
-        'Some error occured, please check your internet connection and retry.',
-      );
       return 'failed';
     }
   };
@@ -56,10 +52,6 @@ export const featBookstore = () => async dispatch => {
         payload: bookstore.data.data.allBookstores,
       });
     } catch (err) {
-      Alert.alert(
-        'Error',
-        'Some error occured, please check your internet connection and retry.',
-      );
       return 'failed';
     }
   };

@@ -3,7 +3,8 @@ import {
   LOGOUT,
   STILL_LOGGEDIN,
   USER_SIGNUP,
-  USER_UPDATE
+  USER_UPDATE,
+  UPDATE_PROPIX
 } from '../actions/types';
 
 const initialState = {
@@ -46,6 +47,12 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: payload
+      }; 
+
+    case UPDATE_PROPIX:
+      return {
+        ...state,
+        user: {...state.user, propix: payload}
       };  
 
     default:
