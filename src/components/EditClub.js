@@ -33,6 +33,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
          isPublish: item.publish,
          isPublic: item.public,
          clubdescription: item.description,
+         meetingDetails: item.details,
          modalVisible: false,
          isLoading: false,
          clubPhoto: item.image
@@ -41,6 +42,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
      const [errorMsg, setErrorMsg] = useState({
        name: '',
        description: '',
+       details: '',
        genre: '',
      });
  
@@ -51,12 +53,13 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
          isPublish,
          isPublic,
          clubdescription,
+         meetingDetails,
          modalVisible,
          isLoading,
          clubPhoto
        } = formData;
  
-     const {name, description, genre} = errorMsg;  
+     const {name, description, details, genre} = errorMsg;  
  
      const onChange = name => text => setFormData({...formData, [name]: text});
 
@@ -134,6 +137,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
        isPublish,
        isPublic,
        clubdescription,
+       meetingDetails,
      });
      if (userUpdateClub == 'failed' || Array.isArray(userUpdateClub)) {
         setFormData({...formData, isLoading: false});
@@ -335,6 +339,35 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               {description !== '' && (
                 <Animatable.View animation="fadeInLeft" duration={500}>
                   <Text style={styles.errorMessage}>{description}</Text>
+                </Animatable.View>
+              )}
+            </View>
+            <View style={styles.singleInput}>
+              <Text style={styles.textLabel}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                }}>
+                <TextInput
+                  multiline
+                  numberOfLines={4}
+                  editable
+                  placeholder="Enter description"
+                  maxLength={300}
+                  style={{
+                    backgroundColor: '#eee',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    fontSize: 14,
+                    color: '#333',
+                  }}
+                  value={meetingDetails}
+                onChangeText={onChange('meetingDetails')}
+                />
+              </View>
+              {details !== '' && (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMessage}>{details}</Text>
                 </Animatable.View>
               )}
             </View>

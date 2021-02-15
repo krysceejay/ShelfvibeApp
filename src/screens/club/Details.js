@@ -381,9 +381,20 @@ const Details = ({route, navigation, fetchClubMembers, getFavByUserAndClub, crea
                     </View>
                 </Modal>
                 </>
-                
                 }
               </View> 
+              <View style={styles.bookPollContainer}>
+                <Text style={styles.listTitle}>Meeting Details</Text>
+              </View>
+              <View style={{marginHorizontal: 12}}>
+                <Text style={styles.descriptionBody}>
+                  {user !== null && isMember === true ? 
+                  item.details !== null ? item.details : 'No details at the moment.'
+                  : 
+                  'Join club to see meeting details.'}
+                </Text>
+              </View>
+              
             
           
           {/* <TouchableOpacity style={styles.join} onPress={() => {}}>

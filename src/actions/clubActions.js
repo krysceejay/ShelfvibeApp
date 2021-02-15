@@ -20,6 +20,7 @@ export const fetchClubs = () => async dispatch => {
             insertedAt
             updatedAt
             description
+            details
             genre
             publish
             user{
@@ -73,6 +74,7 @@ export const getUserClubs = id => async dispatch => {
             insertedAt
             updatedAt
             description
+            details
             genre
             publish
             user{
@@ -123,6 +125,7 @@ export const getUserJoinedClubs = () => async dispatch => {
             insertedAt
             updatedAt
             description
+            details
             genre
             publish
             user{
@@ -162,7 +165,7 @@ export const getUserJoinedClubs = () => async dispatch => {
 
 //Add Club
 export const createClub = clubInput => async dispatch => {
-  const {clubname, clubgenre, photo, isPublish, isPublic, clubdescription} = clubInput;
+  const {clubname, clubgenre, photo, isPublish, isPublic, clubdescription, meetingDetails} = clubInput;
   let img;
   let cgen;
 
@@ -196,8 +199,8 @@ export const createClub = clubInput => async dispatch => {
     }
 
   const query = `
-  mutation CreateClub($clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
-    createClub(input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription}){
+  mutation CreateClub($clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+    createClub(input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription, details: $meetingDetails}){
       result{
         id
         image
@@ -206,6 +209,7 @@ export const createClub = clubInput => async dispatch => {
         insertedAt
         updatedAt
         description
+        details
         genre
         publish
         user{
@@ -246,6 +250,7 @@ export const createClub = clubInput => async dispatch => {
         isPublish,
         isPublic,
         clubdescription,
+        meetingDetails,
         img
       }
     });
@@ -274,7 +279,7 @@ export const createClub = clubInput => async dispatch => {
 
 //UPDATE CLUB
 export const updateClubAction = clubInput => async dispatch => {
-  const {clubId, clubname, clubgenre, photo, clubPhoto, isPublish, isPublic, clubdescription} = clubInput;
+  const {clubId, clubname, clubgenre, photo, clubPhoto, isPublish, isPublic, clubdescription, meetingDetails} = clubInput;
   let img;
   let cgen;
 
@@ -311,8 +316,8 @@ export const updateClubAction = clubInput => async dispatch => {
     }
 
   const query = `
-  mutation UpdateClub($clubId: ID!, $clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
-    updateClub(clubId: $clubId, input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription}){
+  mutation UpdateClub($clubId: ID!, $clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+    updateClub(clubId: $clubId, input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription, details: $meetingDetails}){
       result{
         id
         image
@@ -321,6 +326,7 @@ export const updateClubAction = clubInput => async dispatch => {
         insertedAt
         updatedAt
         description
+        details
         genre
         publish
         user{
@@ -362,6 +368,7 @@ export const updateClubAction = clubInput => async dispatch => {
         isPublish,
         isPublic,
         clubdescription,
+        meetingDetails,
         img
       }
     });
@@ -780,6 +787,7 @@ export const fetchFeaturedClubs = () => async dispatch => {
             insertedAt
             updatedAt
             description
+            details
             genre
             publish
             user{

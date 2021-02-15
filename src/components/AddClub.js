@@ -29,6 +29,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
          isPublish: false,
          isPublic: true,
          clubdescription: '',
+         meetingDetails: '',
          modalVisible: false,
          isLoading: false,
        });
@@ -37,6 +38,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
        name: '',
        description: '',
        genre: '',
+       details: ''
      });
  
        const {
@@ -46,11 +48,12 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
          isPublish,
          isPublic,
          clubdescription,
+         meetingDetails,
          modalVisible,
          isLoading
        } = formData;
  
-     const {name, description, genre} = errorMsg;  
+     const {name, description, details, genre} = errorMsg;  
  
      const onChange = name => text => setFormData({...formData, [name]: text});
 
@@ -129,6 +132,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
        isPublish,
        isPublic,
        clubdescription,
+       meetingDetails,
      });
      if (userCreateClub == 'failed' || Array.isArray(userCreateClub)) {
         setFormData({...formData, isLoading: false});
@@ -260,7 +264,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
               <View
                 style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{marginRight: 50}}>
-                  <Text style={styles.textLabel}>Publish</Text>
+                  <Text style={styles.textLabel}>Show Club</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}
@@ -310,6 +314,36 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
               {description !== '' && (
                 <Animatable.View animation="fadeInLeft" duration={500}>
                   <Text style={styles.errorMessage}>{description}</Text>
+                </Animatable.View>
+              )}
+            </View>
+
+            <View style={styles.singleInput}>
+              <Text style={styles.textLabel}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                }}>
+                <TextInput
+                  multiline
+                  numberOfLines={4}
+                  editable
+                  placeholder="Enter meeting details"
+                  maxLength={300}
+                  style={{
+                    backgroundColor: '#eee',
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    fontSize: 14,
+                    color: '#333',
+                  }}
+                  value={meetingDetails}
+                onChangeText={onChange('meetingDetails')}
+                />
+              </View>
+              {details !== '' && (
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                  <Text style={styles.errorMessage}>{details}</Text>
                 </Animatable.View>
               )}
             </View>
