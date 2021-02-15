@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { Text } from 'react-native';
 import {Provider} from 'react-redux';
 import store from './src/store';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -17,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LoadingScene from './src/screens/LoadingScene';
 import BottomTabs from './src/screens/tabs/BottomTabs';
+import linking from './src/linking'
 
 Icon.loadFont();
 Ionicons.loadFont();
@@ -133,7 +135,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer theme={DefaultTheme}>
+      <NavigationContainer theme={DefaultTheme} linking={linking} fallback={<Text>Loading...</Text>}>
         <Stack.Navigator
           initialRouteName="Loading"
           headerMode="screen"

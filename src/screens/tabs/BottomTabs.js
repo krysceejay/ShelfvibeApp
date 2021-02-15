@@ -132,20 +132,20 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
           showLabel: false,
           keyboardHidesTabBar: true,
         }}>
-        <Tab.Screen name="Home" children={HomeStack} 
+        <Tab.Screen name="Home" component={HomeStack} 
         // options={({ route }) => ({
         // tabBarVisible: getTabBarVisibility(route)
         //  })} 
         />
-        <Tab.Screen name="Club" children={ShelfStack} />
-        <Tab.Screen name="Notification" children={NotificationStack} options={{
+        <Tab.Screen name="Club" component={ShelfStack} />
+        <Tab.Screen name="Notification" component={NotificationStack} options={{
           tabBarBadge: '3',
           tabBarBadgeStyle: {backgroundColor: 'red', width: 20, height: 20}
         }} />
         {isLoggedIn ? (
-          <Tab.Screen name="Dashboard" children={DashDrawer} />
+          <Tab.Screen name="Dashboard" component={DashDrawer} />
         ) : (
-          <Tab.Screen name="Account" children={AccountStack} />
+          <Tab.Screen name="Account" component={AccountStack} />
         )}
       </Tab.Navigator>
     </AuthContext.Provider>
