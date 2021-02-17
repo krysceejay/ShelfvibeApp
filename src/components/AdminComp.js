@@ -68,15 +68,16 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction,
 
       shareBtn = async () => {
           const shareOptions = {
-              message: 'This is a message',
+              message: `shelfvibe://club/${clubid}`,
           };
 
           try {
               const shareResponse = await Share.open(shareOptions);
+              console.log(shareResponse);
           } catch (error) {
               console.log('Error => ', error);
           }
-      }
+        }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -84,12 +85,12 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction,
             {user !== null ?
                 <View style={styles.actionContainer}>
                     <View>
-                    {/* <TouchableOpacity onPress={shareBtn}>
+                    <TouchableOpacity onPress={shareBtn}>
                         <View style={styles.actionSingle}>
                         <MaterialCommunityIcons name="share-variant" size={22} color="#444444" />
                             <Text style={styles.actionText}>Share Link</Text>
                         </View>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     {userFav ? <TouchableOpacity onPress={setUnFavClub}>
                       <View style={styles.actionSingle}>
                       <FontAwesome name="heart" size={22} color="#444444" />

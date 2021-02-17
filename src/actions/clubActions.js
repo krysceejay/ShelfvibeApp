@@ -16,32 +16,13 @@ export const fetchClubs = () => async dispatch => {
             id
             image
             name
-            public
-            insertedAt
-            updatedAt
-            description
-            details
-            genre
-            publish
             user{
               username
               id
             }
-            members{
-              id
-            }
-            polls{
-              books
-              current
-              pollName
-              id
-            }
-            lists{
-              title
-              bookcover
-              current
-              id
-            }
+          members{
+            id
+           }
           }
         }
     `;
@@ -68,34 +49,15 @@ export const getUserClubs = id => async dispatch => {
         user(id: ${id}){
           clubs{
             id
-            image
-            name
-            public
-            insertedAt
-            updatedAt
-            description
-            details
-            genre
-            publish
-            user{
-              username
-              id
-            }
-            members{
-              id
-            }
-            polls{
-              books
-              current
-              pollName
-              id
-            }
-            lists{
-              title
-              bookcover
-              current
-              id
-            }
+          image
+          name
+          user{
+            username
+            id
+          }
+          members{
+            id
+           }
           }
         }
       }
@@ -119,34 +81,15 @@ export const getUserJoinedClubs = () => async dispatch => {
         getJoinedClub{
           club{
             id
-            image
-            name
-            public
-            insertedAt
-            updatedAt
-            description
-            details
-            genre
-            publish
-            user{
-              username
-              id
-            }
-            members{
-              id
-            }
-            polls{
-              books
-              current
-              pollName
-              id
-            }
-            lists{
-              title
-              bookcover
-              current
-              id
-            }
+          image
+          name
+          user{
+            username
+            id
+          }
+          members{
+            id
+           }
           }
         }
       }
@@ -205,30 +148,11 @@ export const createClub = clubInput => async dispatch => {
         id
         image
         name
-        public
-        insertedAt
-        updatedAt
-        description
-        details
-        genre
-        publish
         user{
           username
           id
         }
         members{
-          id
-        }
-        polls{
-          books
-          current
-          pollName
-          id
-        }
-        lists{
-          title
-          bookcover
-          current
           id
         }
       }
@@ -322,30 +246,11 @@ export const updateClubAction = clubInput => async dispatch => {
         id
         image
         name
-        public
-        insertedAt
-        updatedAt
-        description
-        details
-        genre
-        publish
         user{
           username
           id
         }
         members{
-          id
-        }
-        polls{
-          books
-          current
-          pollName
-          id
-        }
-        lists{
-          title
-          bookcover
-          current
           id
         }
       }
@@ -559,9 +464,34 @@ export const getSingleClub = id => async dispatch => {
     query {
       club(clubId: ${id}){
         id
-        public
-        publish
+        image
         name
+        public
+        insertedAt
+        updatedAt
+        description
+        details
+        genre
+        publish
+        user{
+          username
+          id
+        }
+        members{
+          id
+        }
+        polls{
+          books
+          current
+          pollName
+          id
+        }
+        lists{
+          title
+          bookcover
+          current
+          id
+        }
       }
     }
   `;
@@ -780,37 +710,18 @@ export const fetchFeaturedClubs = () => async dispatch => {
   const query = `
       query {
         featuredClubs{
+          id
+          image
+          name
+          user{
+            username
             id
-            image
-            name
-            public
-            insertedAt
-            updatedAt
-            description
-            details
-            genre
-            publish
-            user{
-              username
-              id
-            }
-            members{
-              id
-            }
-            polls{
-              books
-              current
-              pollName
-              id
-            }
-            lists{
-              title
-              bookcover
-              current
-              id
-            }
           }
-        }
+          members{
+            id
+           }
+         }
+       }
     `;
 
   try {
@@ -823,4 +734,3 @@ export const fetchFeaturedClubs = () => async dispatch => {
     return 'failed';
   }
 };
-

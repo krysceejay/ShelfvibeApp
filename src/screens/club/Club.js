@@ -57,7 +57,7 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
-                item
+                clubId: item.id
               });
             }}
             activeOpacity={0.9}>

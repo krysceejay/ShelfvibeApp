@@ -138,10 +138,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
         //  })} 
         />
         <Tab.Screen name="Club" component={ShelfStack} />
-        <Tab.Screen name="Notification" component={NotificationStack} options={{
-          tabBarBadge: '3',
-          tabBarBadgeStyle: {backgroundColor: 'red', width: 20, height: 20}
-        }} />
+        <Tab.Screen name="Notification" component={NotificationStack} />
         {isLoggedIn ? (
           <Tab.Screen name="Dashboard" component={DashDrawer} />
         ) : (

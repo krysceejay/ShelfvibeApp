@@ -62,7 +62,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
-                item
+                clubId: item.id
               });
             }}
             activeOpacity={0.9}>

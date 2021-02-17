@@ -23,7 +23,6 @@ const ManageShelfStack = ({navigation}) => {
           fontSize: 20,
         },
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
         headerTintColor: '#000',
         headerTitleAlign: 'left',
         headerRight: () => {
@@ -44,7 +43,7 @@ const ManageShelfStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="ManageClub" component={ManageClub} options={{ title: 'Manage Club', }} />
+      <Stack.Screen name="ManageClub" component={ManageClub} options={{ title: 'Manage Club', headerLeft: null}} />
       <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
       <Stack.Screen name="Rating" component={Rating}
         options={{

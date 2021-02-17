@@ -11,7 +11,7 @@ const DashClubs = ({data, navigation}) => {
           activeOpacity={0.6}
           onPress={() => {
           navigation.navigate('Details', {
-              item
+            clubId: item.id
               })
             }}
             style={{

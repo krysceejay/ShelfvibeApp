@@ -43,7 +43,7 @@ const JoinedListStack = ({navigation}) => {
           );
         },
       })}>
-      <Stack.Screen name="Joined Club" component={JoinedClub} />
+      <Stack.Screen name="Joined Club" component={JoinedClub} options={{headerLeft: null,}} />
       <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
       <Stack.Screen name="Rating" component={Rating}
         options={{

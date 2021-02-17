@@ -142,6 +142,7 @@ const App = () => {
           screenOptions={{
             gestureEnabled: false,
             headerShown: false,
+            headerLeft: null,
           }}>
           <Stack.Screen name="Loading" component={LoadingScene} />
           <Stack.Screen name="BottomTabs" component={BottomTabs} />

@@ -11,7 +11,7 @@ const DashJoined = ({data, navigation}) => {
           activeOpacity={0.6}
           onPress={() => {
           navigation.navigate('Details', {
-              item: item.club
+            clubId: item.club.id
               })
             }}
             style={{

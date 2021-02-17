@@ -1,8 +1,9 @@
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE, EDIT_POLL, REMOVE_POLL} from '../actions/types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, 
+    VOTE_POLL, REMOVE_VOTE, EDIT_POLL, REMOVE_POLL, CLUB_CURRENT_POLL} from '../actions/types';
 
 const initialState = {
   polls: [],
-  poll: {},
+  currentpoll: {},
   votes: []
 };
 
@@ -13,6 +14,11 @@ const pollReducer = (state = initialState, action) => {
         return {
           ...state,
           polls: payload,
+        };
+    case CLUB_CURRENT_POLL:
+        return {
+          ...state,
+          currentpoll: payload,
         };
     case ADD_POLL:
         return {

@@ -25,7 +25,7 @@ export const removeFile = async (path, filename) => {
         url,
         data
         });
-
+        
      return true;
     }
 

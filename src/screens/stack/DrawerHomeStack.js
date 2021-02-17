@@ -15,11 +15,12 @@ const DrawerHomeStack = ({navigation}) => {
   return (
     <Stack.Navigator
       screenOptions={() => ({
-        headerStyle: {
-          //backgroundColor: '#242c42',
+        headerTitleStyle: {
+          fontFamily: 'Nunito-Regular',
+          fontSize: 20,
         },
-
-        //headerTintColor: 'red',
+        headerTintColor: '#000',
+        headerBackTitleVisible: false,
         headerTitleAlign: 'left',
         headerRight: () => {
           return (
@@ -43,6 +44,7 @@ const DrawerHomeStack = ({navigation}) => {
         name="Dashboard"
         component={Dash}
         options={{
+          headerLeft: null,
           headerTitle: () => {
             return (
               <Text

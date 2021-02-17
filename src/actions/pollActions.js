@@ -1,5 +1,6 @@
 import {Alert} from 'react-native';
-import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, REMOVE_VOTE, EDIT_POLL, REMOVE_POLL} from './types';
+import {ADD_POLL, FETCH_CLUB_POLLS, SET_POLL, FETCH_POLL_VOTES, VOTE_POLL, 
+  REMOVE_VOTE, EDIT_POLL, REMOVE_POLL, CLUB_CURRENT_POLL} from './types';
 import api from '../utils/api';
 
 //Add Poll
@@ -293,5 +294,28 @@ export const removePollAction = pollId => async dispatch => {
     return 'failed';
   }
 }
+
+//FETCH CLUB CURRENT POLL
+export const fetchClubCurrentPolls = id => async dispatch => {
+  const query = `
+      query {
+        clubCurrentPoll(clubId: ${id}){
+          books
+          current
+          pollName
+          id
+        }
+      }
+    `;
+  try {
+    const currentPolls = await api.post('/', {query});
+    dispatch({
+      type: CLUB_CURRENT_POLL,
+      payload: currentPolls.data.data.clubCurrentPoll,
+    });
+  } catch (err) {
+    return 'failed';
+  }
+};
 
   

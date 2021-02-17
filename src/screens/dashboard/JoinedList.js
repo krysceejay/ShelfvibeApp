@@ -63,7 +63,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
-                item: item.club
+                clubId: item.club.id
               });
             }}
             activeOpacity={0.9}>
