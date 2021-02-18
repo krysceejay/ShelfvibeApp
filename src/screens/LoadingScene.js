@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, StyleSheet, View, Animated} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
+import { StackActions } from '@react-navigation/native';
 import Loader from '../components/Loader';
 //import Circle from '../components/Circle';
 
@@ -63,13 +64,20 @@ const LoadingScene = ({navigation}) => {
   //     return wait(2000).then(() => this.props.navigation.navigate('Bottom Tabs'));
   //   };
 
+  // switchToTab = async () => {
+  //   return setTimeout(
+  //     () => navigation.navigate('BottomTabs'),
+  //     //this.props.navigation.dispatch(StackActions.replace('BottomTabs'))
+  //     4000,
+  //   );
+  //   //return true;
+  // };
+
   switchToTab = async () => {
     return setTimeout(
       () => navigation.navigate('BottomTabs'),
-      //this.props.navigation.dispatch(StackActions.replace('Bottom Tabs'))
       4000,
     );
-    //return true;
   };
 
   return (

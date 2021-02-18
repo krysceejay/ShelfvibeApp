@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text } from 'react-native';
 import {Provider} from 'react-redux';
 import store from './src/store';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -135,7 +134,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer theme={DefaultTheme} linking={linking} fallback={<Text>Loading...</Text>}>
+      <NavigationContainer theme={DefaultTheme} linking={linking}>
         <Stack.Navigator
           initialRouteName="Loading"
           headerMode="screen"

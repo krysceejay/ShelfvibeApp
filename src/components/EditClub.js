@@ -289,7 +289,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               <View
                 style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{marginRight: 50}}>
-                  <Text style={styles.textLabel}>Publish</Text>
+                  <Text style={styles.textLabel}>Show Club</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}

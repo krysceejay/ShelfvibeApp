@@ -8,6 +8,7 @@ import Share from 'react-native-share';
 import {favClubAction, removeFavClubAction} from '../actions/favActions';
 import {checkRateClub} from '../actions/rateActions';
 import {AuthContext} from '../utils/context';
+import {random} from '../utils/theme';
 
 
 const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction, 
@@ -68,12 +69,12 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction,
 
       shareBtn = async () => {
           const shareOptions = {
-              message: `shelfvibe://club/${clubid}`,
+              message: `https://shelfvibe.com/club/${random()}${clubid}`,
           };
 
           try {
-              const shareResponse = await Share.open(shareOptions);
-              console.log(shareResponse);
+              await Share.open(shareOptions);
+              // {"app": "com.whatsapp/com.whatsapp.ContactPicker", "message": "com.whatsapp/com.whatsapp.ContactPicker"}
           } catch (error) {
               console.log('Error => ', error);
           }

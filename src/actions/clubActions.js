@@ -16,6 +16,12 @@ export const fetchClubs = () => async dispatch => {
             id
             image
             name
+            genre
+            description
+            details
+            insertedAt
+            public
+            publish
             user{
               username
               id
@@ -49,8 +55,14 @@ export const getUserClubs = id => async dispatch => {
         user(id: ${id}){
           clubs{
             id
-          image
-          name
+            image
+            name
+            genre
+            description
+            details
+            insertedAt
+            public
+            publish
           user{
             username
             id
@@ -81,8 +93,14 @@ export const getUserJoinedClubs = () => async dispatch => {
         getJoinedClub{
           club{
             id
-          image
-          name
+            image
+            name
+            genre
+            description
+            details
+            insertedAt
+            public
+            publish
           user{
             username
             id
@@ -148,6 +166,12 @@ export const createClub = clubInput => async dispatch => {
         id
         image
         name
+        genre
+        description
+        details
+        insertedAt
+        public
+        publish
         user{
           username
           id
@@ -246,6 +270,12 @@ export const updateClubAction = clubInput => async dispatch => {
         id
         image
         name
+        genre
+        description
+        details
+        insertedAt
+        public
+        publish
         user{
           username
           id
@@ -713,6 +743,12 @@ export const fetchFeaturedClubs = () => async dispatch => {
           id
           image
           name
+          genre
+          description
+          details
+          insertedAt
+          public
+          publish
           user{
             username
             id

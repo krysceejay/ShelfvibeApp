@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   aboutHeader: {
     fontFamily: 'Nunito-SemiBold',
     fontSize: 16,
-    letterSpacing: 5,
+    letterSpacing: 3,
     color: '#00a2cc',
     marginVertical: 5,
   },

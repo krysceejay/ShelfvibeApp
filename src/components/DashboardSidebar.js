@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  Switch
 } from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -24,6 +25,9 @@ const proURL = Config.IMAGE_URL;
 
 const DashboardSidebar = props => {
   const user = useContext(AuthContext);
+
+  const [theme, setTheme] = useState(false);
+
   logoutUser = async () => {
     await props.logout();
   };
@@ -42,6 +46,10 @@ const DashboardSidebar = props => {
       ],
       {cancelable: false},
     );
+
+    toggleSwitch = () => {
+      setTheme(!theme);
+    };
 
   return (
     <View style={{flex: 1}}>
@@ -116,17 +124,6 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('ManageShelf');
               }}
             />
-            {/* <DrawerItem
-              label="Add Club"
-              labelStyle={{
-                fontSize: 16,
-                fontFamily: 'Nunito-Regular',
-              }}
-              icon={() => <Icon color="#242c42" size={20} name="plus-square" />}
-              onPress={() => {
-                props.navigation.navigate('AddClub');
-              }}
-            /> */}
             <DrawerItem
               label="Joined Club"
               labelStyle={{
@@ -149,6 +146,22 @@ const DashboardSidebar = props => {
                 props.navigation.navigate('Profile');
               }}
             />
+            <View style={styles.preferences}>
+              <View style={styles.preferenceTitle}>
+                 <Text style={styles.titleText}>PREFERENCES</Text>
+              </View>
+              <View style={styles.titleAndSwitch}>
+                <Text style={styles.themeText}>DARK THEME</Text>
+                <Switch
+                    trackColor={{false: '#767577', true: '#6ad83c'}}
+                    thumbColor={theme ? '#d1ecf1' : '#f4f3f4'}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={theme}
+                    style={{transform: [{scaleX: 1.1}, {scaleY: 1}]}}
+                  />
+              </View>
+            </View>
           </View>
         </View>
       </DrawerContentScrollView>
@@ -237,4 +250,30 @@ const styles = StyleSheet.create({
     borderTopColor: '#f4f4f4',
     borderTopWidth: 1,
   },
+  preferences: {
+    //backgroundColor: 'red',
+    paddingVertical: 20,
+    borderColor: '#f4f4f4',
+    borderWidth: 1,
+  },
+  preferenceTitle: {
+    marginHorizontal: 20,
+  },
+  titleText: {
+    fontFamily: 'Nunito-SemiBold',
+    fontSize: 15,
+    color: '#aaa',
+    letterSpacing: 2,
+  },
+  themeText: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 13,
+  },
+  titleAndSwitch: {
+    marginHorizontal: 20,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  } 
 });

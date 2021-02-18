@@ -53,13 +53,13 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
   useEffect(() => {
     setIsLoading(true);
     const unsubscribe = navigation.addListener('focus', async () => {
-      const singleClub = await getSingleClub(clubId);
       await getClubRatingsAction(clubId);
       await fetchClubMembers(clubId);
       await fetchClubCurrentPolls(clubId);
       await getFavByUserAndClub(clubId);
       checkMember(clubId);
 
+      const singleClub = await getSingleClub(clubId);
       if (singleClub !== 'failed') {
         setIsLoading(false);
       }

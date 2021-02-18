@@ -16,14 +16,13 @@
 //     "updatedAt": "2021-02-03", 
 //      "user": {"id": "17", "username": "kryso"}
 //     }
+// https://shelfvibe.com/club/54HPlIIt15
+// shelfvibe://club/54HPlIIt15436
  
-// getItem = id => {
-//     //console.log(btoa(item));
-//     // getSingleClubLink(id).then((response)=>{
-//     //     return response;
-//     // })
-//     return item
-// }
+getItem = slug => {
+    let id = slug.slice(8);
+    return id;
+}
 
 const config = {
     screens: {
@@ -45,7 +44,10 @@ const config = {
                 Club: 'clubs',
                 Details: {
                     path: 'club/:clubId',
-                    exact: true
+                    parse: {
+                        clubId: clubId => getItem(clubId),
+                      },
+                    exact: true,
                 }
              }
             }
