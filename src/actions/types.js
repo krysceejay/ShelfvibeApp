@@ -57,3 +57,4 @@ export const UPDATE_PROPIX = 'UPDATE_PROPIX';
 export const FEATURED_CLUBS = 'FEATURED_CLUBS';
 export const CLUB_CURRENT_POLL = 'CLUB_CURRENT_POLL';
 export const SINGLE_CLUB_SLUG = 'SINGLE_CLUB_SLUG';
+export const SET_THEME = 'SET_THEME';

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {connect} from 'react-redux';
 import {
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   Alert,
   Switch
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,19 +19,20 @@ import moment from "moment";
 import Config from 'react-native-config';
 //import SidebarDropDown from './SidebarDropDown';
 import {logout} from '../actions/authActions';
-import {AuthContext} from '../utils/context';
+import {AuthContext, ThemeContext} from '../utils/context';
 import {stringToHslColor} from '../utils/theme';
 
 const proURL = Config.IMAGE_URL;
 
 const DashboardSidebar = props => {
   const user = useContext(AuthContext);
-
-  const [theme, setTheme] = useState(false);
+const {toggleTheme} = useContext(ThemeContext);
 
   logoutUser = async () => {
     await props.logout();
   };
+
+  const {dark, colors} = useTheme();
 
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -47,12 +49,8 @@ const DashboardSidebar = props => {
       {cancelable: false},
     );
 
-    toggleSwitch = () => {
-      setTheme(!theme);
-    };
-
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: colors.background}}>
       <SafeAreaView style={styles.closeBtn}>
         <TouchableOpacity
           onPress={() => {
@@ -83,9 +81,9 @@ const DashboardSidebar = props => {
             <Text style={styles.initial}>{user.username.charAt(0)}</Text>
            </View>}
             <View style={{marginLeft: 15, width: '70%'}}>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.title}>{`${user.firstName} ${user.lastName}`}</Text>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.caption}>{user.username}</Text>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.memberDate}>Member since: {moment(user.insertedAt).format("Do MMM YYYY")} </Text>
+          <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.title, {color: colors.text}]}>{`${user.firstName} ${user.lastName}`}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.caption, {color: colors.text}]}>{user.username}</Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.memberDate, {color: colors.text}]}>Member since: {moment(user.insertedAt).format("Do MMM YYYY")} </Text>
             </View>
           </View>
           <View style={styles.drawerSection}>
@@ -94,8 +92,9 @@ const DashboardSidebar = props => {
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
+                color: colors.text
               }}
-              icon={() => <Icon color="#242c42" size={20} name="dashboard" />}
+              icon={() => <Icon color={colors.icon} size={20} name="dashboard" />}
               onPress={() => {
                 props.navigation.navigate('Dashboard');
               }}
@@ -112,10 +111,11 @@ const DashboardSidebar = props => {
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
+                color: colors.text
               }}
               icon={() => (
                 <MaterialCommunityIcons
-                  color="#242c42"
+                  color={colors.icon}
                   size={20}
                   name="cards-club"
                 />
@@ -129,8 +129,9 @@ const DashboardSidebar = props => {
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
+                color: colors.text
               }}
-              icon={() => <Icon color="#242c42" size={20} name="handshake-o" />}
+              icon={() => <Icon color={colors.icon} size={20} name="handshake-o" />}
               onPress={() => {
                 props.navigation.navigate('JoinedList');
               }}
@@ -140,25 +141,26 @@ const DashboardSidebar = props => {
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
+                color: colors.text
               }}
-              icon={() => <Icon color="#242c42" size={20} name="id-card" />}
+              icon={() => <Icon color={colors.icon} size={20} name="id-card" />}
               onPress={() => {
                 props.navigation.navigate('Profile');
               }}
             />
-            <View style={styles.preferences}>
+            <View style={[styles.preferences, {borderTopColor: colors.border, borderBottomColor: colors.border}]}>
               <View style={styles.preferenceTitle}>
-                 <Text style={styles.titleText}>PREFERENCES</Text>
+                 <Text style={styles.titleText}>Preferences</Text>
               </View>
               <View style={styles.titleAndSwitch}>
-                <Text style={styles.themeText}>DARK THEME</Text>
+                <Text style={[styles.themeText, {color: colors.text}]}>DARK THEME</Text>
                 <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
-                    thumbColor={theme ? '#d1ecf1' : '#f4f3f4'}
+                    thumbColor={dark ? '#d1ecf1' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={theme}
-                    style={{transform: [{scaleX: 1.1}, {scaleY: 1}]}}
+                    onValueChange={() => toggleTheme()}
+                    value={dark}
+                    style={{transform: [{scaleX: 1.1}, {scaleY: 1.1}]}}
                   />
               </View>
             </View>
@@ -171,8 +173,9 @@ const DashboardSidebar = props => {
           labelStyle={{
             fontSize: 16,
             fontFamily: 'Nunito-Regular',
+            color: colors.text
           }}
-          icon={() => <Icon color="#242c42" size={20} name="sign-out" />}
+          icon={() => <Icon color={colors.icon} size={20} name="sign-out" />}
           onPress={createTwoButtonAlert}
         />
       </View>
@@ -253,8 +256,8 @@ const styles = StyleSheet.create({
   preferences: {
     //backgroundColor: 'red',
     paddingVertical: 20,
-    borderColor: '#f4f4f4',
-    borderWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1
   },
   preferenceTitle: {
     marginHorizontal: 20,

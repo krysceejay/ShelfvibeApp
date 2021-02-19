@@ -1,5 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import { useTheme } from '@react-navigation/native';
 import Notifications from '../Notifications';
 import Details from '../club/Details';
 import Report from '../club/Report';
@@ -10,9 +11,13 @@ import AllRatings from '../club/AllRatings';
 const Stack = createStackNavigator();
 
 const NotificationStack = () => {
+  const {colors} = useTheme();
   return (
     <Stack.Navigator initialRouteName="Notification"
       screenOptions={() => ({
+        headerStyle: {
+          backgroundColor: colors.background
+        },
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
           fontSize: 20,

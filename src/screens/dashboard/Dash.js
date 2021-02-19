@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from '@react-navigation/native';
 import DashClubs from '../../components/DashClubs';
 import DashJoined from '../../components/DashJoined';
 import {AuthContext} from '../../utils/context';
@@ -11,6 +11,7 @@ import Loader from '../../components/Loader';
 const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedClub}) => {
   const [isLoading, setIsLoading] = useState(false);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,10 +27,10 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
 
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={[styles.container, {backgroundColor: colors.background}]} showsVerticalScrollIndicator={false}>
             <View style={styles.userInfoSection}>
             <View>
-                <Text style={styles.welcome}>Welcome <Text style={styles.username}>{user.firstName},</Text></Text>
+                <Text style={[styles.welcome, {color: colors.text}]}>Welcome <Text style={styles.username}>{user.firstName},</Text></Text>
                 
             </View>
             </View>
@@ -38,28 +39,24 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 </Text> */}
             {isLoading ? <Loader /> :
             <View style={styles.clubViews}>
-              <View style={styles.stats}>
-              <TouchableOpacity activeOpacity={0.6} 
-              onPress={() => {navigation.navigate('ManageShelf')}}
-              style={styles.statsSingleOne}>
+              <View style={[styles.stats, {backgroundColor: colors.dashStats}]}>
+                <TouchableOpacity activeOpacity={0.6} 
+                onPress={() => {navigation.navigate('ManageShelf')}}
+                style={styles.statsSingleOne}>
+                  <View>
+                    <Text style={[styles.number, {color: colors.text}]}>{userClubs.length}</Text>
+                    <Text style={[styles.text, {color: colors.text}]}>Clubs Started</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.6} 
+                onPress={() => {navigation.navigate('JoinedList')}}
+                style={styles.statsSingle}>
                 <View>
-                  <Text style={styles.number}>{userClubs.length}</Text>
-                  <Text style={styles.text}>Clubs Started</Text>
+                    <Text style={[styles.number, {color: colors.text}]}>{joinedClub.length}</Text>
+                    <Text style={[styles.text, {color: colors.text}]}>Clubs Joined</Text>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.6} 
-              onPress={() => {navigation.navigate('JoinedList')}}
-              style={styles.statsSingle}>
-               <View>
-                  <Text style={styles.number}>{joinedClub.length}</Text>
-                  <Text style={styles.text}>Clubs Joined</Text>
-               </View>
-               </TouchableOpacity>
-               
-                {/* <Text style={styles.briefBio}>
-                Books read
-                </Text> */}
-            </View>
+                </TouchableOpacity>
+              </View>
               <View style={styles.clubs}>
                 <View style={styles.listTitleView}>
                   <Text style={styles.listTitle}>Your Clubs</Text>
@@ -88,7 +85,6 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
               <DashJoined data={joinedClub.slice(0, 4)} navigation={navigation} />
             </View> 
             }
-            {/* <TopTabs navigation={navigation} /> */}
         </ScrollView>
     )
 }
@@ -107,26 +103,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingBottom: 20,
-        overflow: 'hidden',
-        backgroundColor: '#fff'
+        overflow: 'hidden'
       },
     icon: {
         alignSelf: 'flex-end',
         marginRight: 20,
         marginTop: 10
-        // position: 'absolute',
-        // top: 25,
-        // right: 20,
-        // zIndex: 2,
     } ,
     userInfoSection: {
         flexDirection: 'row',
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'space-between',
-        //backgroundColor: 'red',
-        //width: '100%',
-        //height: 60,
         paddingHorizontal: 12
       }, 
       infoRow: {
@@ -218,8 +206,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 12,
         marginBottom: 30,
         padding: 15,
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        //justifyContent: 'space-around',
         alignItems: 'center',
         borderRadius: 12
       },

@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ManageClub from '../dashboard/ManageClub';
@@ -14,33 +15,37 @@ import AddReview from '../club/AddReview';
 const Stack = createStackNavigator();
 
 const ManageShelfStack = ({navigation}) => {
+  const {colors} = useTheme();
   return (
     <Stack.Navigator
       initialRouteName="ManageClub"
       screenOptions={() => ({
+        headerStyle: {
+          backgroundColor: colors.background
+        },
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',
           fontSize: 20,
+          color: colors.text
         },
         headerBackTitleVisible: false,
         headerTintColor: '#000',
         headerTitleAlign: 'left',
         headerRight: () => {
-          return (
-            <TouchableOpacity
+          return <TouchableOpacity
               onPress={() => {
                 navigation.openDrawer();
               }}>
               <Ionicons
                 name="md-menu"
                 size={30}
+                color={colors.icon}
                 style={{
                   paddingRight: 20,
                   fontFamily: 'Nunito-BoldItalic',
                 }}
               />
             </TouchableOpacity>
-          );
         },
       })}>
       <Stack.Screen name="ManageClub" component={ManageClub} options={{ title: 'Manage Club', headerLeft: null}} />
@@ -76,5 +81,3 @@ const ManageShelfStack = ({navigation}) => {
 };
 
 export default ManageShelfStack;
-
-const styles = StyleSheet.create({});

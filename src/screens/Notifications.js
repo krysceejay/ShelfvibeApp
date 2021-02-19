@@ -181,7 +181,7 @@ export default connect(
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    backgroundColor: '#eee'
+    //backgroundColor: '#eee'
   },
   userInfoSection: {
     flexDirection: 'row',

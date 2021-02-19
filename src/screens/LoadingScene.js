@@ -30,7 +30,7 @@ const LoadingScene = ({navigation}) => {
     //   }),
     // ]).start();
     switchToTab();
-  });
+  },[]);
 
   // async componentDidMount() {
   //   // const {LogoAnime, LogoText} = this.state;
@@ -75,7 +75,7 @@ const LoadingScene = ({navigation}) => {
 
   switchToTab = async () => {
     return setTimeout(
-      () => navigation.navigate('BottomTabs'),
+      () => navigation.dispatch(StackActions.replace('BottomTabs')),
       4000,
     );
   };

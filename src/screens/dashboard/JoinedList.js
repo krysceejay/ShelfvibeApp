@@ -12,6 +12,7 @@ import {
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 import {getUserJoinedClubs, leaveClubAction} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 import {AuthContext} from '../../utils/context';
@@ -24,6 +25,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
 
   const [isLoading, setIsLoading] = useState(false);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   useEffect(() => {
     setIsLoading(true);
@@ -102,7 +104,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       {isLoading ? <Skeleton /> :
       <FlatList
         data={joinedClub}
@@ -133,9 +135,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //paddingVertical: 15,
-    backgroundColor: '#fff',
+    flex: 1
   },
   item: {
     marginBottom: 12,
@@ -146,8 +146,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     borderWidth: 1,
     borderColor: '#f5f5f5',
-    overflow: 'hidden',
-    //backgroundColor: 'red',
+    overflow: 'hidden'
   },
   bookCoverContain: {
     width: '100%',
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
     maxWidth: '90%'
-    //textAlign: 'center',
   },
   members: {
     fontFamily: 'Nunito-Regular',

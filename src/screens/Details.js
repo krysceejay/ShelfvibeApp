@@ -21,7 +21,7 @@ const Details = ({navigation, route}) => {
             style={{
               //paddingHorizontal: 12,
               position: 'absolute',
-              top: 50,
+              top: 25,
               left: 15,
               zIndex: 3,
               backgroundColor: '#fff',

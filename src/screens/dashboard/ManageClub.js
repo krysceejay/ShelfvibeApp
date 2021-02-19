@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
+import { useTheme } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
@@ -30,6 +31,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
   const [addClubShow, setAddClubShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   useEffect(() => {
     setIsLoading(true);
@@ -100,7 +102,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       {isLoading ? <Skeleton /> :
       <>
       <TouchableOpacity onPress={() => {
@@ -175,9 +177,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //paddingVertical: 15,
-    backgroundColor: '#fff',
+    flex: 1
   },
   item: {
     marginBottom: 12,
