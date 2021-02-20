@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Config from 'react-native-config';
+import { useTheme } from '@react-navigation/native';
 
 const imgURL = Config.IMAGE_URL;
 
 const DashClubs = ({data, navigation}) => {
+  const {colors} = useTheme();
     _renderItem = ({item, index}) => {
         return (
           <TouchableOpacity
@@ -15,8 +17,9 @@ const DashClubs = ({data, navigation}) => {
               })
             }}
             style={{
-              backgroundColor: '#fafafa',
-              //paddingBottom: 10,
+              backgroundColor: colors.background,
+              borderWidth: 1,
+              borderColor: colors.border,
               width: 150,
               //height: 200,
               marginRight: 12,
@@ -31,8 +34,8 @@ const DashClubs = ({data, navigation}) => {
                   style={{width: '100%', height: 120, resizeMode: 'cover'}}
                 />
               <View style={styles.textContainer}>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.name}</Text>
-              <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>{item.name}</Text>
+              <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
               {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
               </Text>
             </View>
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     members: {
       fontFamily: 'Nunito-Regular',
       fontSize: 13,
-      color: '#444444',
+      //color: '#444444',
     },
     clubNoImage:{
       height: 120,

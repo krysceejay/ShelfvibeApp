@@ -10,6 +10,7 @@ import {
   Alert
 } from 'react-native';
 import {connect} from 'react-redux';
+import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from 'react-native-config';
@@ -20,16 +21,9 @@ import {fetchClubMembers, setMemberStatusAction, removeMemberAction} from '../ac
 
 const proURL = Config.IMAGE_URL;
 
-// const dataList = [
-//     {key: "1"},
-//     {key: "2"},
-//     {key: "3"},
-//     {key: "4"},
-//     {key: "5"},
-//   ];
-
 const Members = ({closeModal, members, owner, clubid, fetchClubMembers, setMemberStatusAction, removeMemberAction}) => {
   const user = useContext(AuthContext);
+  const {dark, colors} = useTheme();
 
   useEffect(() => {
     //setIsLoading(true);
@@ -123,7 +117,12 @@ const remove = (id) =>
 
   const VisibleItem = ({data}) => {
     return(
-    <View style={styles.userInfoSection}>
+    <View style={[
+      styles.userInfoSection, 
+      {
+        backgroundColor: colors.background, 
+        borderColor: colors.border,
+        }]}>
       <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12}}>
         {data.item.user.propix !== "noimage.png" ? 
           <Image
@@ -137,15 +136,15 @@ const remove = (id) =>
          </View>
         }
         <View style={{paddingHorizontal: 10}}>
-      <Text style={styles.username} numberOfLines={1}>{data.item.user.username}</Text>
+      <Text style={[styles.username, {color: colors.text}]} numberOfLines={1}>{data.item.user.username}</Text>
       {data.item.status ?  
-        <Text style={[styles.caption, {color: '#155724'}]}>active</Text>
+        <Text style={[styles.caption, {color: dark ? '#90ee90' : '#155724'}]}>active</Text>
         :
-        <Text style={[styles.caption, {color: '#721c24'}]}>not active</Text>
+        <Text style={[styles.caption, {color: dark ? '#ff1a1a' : '#721c24'}]}>not active</Text>
         }
         </View>
       </View>
-      {owner === data.item.user.id && <Text style={styles.adminText}>Admin</Text>}
+      {owner === data.item.user.id && <Text style={[styles.adminText, {color: colors.text}]}>Admin</Text>}
     </View>
     )
   }
@@ -157,12 +156,11 @@ const remove = (id) =>
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.closeBtn}>
-        <Text style={styles.title}>
+        <Text style={[styles.title, {color: colors.text}]}>
           Members ({members.length})
         </Text>
         <TouchableOpacity onPress={onClosePress}
         style={{
-          
           zIndex: 2,
           backgroundColor: '#fff',
           borderRadius: 15,
@@ -184,7 +182,6 @@ const remove = (id) =>
         style={{
           flex: 1,
           alignSelf: 'stretch',
-          //paddingHorizontal: 10,
           marginBottom: 10,
         }}>
          
@@ -193,7 +190,7 @@ const remove = (id) =>
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             renderHiddenItem={(data, rowMap) => (
-                <View style={{backgroundColor: '#f0f0f0', flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginVertical: 5, height: 60, paddingHorizontal: 12,}}>
+                <View style={{backgroundColor: colors.profileCard, flexDirection: 'row', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginVertical: 5, height: 60, paddingHorizontal: 12,}}>
                   <TouchableOpacity
                     style={{
                       width: 34,
@@ -209,8 +206,8 @@ const remove = (id) =>
                       }>
                       {
                       user !== null && owner !== data.item.user.id && (data.item.status ? 
-                      <Icon name="toggle-on" size={22} color="#444444" /> : 
-                      <Icon name="toggle-off" size={22} color="#444444" />)
+                      <Icon name="toggle-on" size={22} color={colors.icon} /> : 
+                      <Icon name="toggle-off" size={22} color={colors.icon} />)
                       }
                     
                   </TouchableOpacity>
@@ -220,14 +217,12 @@ const remove = (id) =>
                       height: 34,
                       alignItems: 'center',
                       justifyContent: 'center',
-                      //marginHorizontal: 10,
-                      
                     }}
                     onPress={() => {
                       user !== null && owner !== data.item.user.id && remove(data.item.id)
                       }}>
                     {user !== null && owner !== data.item.user.id && 
-                    <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+                    <Ionicons name="md-remove-circle-outline" size={22} color={colors.icon} />
                     }
                   </TouchableOpacity>
                     {/* <Text>Left</Text>
@@ -279,11 +274,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
     width: '100%',
     height: 60,
     borderWidth: 1,
-    borderColor: '#f6f6f6',
   },
   avatar: {
     height: 50,

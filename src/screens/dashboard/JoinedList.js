@@ -60,7 +60,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <View style={styles.itemContain}>
+        <View style={[styles.itemContain, {borderColor: colors.border}]}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
@@ -79,9 +79,9 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
           </TouchableOpacity>
         </View>
         
-        <View style={styles.bookDetails}>
+        <View style={[styles.bookDetails, {backgroundColor: colors.background}]}>
           <View style={styles.nameAndEdit}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>
             {item.club.name}
             </Text>
             {user !== null && user.id !== item.club.user.id && <TouchableOpacity
@@ -90,10 +90,10 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
             }}
             onPress={() => leaveClubBtn(item.club.id)}
             activeOpacity={0.9}>
-              <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+              <Ionicons name="md-remove-circle-outline" size={22} color={colors.icon} />
           </TouchableOpacity> }
           </View>
-            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
              {item.club.members.length} {item.club.members.length > 1 ? 'members' : 'member'}
             </Text>
         </View>
@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#f5f5f5',
     overflow: 'hidden'
   },
   bookCoverContain: {
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
   },
   nameAndEdit: {
     flex: 1,

@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Genre = ({genrelist, item}) => {
+  const {colors} = useTheme();
   const [genreListChild, setGenreListChild] = useState(genrelist);
   
     const pushToList = () => {
@@ -26,11 +28,11 @@ const Genre = ({genrelist, item}) => {
                 : 'ios-square-outline'
             }
             size={25}
-            color={genreListChild.includes(item.name) ? '#e91e63' : '#666666'}
+            color={genreListChild.includes(item.name) ? '#e91e63' : colors.icon}
             style={{width: 32}}
           />
         </TouchableOpacity>
-        <Text style={styles.genreText}>{item.name}</Text>
+        <Text style={[styles.genreText, {color: colors.text}]}>{item.name}</Text>
       </View>
     );
   
@@ -43,15 +45,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     flexDirection: 'row',
-  },
-  checkbox: {
-    alignSelf: 'center',
-    // height: 20,
-    // width: 20,
+    alignItems: 'center'
   },
   genreText: {
     fontSize: 16,
     fontFamily: 'Nunito-Regular',
-    //margin: 8,
   },
 });

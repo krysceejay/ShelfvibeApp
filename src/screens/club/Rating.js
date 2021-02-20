@@ -1,34 +1,39 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   Text,
   StyleSheet,
   View,
   FlatList,
-  
+  SafeAreaView,
+  TouchableOpacity,
+  StatusBar
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarGroup from '../../components/StarGroup';
 import ProgressBar from '../../components/ProgressBar';
 import BorderButton from '../../components/BorderButton';
 
 const Rating = ({ navigation, ratings}) => {
-  
-  let totalRatings = 0;
 
+  const {dark, colors} = useTheme();
+
+  let totalRatings = 0;
   let progress = [];
   let progressNum = [];
 
   _renderItem = ({item, index}) => {
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, {backgroundColor: colors.card}]}>
         <View style={styles.reviewTop}>
           <StarGroup rating={item.rating.toString()} />
-          <Text style={styles.reviewDate}>{item.updatedAt}</Text>
+          <Text style={[styles.reviewDate, {color: colors.text}]}>{item.updatedAt}</Text>
         </View>
         <View>
-          <Text style={styles.reviewText}>{item.comment}</Text>
+          <Text style={[styles.reviewText, {color: colors.text}]}>{item.comment}</Text>
         </View>
-        <Text style={styles.reviewUser}>By {item.user.username}</Text>
+        <Text style={[styles.reviewUser, {color: colors.text}]}>By {item.user.username}</Text>
       </View>
     );
   };
@@ -63,19 +68,47 @@ const Rating = ({ navigation, ratings}) => {
     return convertToPercent;
   };
 
+  getProgress = (prog) => {
+    for (let i = 5; i > 0; i--) {
+      prog.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
+    }
+    return prog;
+  }
+
+  getProgressNum = (num) => {
+    for (let i = 5; i > 0; i--) {
+      num.push(<Text key={i} style={[styles.ratingMetricsSingleText, {color: colors.text}]}>{i}</Text>);
+    }
+    return num;
+  }
+  
   getRatings = item => {
     return item.rating;
   };
 
   const countOccurrences = (arr, val) =>
     arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-
-    for (let i = 5; i > 0; i--) {
-      progress.push(<ProgressBar percent={ratingPercent(i)} key={i} />);
-    progressNum.push(<Text key={i} style={styles.ratingMetricsSingleText}>{i}</Text>);
-    }
   
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.background}}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+        <View style={[styles.header, {borderBottomColor: colors.borderBottomColor}]}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack();
+          }}
+          style={{
+            paddingHorizontal: 3,
+            marginRight: 38
+          }}
+            activeOpacity={0.9}>
+            <AntDesign
+              name="left"
+              size={28}
+              color={colors.icon}
+              />
+          </TouchableOpacity>
+          <Text style={[styles.headerText, {color: colors.text}]}>Rating</Text>
+        </View>
     <View style={styles.container}>
       <FlatList
         ListHeaderComponent={
@@ -83,24 +116,24 @@ const Rating = ({ navigation, ratings}) => {
             <View style={styles.ratingView}>
               <View style={styles.ratingStats}>
                 <View style={styles.ratingNumStar}>
-                  <Text style={styles.ratingBigNum}>{data.ratingActual}</Text>
+                  <Text style={[styles.ratingBigNum, {color: colors.text}]}>{data.ratingActual}</Text>
 
                   <StarGroup rating={data.ratingActual} />
 
-                  <Text style={styles.ratingSmallNum}>{ratings.length}</Text>
+                  <Text style={[styles.ratingSmallNum, {color: colors.text}]}>{ratings.length}</Text>
                 </View>
-                <View style={styles.ratingMetrics}>{progressNum}</View>
+                <View style={styles.ratingMetrics}>{getProgressNum(progressNum)}</View>
               </View>
-              <View style={styles.ratingProgress}>{progress}</View>
+              <View style={styles.ratingProgress}>{getProgress(progress)}</View>
             </View>
-            <Text style={styles.reviewTitle}>Reviews</Text>
+            <Text style={[styles.reviewTitle, {color: colors.text}]}>Reviews</Text>
           </View>
         }
         data={ratings.slice(0, 5)}
         renderItem={_renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={() => (
-          <Text style={styles.reviewText}>No review yet</Text>
+          <Text style={[styles.reviewText, {color: colors.text}]}>No review yet</Text>
         )}
         contentContainerStyle={{marginVertical: 10}}
         showsVerticalScrollIndicator={false}
@@ -121,6 +154,7 @@ const Rating = ({ navigation, ratings}) => {
         }}
       />
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -136,13 +170,17 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     paddingHorizontal: 12,
-
-    //paddingHorizontal: 10,
-    //paddingTop: 5,
-    //paddingVertical: 15,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 5,
+    marginBottom: 5,
+    height: 55,
+    borderBottomWidth: 1
+ },
   ratingView: {
     flexDirection: 'row',
   },
@@ -172,8 +210,6 @@ const styles = StyleSheet.create({
   },
   ratingMetrics: {
     flex: 1,
-    //paddingHorizontal: 8,
-    //backgroundColor: 'yellow',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
@@ -201,8 +237,6 @@ const styles = StyleSheet.create({
     //flex: 1,
     marginVertical: 5,
     padding: 15,
-
-    backgroundColor: '#f4f4f4',
     borderRadius: 5,
   },
   reviewTop: {
@@ -231,6 +265,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     //alignItems: 'flex-start',
   },
+  headerText: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 20,
+  }
   
   
 });

@@ -59,7 +59,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <View style={styles.itemContain}>
+        <View style={[styles.itemContain, {borderColor: colors.border}]}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
@@ -77,9 +77,9 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           </TouchableOpacity>
         </View>
         
-        <View style={styles.bookDetails}>
+        <View style={[styles.bookDetails, {backgroundColor: colors.background}]}>
           <View style={styles.nameAndEdit}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>
               {item.name}
             </Text>
             <TouchableOpacity
@@ -88,10 +88,10 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
             }}
             activeOpacity={0.9}
             onPress={() => {handleOnSelectItem(item)}}>
-            <MaterialCommunityIcons name="dots-vertical" size={22} color="#444444" />
+            <MaterialCommunityIcons name="dots-vertical" size={22} color={colors.icon} />
           </TouchableOpacity>
           </View>
-            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
             {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
             </Text>
         </View>
@@ -120,7 +120,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
         animationType="fade"
         transparent={true}
         visible={addClubShow}>
-        <View style={styles.memberModalView}>
+        <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
             <AddClub closeModal={handleOnCloseModal} />
         </View>
         </Modal>
@@ -137,17 +137,6 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           </View>
       )}
       />
-      {/* <Modal
-        animationType="fade"
-        transparent={true}
-        visible={selectedItem ? true : false}>
-        <View style={styles.memberModalView}>
-          <EditClub
-            closeModal={handleOnCloseEditModal}
-            item={selectedItem}
-          />
-        </View>
-      </Modal> */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -187,7 +176,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#f5f5f5',
     overflow: 'hidden',
     //backgroundColor: 'red',
   },
@@ -204,7 +192,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     //marginBottom: 12
   },
   nameAndEdit: {
@@ -264,8 +252,7 @@ const styles = StyleSheet.create({
       },
       memberModalView: {
         flex: 1,
-        backgroundColor: '#fff',
-    },
+      },
     clubNoImage:{
       height: '100%',
     width: '100%',

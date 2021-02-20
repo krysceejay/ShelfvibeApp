@@ -14,6 +14,8 @@ import Rating from '../club/Rating';
 import AllRatings from '../club/AllRatings';
 import Report from '../club/Report';
 import AddReview from '../club/AddReview';
+import Poll from '../club/Poll';
+import ReadingList from '../club/ReadingList';
 
 const Drawer = createDrawerNavigator();
 
@@ -44,20 +46,7 @@ const DashDrawer = () => {
         },
         headerTintColor: colors.text,
         headerLeft: () => {
-          return <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}
-              style={{
-                paddingHorizontal: 3,
-                fontFamily: 'Nunito-Bold',
-              }}>
-              <AntDesign
-                name="left"
-                size={28}
-                color={colors.icon}
-              />
-            </TouchableOpacity>
+          return null
         },
         headerRight: () => {
           return <TouchableOpacity
@@ -76,35 +65,19 @@ const DashDrawer = () => {
             </TouchableOpacity>
         },
       })}>
-      <Drawer.Screen name="Dashboard" component={Dash} options={{
-        headerLeft: () => {
-          return null
-        },
-      }} />
-      <Drawer.Screen name="ManageShelf" component={ManageClub} options={{ title: 'Manage Club',
-        headerLeft: () => {
-          return null
-        }}} />
-      <Drawer.Screen name="JoinedList" component={JoinedClub} options={{ title: 'Joined Club',
-        headerLeft: () => {
-          return null
-        }}} />
-      <Drawer.Screen name="Profile" component={Profile} options={{
-        headerLeft: () => {
-          return null
-        },
-      }} />
+      <Drawer.Screen name="Dashboard" component={Dash} />
+      <Drawer.Screen name="ManageShelf" component={ManageClub} options={{ title: 'Manage Club' }} />
+      <Drawer.Screen name="JoinedList" component={JoinedClub} options={{ title: 'Joined Club' }} />
+      <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Details" component={Details} options={{ headerShown: false }} />
-      <Drawer.Screen name="Rating" component={Rating} options={{
+      <Drawer.Screen name="Rating" component={Rating} options={{ headerShown: false }} />
+      <Drawer.Screen name="All Ratings" component={AllRatings} options={{ headerShown: false }} />
+      <Drawer.Screen name="Report" component={Report} options={{ headerShown: false }} />
+      <Drawer.Screen name="Add Review" component={AddReview} options={{ headerShown: false }} />
+      <Drawer.Screen name="Poll" component={Poll} options={{
         headerRight: null
         }} />
-      <Drawer.Screen name="All Ratings" component={AllRatings} options={{
-        headerRight: null
-        }} />
-      <Drawer.Screen name="Report" component={Report} options={{
-        headerRight: null
-        }} />
-      <Drawer.Screen name="Add Review" component={AddReview} options={{
+      <Drawer.Screen name="Reading List" component={ReadingList} options={{
         headerRight: null
         }} />
       

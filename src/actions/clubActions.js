@@ -160,7 +160,7 @@ export const createClub = clubInput => async dispatch => {
     }
 
   const query = `
-  mutation CreateClub($clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+  mutation CreateClub($clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String, $isPublic: Boolean!, $isPublish: Boolean!) {
     createClub(input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription, details: $meetingDetails}){
       result{
         id
@@ -264,7 +264,7 @@ export const updateClubAction = clubInput => async dispatch => {
     }
 
   const query = `
-  mutation UpdateClub($clubId: ID!, $clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String!, $isPublic: Boolean!, $isPublish: Boolean!) {
+  mutation UpdateClub($clubId: ID!, $clubname: String!, $cgen: [String!], $img: String!, $clubdescription: String!, $meetingDetails: String, $isPublic: Boolean!, $isPublish: Boolean!) {
     updateClub(clubId: $clubId, input: {name: $clubname, public: $isPublic, publish: $isPublish, image: $img, genre: $cgen, description: $clubdescription, details: $meetingDetails}){
       result{
         id

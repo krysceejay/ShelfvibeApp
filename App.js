@@ -32,12 +32,13 @@ const MyTheme = {
     ...DefaultTheme.colors,
     primary: 'rgb(255, 45, 85)',
     background: 'rgb(242, 242, 242)',
-    card: 'rgb(255, 255, 255)',
+    card: '#fafafa',
     text: '#333333',
     border: 'rgb(199, 199, 204)',
     icon: '#242c42',
     dashStats: 'rgba(0,0,0,0.1)',
     profileCard: '#fafafa',
+    borderBottomColor: '#eee'
   },
 };
 
@@ -47,12 +48,13 @@ const MyDarkTheme = {
     ...DarkTheme.colors,
     primary: 'rgb(255, 45, 85)',
     background: '#333333',
-    card: 'rgb(255, 255, 255)',
+    card: '#222',
     text: 'rgb(242, 242, 242)',
     border: 'rgb(199, 199, 204)',
     icon: 'rgb(242, 242, 242)',
     dashStats: 'rgba(255,255,255,0.1)',
     profileCard: '#222',
+    borderBottomColor: '#777'
   },
 };
 

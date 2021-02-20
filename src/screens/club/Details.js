@@ -9,12 +9,14 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Modal,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 
 import StarGroup from '../../components/StarGroup';
 import ReadingList from '../../components/ReadingList';
@@ -35,20 +37,12 @@ const imgURL = Config.IMAGE_URL;
 const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetchClubCurrentPolls, currentpoll, getFavByUserAndClub, createMemberAction, checkMemberClub, 
    getClubRatingsAction, sendNotificationAction, members, userFavClub, ratings, isMember}) => {
   const {clubId} = route.params;
+  const {dark, colors} = useTheme();
   const user = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [pollModal, setPollModal] = useState(false);
   const [adminModal, setAdminModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   getClubSingle(clubId);
-  //   getClubRatings(clubId);
-  //   getClubMembers(clubId);
-  //   getClubCurrentPoll(clubId);
-  //   checkFav(clubId);
-  //   checkMember(clubId);
-  // }, [navigation, clubId]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -67,18 +61,6 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
 
     return unsubscribe;
   }, [navigation, clubId]);
-
-  // useEffect(() => {
-  //   const unsubscribe = async () => {
-  //     getClubSingle(clubId);
-  //     getClubRatings(clubId);
-  //     getClubMembers(clubId);
-  //     getClubCurrentPoll(clubId);
-  //     checkFav(clubId);
-  //     checkMember(clubId);
-  //   };
-  //   return unsubscribe;
-  // }, [navigation, clubId]);
 
   getClubRatings = async clubid => {
     await getClubRatingsAction(clubid);
@@ -217,7 +199,8 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
       ); 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
       {isLoading || club === null ? (
         <>
            <TouchableOpacity
@@ -261,7 +244,7 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
       </TouchableOpacity> : null}
     <ScrollView
       showsVerticalScrollIndicator={false}
-      style={{backgroundColor: '#fff'}}>
+      style={{backgroundColor: colors.background}}>
       <View style={{marginBottom: 20,}}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
@@ -325,13 +308,13 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
 
         </View>
         <View style={styles.clubDetails}>
-            <Text style={styles.bookTitle}>{club.name}</Text>
+            <Text style={[styles.bookTitle, {color: colors.text}]}>{club.name}</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 12,}}>
               <View style={styles.starText}>
                 <View style={styles.starGroup}>
                   <StarGroup rating={data.ratingActual} />
                   <Text
-                    style={styles.starRateText}
+                    style={[styles.starRateText, {color: colors.text}]}
                     numberOfLines={1}
                     ellipsizeMode="tail">
                     {data.ratingActual} of {data.numberOfRev}
@@ -341,23 +324,14 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
                 <TouchableOpacity onPress={() => {
                   navigation.navigate('Rating');
                 }}>
-                  <Text style={styles.seeAll}>View</Text>
+                  <Text style={[styles.seeAll, {color: colors.text}]}>View</Text>
                 </TouchableOpacity>
-
-                {/* <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Rating');
-                  }}>
-                  <View style={styles.iconContainer}>
-                    <Text style={styles.ratingText}>view more</Text>
-                  </View>
-                </TouchableOpacity> */}
               </View>
               <View style={styles.detailsGroup}>
                   <MaterialCommunityIcons
                     name="cards-club"
                     size={22}
-                    color="#373435"
+                    color={colors.icon}
                   />
                   {club.public ? 
                     <View style={styles.detailsTextPublic}>
@@ -370,38 +344,32 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
                 </View>
                 </View>
           <View style={{marginTop: 5, marginHorizontal: 12}}>
-            <Text style={styles.descriptionBody}>{club.description}</Text>
+            <Text style={[styles.descriptionBody, {color: colors.text}]}>{club.description}</Text>
           </View>
           <View style={styles.genre}>
             {club.genre.map(formatGenre)}
           </View>
           <View style={styles.readingListContainer}>
             <View style={styles.listTop}>
-              <Text style={styles.listTitle}>Reading List</Text>
-              {/* <TouchableWithoutFeedback onPress={() => {
-                setAdminModal(true);
-              }}
-              >
-                <MaterialCommunityIcons name="dots-vertical" size={25} color="#444444" />
-              </TouchableWithoutFeedback> */}
+              <Text style={[styles.listTitle, {color: colors.text}]}>Reading List</Text>
               
             </View>
               <ReadingList bookLists={club.lists} />
           </View>
           <View style={styles.clubMembersContainer}>
-          <Text style={styles.listTitle}>Club Members</Text>
+          <Text style={[styles.listTitle, {color: colors.text}]}>Club Members</Text>
             <View style={styles.membersAndExcess}>
               <View style={styles.clubMembers}>
                 {members.slice(0, 5).map(showMembers)}
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
                 {members.length > 5 && 
-                <Text style={styles.extra}>+{members.length - 5}</Text>
+                <Text style={[styles.extra, {color: colors.text}]}>+{members.length - 5}</Text>
                 }
                 <TouchableWithoutFeedback onPress={() => {
                   setModalVisible(true);
                 }}>
-                    <Text style={styles.seeAll}>View</Text>
+                    <Text style={[styles.seeAll, {color: colors.text}]}>View</Text>
                   </TouchableWithoutFeedback>
               </View>
             </View>
@@ -410,7 +378,7 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
             animationType="fade"
             transparent={true}
             visible={modalVisible}>
-            <View style={styles.memberModalView}>
+            <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
               <Members
                 closeModal={handleOnCloseModal}
                 clubid={clubId}
@@ -421,14 +389,14 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
           </View>
             
               <View style={styles.bookPollContainer}>
-                <Text style={styles.listTitle}>Book Poll</Text>
+                <Text style={[styles.listTitle, {color: colors.text}]}>Book Poll</Text>
               </View>
               <View style={styles.bookPoll}>
                 {isEmpty(currentpoll) ?
-                <Text style={styles.noPoll}>No active poll for this club.</Text> 
+                <Text style={[styles.noPoll, {color: colors.text}]}>No active poll for this club.</Text> 
                 :
                 <>
-                  <Text style={styles.pollTitle}>{currentpoll.pollName}</Text>
+                  <Text style={[styles.pollTitle, {color: colors.text}]}>{currentpoll.pollName}</Text>
                   <TouchableOpacity style={styles.bookPollBtn} onPress={() => {
                     setPollModal(true);
                   }}>
@@ -450,10 +418,10 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
                 }
               </View> 
               <View style={styles.bookPollContainer}>
-                <Text style={styles.listTitle}>Meeting Details</Text>
+                <Text style={[styles.listTitle, {color: colors.text}]}>Meeting Details</Text>
               </View>
               <View style={{marginHorizontal: 12}}>
-                <Text style={styles.descriptionBody}>
+                <Text style={[styles.descriptionBody, {color: colors.text}]}>
                   {user !== null && isMember === true ? 
                   club.details !== null ? club.details : 'No details at the moment.'
                   : 
@@ -493,10 +461,6 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    //marginBottom: 20,
-    backgroundColor: '#fff',
     overflow: 'hidden',
   },
 
@@ -685,18 +649,10 @@ const styles = StyleSheet.create({
   },
   adminModalView: {
     flex: 1,
-    //backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    //top: 100
-   //justifyContent: 'flex-end',
    alignItems: 'flex-end',
   },
   memberModalView: {
     flex: 1,
-    //marginVertical: 20,
-    backgroundColor: '#fff',
-    //borderRadius: 20,
-    //padding: 35,
-    //alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

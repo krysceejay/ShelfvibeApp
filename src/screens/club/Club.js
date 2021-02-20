@@ -11,6 +11,7 @@ import {
   TextInput,
   SafeAreaView
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
@@ -23,6 +24,7 @@ const imgURL = Config.IMAGE_URL;
 const {width} = Dimensions.get('window');
 
 const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
+  const {colors} = useTheme();
   const [showSearch, setShowSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -101,7 +103,7 @@ const Club = ({fetchClubs, filterClub, navigation, clubs, filterClubs}) => {
           </TouchableOpacity>
         <TextInput placeholder="Search club" style={styles.textInput} onChangeText={text => searchClub(text)} />
       </View> : 
-      <View style={styles.header}>
+      <View style={[styles.header, {borderBottomColor: colors.borderBottomColor}]}>
           <Text style={styles.headerText}>All Clubs</Text>
           <TouchableOpacity onPress={() => {
             setShowSearch(true);
@@ -222,11 +224,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%', 
-    backgroundColor: '#fff',
     paddingHorizontal: 15,
     paddingVertical: 5,
     marginBottom: 5,
     height: 55,
+    borderBottomWidth: 1
  },
     headerText: {
     fontSize: 18,

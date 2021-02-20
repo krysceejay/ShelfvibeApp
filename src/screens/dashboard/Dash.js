@@ -42,7 +42,7 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
               <View style={[styles.stats, {backgroundColor: colors.dashStats}]}>
                 <TouchableOpacity activeOpacity={0.6} 
                 onPress={() => {navigation.navigate('ManageShelf')}}
-                style={styles.statsSingleOne}>
+                style={[styles.statsSingleOne, {borderRightColor: colors.dashStats}]}>
                   <View>
                     <Text style={[styles.number, {color: colors.text}]}>{userClubs.length}</Text>
                     <Text style={[styles.text, {color: colors.text}]}>Clubs Started</Text>
@@ -51,10 +51,10 @@ const Dash = ({navigation, getUserClubs, getUserJoinedClubs, userClubs, joinedCl
                 <TouchableOpacity activeOpacity={0.6} 
                 onPress={() => {navigation.navigate('JoinedList')}}
                 style={styles.statsSingle}>
-                <View>
+                  <View>
                     <Text style={[styles.number, {color: colors.text}]}>{joinedClub.length}</Text>
                     <Text style={[styles.text, {color: colors.text}]}>Clubs Joined</Text>
-                </View>
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.clubs}>
@@ -219,6 +219,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRightWidth: 1,
-        borderRightColor: 'rgba(0,0,0,0.2)'
       }
 })
