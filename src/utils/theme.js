@@ -34,3 +34,11 @@ export const random = (length = 8) => {
 
   return str;
 };
+
+export const isEmpty = obj => {
+  for (let key in obj) {
+    if(obj.hasOwnProperty(key))
+        return false;
+      }
+      return true;
+  }

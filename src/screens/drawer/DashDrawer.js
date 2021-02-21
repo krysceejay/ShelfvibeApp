@@ -9,12 +9,12 @@ import Dash from '../dashboard/Dash';
 import ManageClub from '../dashboard/ManageClub';
 import JoinedClub from '../dashboard/JoinedList';
 import Profile from '../dashboard/Profile';
+import Poll from '../club/Poll';
 import Details from '../club/Details';
 import Rating from '../club/Rating';
 import AllRatings from '../club/AllRatings';
 import Report from '../club/Report';
 import AddReview from '../club/AddReview';
-import Poll from '../club/Poll';
 import ReadingList from '../club/ReadingList';
 
 const Drawer = createDrawerNavigator();
@@ -74,12 +74,8 @@ const DashDrawer = () => {
       <Drawer.Screen name="All Ratings" component={AllRatings} options={{ headerShown: false }} />
       <Drawer.Screen name="Report" component={Report} options={{ headerShown: false }} />
       <Drawer.Screen name="Add Review" component={AddReview} options={{ headerShown: false }} />
-      <Drawer.Screen name="Poll" component={Poll} options={{
-        headerRight: null
-        }} />
-      <Drawer.Screen name="Reading List" component={ReadingList} options={{
-        headerRight: null
-        }} />
+      <Drawer.Screen name="Poll" component={Poll} options={{ headerShown: false }} />
+      <Drawer.Screen name="Reading List" component={ReadingList} options={{ headerShown: false }} />
       
     </Drawer.Navigator>
   );

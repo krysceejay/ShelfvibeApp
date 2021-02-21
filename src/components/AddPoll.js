@@ -3,10 +3,12 @@ import {connect} from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import {addPoll} from '../actions/pollActions';
 
 const AddPoll = ({closeModal, addPoll, clubId}) => {
+  const {colors} = useTheme();
   const [formData, setFormData] = useState({
     pollname: '',
     pollbooks: [],
@@ -65,7 +67,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
     return (
         <SafeAreaView style={styles.container}>
         <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, {color: colors.text}]}>
             Add Poll
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -93,10 +95,12 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
           extraHeight={10}>
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Poll Name</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Poll Name</Text>
                   <TextInput 
                   placeholder="Enter poll name" 
-                  style={styles.textInput}
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={pollname}
                   onChangeText={onChange('pollname')} 
                   />
@@ -107,44 +111,52 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   )}
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 1</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 1</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book1}
                   onChangeText={onChange('book1')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 2</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 2</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
                   value={book2}
                   onChangeText={onChange('book2')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 3</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 3</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
                   value={book3}
                   onChangeText={onChange('book3')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 4</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 4</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book4}
                   onChangeText={onChange('book4')}
                   />
                 </View>
                 <View style={styles.singleInput}>
                   <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={addPollAction}>
-                    <Text style={styles.textSign}>Add Poll</Text>
+                    <Text style={[styles.textSign, {color: colors.text}]}>Add Poll</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -189,11 +201,8 @@ const styles = StyleSheet.create({
       textInput: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
-        backgroundColor: '#eee',
         height: 50,
         paddingHorizontal: 10,
-        borderColor: '#ddd', 
         borderWidth: 1 
       },
       signIn: {

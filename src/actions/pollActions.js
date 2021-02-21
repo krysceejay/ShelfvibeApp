@@ -92,7 +92,6 @@ export const editPoll = pollInput => async dispatch => {
         });
       } else {
         const errorMessages = editClubPoll.data.data.updatePoll.messages;
-        console.log(errorMessages);
         Alert.alert(
           'Error',
           'Please make sure you provide the required fields',
@@ -100,7 +99,6 @@ export const editPoll = pollInput => async dispatch => {
         return errorMessages;
       }
     } catch (err) {
-      console.log(err);
       Alert.alert(
         'Error',
         'Some error occured, please check your internet connection and retry.',

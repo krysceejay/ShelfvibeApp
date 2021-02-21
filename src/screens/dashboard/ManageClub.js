@@ -29,7 +29,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [addClubShow, setAddClubShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedClubItem, setSelectedClubItem] = useState(null);
   const user = useContext(AuthContext);
   const {colors} = useTheme();
 
@@ -48,12 +48,12 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
     setAddClubShow(false);
   };
 
-  handleOnSelectItem = item => {
-    setSelectedItem(item);
+  handleOnSelectItem = it => {
+    setSelectedClubItem(it);
   };
 
   handleOnCloseEditModal = () => {
-    setSelectedItem(null);
+    setSelectedClubItem(null);
   };
 
   _renderItem = ({item, index}) => {
@@ -86,8 +86,8 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
             style={{
               justifyContent: 'flex-end'
             }}
-            activeOpacity={0.9}
-            onPress={() => {handleOnSelectItem(item)}}>
+            
+            onPress={() => handleOnSelectItem(item)}>
             <MaterialCommunityIcons name="dots-vertical" size={22} color={colors.icon} />
           </TouchableOpacity>
           </View>
@@ -116,14 +116,6 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           color="#fff"
         />
       </TouchableOpacity>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={addClubShow}>
-        <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
-            <AddClub closeModal={handleOnCloseModal} />
-        </View>
-        </Modal>
       <FlatList
         data={userClubs}
         renderItem={_renderItem}
@@ -137,20 +129,28 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           </View>
       )}
       />
+      </>
+      }
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={addClubShow}>
+          <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
+              <AddClub closeModal={handleOnCloseModal} />
+          </View>
+        </Modal>
       <Modal
         animationType="fade"
         transparent={true}
-        visible={selectedItem ? true : false}>
-          <TouchableOpacity onPress={handleOnCloseEditModal} activeOpacity={1} style={styles.modalView}>
-            <Manage
-            closeModal = {handleOnCloseEditModal}
-            item={selectedItem}
-            navigation={navigation}
-            />
-          </TouchableOpacity>
+        visible={selectedClubItem !== null ? true : false}>
+        <TouchableOpacity onPress={handleOnCloseEditModal} activeOpacity={1} style={styles.modalView}>
+          <Manage
+          closeModal={handleOnCloseEditModal}
+          item={selectedClubItem}
+          navigation={navigation}
+          />
+        </TouchableOpacity>
       </Modal>
-      </>
-      }
     </View>
   );
 };

@@ -46,28 +46,6 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction,
         closeModal();
       }
 
-    //   reportClub = async () => {
-    //     const userReportClub = await reportClubAction({
-    //         clubid, 
-    //         reportSubject,
-    //         reportBody
-    //       });
-
-    //       if (userReportClub == 'failed' || Array.isArray(userReportClub)) {
-    //         if (Array.isArray(userReportClub)) {
-    //           const errMsges = {};
-    //           userReportClub.forEach(item => {
-    //             errMsges[item.field] = item.message;
-    //           });
-    //           setErrorMsg(errMsges);
-    //         }
-    //       } else {
-    //         console.log('success');
-    //       }
-
-    //     closeModal();
-    //   }
-
       shareBtn = async () => {
           const shareOptions = {
               message: `https://shelfvibe.com/club/${random()}${clubid}`,
@@ -77,7 +55,8 @@ const AdminComp = ({navigation, closeModal, clubid, userFav, favClubAction,
               await Share.open(shareOptions);
               // {"app": "com.whatsapp/com.whatsapp.ContactPicker", "message": "com.whatsapp/com.whatsapp.ContactPicker"}
           } catch (error) {
-              console.log('Error => ', error);
+            return;
+              //console.log('Error => ', error);
           }
         }
 

@@ -1,7 +1,9 @@
 import React, {useState, useContext} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import RatingStarGroup from '../../components/RatingStarGroup';
 import {rateClub, updateRateClub} from '../../actions/rateActions';
 import {sendNotificationAction} from '../../actions/notificationActions';
@@ -11,6 +13,7 @@ import {AuthContext} from '../../utils/context';
 const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation, sendNotificationAction}) => {
     const {clubid, ownerId} = route.params;
     const user = useContext(AuthContext);
+    const {dark, colors} = useTheme();
     const [formData, setFormData] = useState({
         userRating: 0,
         userComment: '',
@@ -75,7 +78,25 @@ const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation, sendN
       };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
+          <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+            <View style={[styles.header, {borderBottomColor: colors.borderBottomColor}]}>
+              <TouchableOpacity onPress={() => {
+                navigation.goBack();
+              }}
+              style={{
+                paddingHorizontal: 3,
+                marginRight: 38
+              }}
+                activeOpacity={0.9}>
+                <AntDesign
+                  name="left"
+                  size={28}
+                  color={colors.icon}
+                  />
+              </TouchableOpacity>
+              <Text style={[styles.headerText, {color: colors.text}]}>Add Review</Text>
+            </View>
             <View style={styles.ratingActionView}>
               <View style={{alignSelf: 'center', marginVertical: 15}}>
                 <RatingStarGroup getRating={getUserRating} />
@@ -87,36 +108,37 @@ const AddReview = ({route, rateClub, updateRateClub, hasRated, navigation, sendN
               </View>
               <View
                 style={{
-                  backgroundColor: '#fff',
-                  borderColor: '#ccc',
-                  borderWidth: 2,
+                  paddingHorizontal: 20
                 }}>
                 <TextInput
                   multiline
                   numberOfLines={2}
                   editable
                   placeholder="Review comment"
-                  //maxLength={40}
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
-                    fontSize: 15,
-                    color: '#333',
+                    fontSize: 14,
+                    color: colors.text,
                   }}
                   value={userComment}
                   onChangeText={onChange('userComment')}
                 />
               </View>
               {comment !== '' && (
-                <Animatable.View animation="fadeInLeft" duration={500}>
+                <Animatable.View animation="fadeInLeft" duration={500} style={{paddingHorizontal: 20}}>
                   <Text style={styles.errorMessage}>{comment}</Text>
                 </Animatable.View>
               )}
-              <View style={{alignItems: 'flex-start'}}>
+              <View style={{alignItems: 'flex-start', paddingHorizontal: 20}}>
                 <TouchableOpacity onPress={rateClubAction}>
-                  <View style={styles.submit}>
-                    <Text style={styles.submitText}>Submit</Text>
+                  <View style={[styles.submit, {borderColor: colors.border}]}>
+                    <Text style={[styles.submitText, {color: colors.text}]}>Submit</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -136,22 +158,20 @@ export default connect(
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 12,
+        flex: 1
       },
     ratingActionView: {
     marginBottom: 20,
     },
     submit: {
-    backgroundColor: '#242c42',
     width: 100,
     marginTop: 10,
     borderRadius: 5,
     padding: 5,
+    borderWidth: 1,
+    
     },
     submitText: {
-    color: '#fff',
     fontFamily: 'Nunito-Regular',
     fontSize: 16,
     textAlign: 'center',
@@ -161,4 +181,17 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 3
     },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      paddingVertical: 5,
+      marginBottom: 5,
+      height: 55,
+      borderBottomWidth: 1
+   },
+   headerText: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 20,
+  } 
 })

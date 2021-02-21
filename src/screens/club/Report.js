@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useTheme } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import {reportClubAction} from '../../actions/clubActions';
 
 const Report = ({route, reportClubAction, navigation}) => {
     const {clubid} = route.params;
+    const {dark, colors} = useTheme();
     const [formData, setFormData] = useState({
         reportSubject: '',
         reportBody: '',
@@ -47,17 +50,37 @@ const Report = ({route, reportClubAction, navigation}) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
+          <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+            <View style={[styles.header, {borderBottomColor: colors.borderBottomColor}]}>
+              <TouchableOpacity onPress={() => {
+                navigation.goBack();
+              }}
+              style={{
+                paddingHorizontal: 3,
+                marginRight: 38
+              }}
+                activeOpacity={0.9}>
+                <AntDesign
+                  name="left"
+                  size={28}
+                  color={colors.icon}
+                  />
+              </TouchableOpacity>
+              <Text style={[styles.headerText, {color: colors.text}]}>Report</Text>
+          </View>
             <KeyboardAwareScrollView
-          resetScrollToCoords={{x: 0, y: 0}}
-          scrollEnabled={true}
-          extraHeight={10}>
+              resetScrollToCoords={{x: 0, y: 0}}
+              scrollEnabled={true}
+              extraHeight={10}>
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Subject</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Subject</Text>
                   <TextInput 
                   placeholder="Enter subject" 
-                  style={styles.textInput}
+                  placeholderTextColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
+                  selectionColor={colors.text}
                   value={reportSubject}
                   onChangeText={onChange('reportSubject')} 
                   />
@@ -69,19 +92,23 @@ const Report = ({route, reportClubAction, navigation}) => {
                 </View>
 
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Body</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Body</Text>
                   <TextInput
                   multiline
                   numberOfLines={4}
                   editable
                   placeholder="Enter body"
+                  placeholderTextColor={colors.text}
+                  selectionColor={colors.text}
                   maxLength={300}
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
+                    color: colors.text,
                   }}
                   value={reportBody}
                   onChangeText={onChange('reportBody')}
@@ -95,7 +122,7 @@ const Report = ({route, reportClubAction, navigation}) => {
         
                 <View style={styles.singleInput}>
                   <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={reportClub}>
-                    <Text style={styles.textSign}>Report</Text>
+                    <Text style={[styles.textSign, {color: colors.text}]}>Report</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -128,11 +155,8 @@ const styles = StyleSheet.create({
     textInput: {
      fontFamily: 'Nunito-Regular',
      fontSize: 14,
-     color: '#333',
-     backgroundColor: '#fff',
      height: 50,
      paddingHorizontal: 10,
-     borderColor: '#ddd', 
      borderWidth: 1 
     },
     signIn: {
@@ -154,4 +178,17 @@ const styles = StyleSheet.create({
         color: 'red',
         marginTop: 3
       },
-})
+      header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        paddingVertical: 5,
+        marginBottom: 5,
+        height: 55,
+        borderBottomWidth: 1
+     },
+     headerText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 20,
+    }
+  })

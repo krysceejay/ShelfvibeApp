@@ -9,10 +9,13 @@ import {
   Modal,
   TouchableOpacity,
   SafeAreaView,
-  Image
+  Image,
+  StatusBar
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../components/Loader';
 import AddBook from '../../components/AddBook';
@@ -24,36 +27,48 @@ const {width} = Dimensions.get('window');
 const numColumns = 3;
 const imgURL = Config.IMAGE_URL;
 
-const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
+const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction, navigation}) => {
   const {clubid} = route.params;
+  const {dark, colors} = useTheme();
   const [addBookShow, setAddBookShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedBookItem, setSelectedBookItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useContext(AuthContext);
 
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getClubReadList(clubid);
+  // }, [clubid]);
+
+  // getClubReadList = async clubid => {
+  //   const getReadList = await fetchClubReadList(clubid);
+  //     if (getReadList !== 'failed') {
+  //       setIsLoading(false);
+  //   }
+  // };
+
   useEffect(() => {
     setIsLoading(true);
-    getClubReadList(clubid);
-  }, [clubid]);
-
-  getClubReadList = async clubid => {
-    const getReadList = await fetchClubReadList(clubid);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getReadList = await fetchClubReadList(clubid);
       if (getReadList !== 'failed') {
         setIsLoading(false);
-    }
-  };
+      }
+    });
+    return unsubscribe;
+  }, [clubid]);
 
   handleOnCloseModal = () => {
     setAddBookShow(false);
   };
 
-  handleOnSelectItem = item => {
-    setSelectedItem(item);
+  handleOnSelectBookItem = item => {
+    setSelectedBookItem(item);
   };
 
   handleOnCloseEditModal = () => {
-    setSelectedItem(null);
+    setSelectedBookItem(null);
   };
 
   markCurrent = async (bookId) => {
@@ -71,40 +86,39 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
     return (
         <View
             style={{
-                backgroundColor: '#fff',
+                backgroundColor: colors.background,
                 padding: 6,
                 width: width * 1/3,
-                height: width * 0.56,
+                //height: width * 0.56,
                 marginVertical: 3,
-                position: 'relative'
+                position: 'relative',
             }}>
             <Image
                 source={{
                   uri: `${imgURL}/bookcover/${item.bookcover}`,
                 }}
-                style={{width: '100%', height: '80%', resizeMode: 'cover'}}
+                style={{width: '100%', height: width * 0.40, resizeMode: 'cover'}}
               />
-              <View style={styles.current}>
-                  <TouchableOpacity activeOpacity={0.6} onPress={() => {
-                    markCurrent(item.id)
-                  }}>
-                      <Ionicons 
-                        name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} 
-                        size={30} 
-                        color={item.current ? "#155724" : "#ccc"} 
-                      />
-                  </TouchableOpacity>
-                  {item.current && <Text style={styles.textMonth}>Current</Text>}
-                  
+              <View style={[styles.current, {backgroundColor: colors.card}]}>
+                <TouchableOpacity activeOpacity={0.6} onPress={() => {
+                  markCurrent(item.id)
+                }}>
+                  <Ionicons 
+                    name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} 
+                    size={25} 
+                    color={item.current ? dark ? '#90ee90': '#155724' : colors.icon} 
+                  />
+                </TouchableOpacity>
+                  {item.current && <Text style={[styles.textMonth, {color: colors.text}]}>Current</Text>}
               </View>
             <TouchableOpacity
             style={{
               //paddingHorizontal: 12,
               position: 'absolute',
-              bottom: 50,
-              right: 10,
+              bottom: 25,
+              right: 6,
               zIndex: 2,
-              backgroundColor: '#242c42',
+              backgroundColor: colors.card,
               borderRadius: 15,
               width: 30,
               height: 30,
@@ -112,15 +126,34 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
               justifyContent: 'center',
             }}
             activeOpacity={0.6}
-            onPress={() => {handleOnSelectItem(item)}}>
-            <FontAwesome name="edit" size={18} color="#fff" />
+            onPress={() => handleOnSelectBookItem(item)}>
+            <FontAwesome name="edit" size={18} color={colors.icon} />
           </TouchableOpacity>
-          <Text numberOfLines={2} ellipsizeMode="tail" style={styles.bookTitle}>{item.title}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>{item.title}</Text>
         </View>
     );
   };
 
   return (
+    <SafeAreaView style={{flex: 1}}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+      <View style={[styles.headerBlock, {borderBottomColor: colors.borderBottomColor}]}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack();
+          }}
+          style={{
+            paddingHorizontal: 3,
+            marginRight: 38
+          }}
+            activeOpacity={0.9}>
+            <AntDesign
+              name="left"
+              size={28}
+              color={colors.icon}
+              />
+          </TouchableOpacity>
+          <Text style={[styles.headerText, {color: colors.text}]}>Reading List</Text>
+        </View>
     <View style={styles.container}>
         <TouchableOpacity onPress={() => {
             setAddBookShow(true);
@@ -137,7 +170,7 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
         animationType="fade"
         transparent={true}
         visible={addBookShow}>
-        <View style={styles.memberModalView}>
+        <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
             <AddBook closeModal={handleOnCloseModal} clubId={clubid} />
         </View>
         </Modal>
@@ -151,7 +184,6 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}/> :
-      <>
       <FlatList
           data={bookLists}
           renderItem={_renderItem}
@@ -159,25 +191,25 @@ const ReadingList = ({route, fetchClubReadList, bookLists, setBookAction}) => {
           numColumns={numColumns}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>No book found</Text>
+            <Text style={[styles.emptyText, {color: colors.text}]}>No book found</Text>
         )}
         contentContainerStyle={{paddingBottom: 45}}
         />
+        }
         <Modal
-            animationType="fade"
-            transparent={true}
-            visible={selectedItem ? true : false}>
-            <View style={styles.memberModalView}>
-              <EditBook
-                closeModal={handleOnCloseEditModal}
-                item={selectedItem}
-                clubId={clubid}
-              />
-            </View>
-          </Modal>
-          </>
-          }
+          animationType="fade"
+          transparent={true}
+          visible={selectedBookItem ? true : false}>
+          <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
+            <EditBook
+              closeModal={handleOnCloseEditModal}
+              item={selectedBookItem}
+              clubId={clubid}
+            />
+          </View>
+        </Modal>
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -193,8 +225,6 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingVertical: 10,
-    backgroundColor: '#fff',
     overflow: 'hidden',
   },
   header: {
@@ -230,14 +260,13 @@ const styles = StyleSheet.create({
     },
     memberModalView: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     current: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
         position: 'absolute',
-        backgroundColor: 'rgba(238,238,238, 0.95)',
+        //backgroundColor: 'rgba(238,238,238, 0.95)',
         top: 6,
         left: 6,
         width: '100%',
@@ -246,7 +275,6 @@ const styles = StyleSheet.create({
     textMonth: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
         marginLeft: 15
     },
     floatingBtn: {
@@ -275,4 +303,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         marginTop: 15
       },
+      headerBlock: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        paddingVertical: 5,
+        height: 55,
+        borderBottomWidth: 1
+     },
+      headerText: {
+        fontFamily: 'Nunito-Regular',
+        fontSize: 20,
+      }
 });

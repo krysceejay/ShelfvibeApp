@@ -10,17 +10,17 @@ const Manage = ({closeModal, item, navigation, updateClubPublic, updateClubPubli
     const [edit, setEdit] = useState(false);
     const {colors} = useTheme();
       goToPoll = () => {
+        closeModal();
         navigation.navigate('Poll', {
             clubid: item.id
           });
-        closeModal();
       }
 
       goToReadingList = () => {
+        closeModal();
         navigation.navigate('Reading List', {
             clubid: item.id
           });
-        closeModal();
       }
 
       setClubPublic = async () => {

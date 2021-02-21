@@ -1,15 +1,17 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 const BorderButton = ({onpress, text}) => {
+  const {colors} = useTheme();
   return (
     <View style={{alignItems: 'flex-start'}}>
       <TouchableOpacity
         onPress={() => {
           onpress();
         }}>
-        <View style={styles.viewAll}>
-          <Text style={styles.viewAllText}>{text}</Text>
+        <View style={[styles.viewAll, {borderColor: colors.border, backgroundColor: colors.background}]}>
+          <Text style={[styles.viewAllText, {color: colors.text}]}>{text}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -20,14 +22,10 @@ export default BorderButton;
 
 const styles = StyleSheet.create({
   viewAll: {
-    backgroundColor: '#242c42',
-    //width: 100,
     paddingVertical: 5,
     paddingHorizontal: 8,
-    borderColor: '#fff',
-    borderWidth: 3,
+    borderWidth: 1,
     borderRadius: 25,
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -38,7 +36,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   viewAllText: {
-    color: '#fff',
     fontFamily: 'Nunito-Regular',
     fontSize: 16,
     textAlign: 'center',

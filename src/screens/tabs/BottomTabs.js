@@ -125,7 +125,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#00a2cc',
+          activeTintColor: colors.text,
           inactiveTintColor: 'gray',
           style: {
             backgroundColor: colors.background

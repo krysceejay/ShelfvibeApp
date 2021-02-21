@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import moment from "moment";
 import Config from 'react-native-config';
 import {userNotificationAction, userSeenNoteAction} from '../actions/notificationActions';
@@ -12,7 +13,7 @@ import {stringToHslColor} from '../utils/theme';
 const proURL = Config.IMAGE_URL;
 
 const Notifications = ({userNotificationAction, userSeenNoteAction, notifications, navigation}) => {
-
+  const {colors} = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -45,16 +46,16 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
               <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
                 handleOnSelectItem(senderUser);
               }}>
-                <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{senderUser.username}</Text> 
                 </TouchableOpacity>
-                <Text>has joined your club</Text>
+                <Text style={{color: colors.text}}>has joined your club</Text>
                 <TouchableOpacity style={{marginHorizontal: 3}}
                 onPress={() => {
                   navigation.navigate('Details', {
-                    item: club
+                    clubId: club.id
                   });
                 }}>
-                <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{club.name}</Text>
                 </TouchableOpacity>
               </View>
         break;
@@ -64,16 +65,16 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
                   <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
                 handleOnSelectItem(senderUser);
               }}>
-                   <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                   <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{senderUser.username}</Text> 
                   </TouchableOpacity>
-                  <Text>has liked your club</Text>
+                  <Text style={{color: colors.text}}>has liked your club</Text>
                   <TouchableOpacity style={{marginHorizontal: 4}}
                   onPress={() => {
                     navigation.navigate('Details', {
-                      item: club
+                      clubId: club.id
                     });
                   }}>
-                  <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                  <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{club.name}</Text>
                 </TouchableOpacity>
                 </View>
         break;
@@ -83,16 +84,16 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
                   <TouchableOpacity style={{marginHorizontal: 3}} onPress={() => {
                 handleOnSelectItem(senderUser);
               }}>
-                   <Text style={{fontFamily: 'Nunito-Bold'}}>{senderUser.username}</Text> 
+                   <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{senderUser.username}</Text> 
                   </TouchableOpacity>
-                  <Text>has added a review to your club</Text>
+                  <Text style={{color: colors.text}}>has added a review to your club</Text>
                   <TouchableOpacity style={{marginHorizontal: 4}}
                   onPress={() => {
                     navigation.navigate('Details', {
-                      item: club
+                      clubId: club.id
                     });
                   }}>
-                  <Text style={{fontFamily: 'Nunito-Bold'}}>{club.name}</Text>
+                  <Text style={{fontFamily: 'Nunito-Bold', color: colors.text}}>{club.name}</Text>
                 </TouchableOpacity>
                 </View>
         break;
@@ -104,7 +105,7 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
   }
 
   const renderItem = ({item}) => {
-    return ( <View style={styles.userInfoSection}>
+    return ( <View style={[styles.userInfoSection, {backgroundColor: colors.card}]}>
           {item.senderUser.propix !== "noimage.png" ?
             <Image
               style={styles.avatar}
@@ -117,7 +118,7 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
 
             <View style={{paddingLeft: 10, maxWidth: '90%'}}>
                 <Message data={item} />
-              <Text style={styles.caption}> {moment(item.insertedAt).startOf('second').fromNow()}</Text>
+              <Text style={[styles.caption, {color: colors.text}]}> {moment(item.insertedAt).startOf('second').fromNow()}</Text>
             </View>
       </View>
       )
@@ -135,12 +136,12 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
         alignItems: 'center',
         justifyContent: 'center',
       }}/> :
-      <>
       <FlatList
           data={notifications}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 50, paddingTop: 12}}
           ListEmptyComponent={() => (
             <View style={{
               justifyContent: 'center', 
@@ -152,19 +153,18 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
             </View>
           )}
         /> 
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={selectedItem ? true : false}>
-            <View style={styles.memberModalView}>
-              <Profile
-                closeModal={handleOnCloseEditModal}
-                user={selectedItem}
-              />
-            </View>
-          </Modal>
-         </> 
         }
+       <Modal
+        animationType="fade"
+        transparent={true}
+        visible={selectedItem ? true : false}>
+        <View style={styles.memberModalView}>
+          <Profile
+            closeModal={handleOnCloseEditModal}
+            user={selectedItem}
+          />
+        </View>
+      </Modal> 
     </View>
   );
 };
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginVertical: 6,
     marginHorizontal: 12,
-    backgroundColor: '#fff',
     borderRadius: 10,
     //width: '100%',
   },

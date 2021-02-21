@@ -23,13 +23,13 @@ const NotificationStack = () => {
           fontSize: 20,
         },
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
-        headerTintColor: '#000',
         headerTitleAlign: 'left',
+        headerShown: false,
+        headerTintColor: colors.text,
       })}
     >
-      <Stack.Screen name="Notification" component={Notifications} />
-      <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+      <Stack.Screen name="Notification" component={Notifications} options={{ headerShown: true }} />
+      <Stack.Screen name="Details" component={Details} />
       <Stack.Screen name="Rating" component={Rating} />
       <Stack.Screen name="All Ratings" component={AllRatings} />
       <Stack.Screen name="Report" component={Report} />

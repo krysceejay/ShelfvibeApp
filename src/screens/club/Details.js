@@ -23,7 +23,7 @@ import ReadingList from '../../components/ReadingList';
 import Members from '../../components/Members';
 import BookPoll from '../../components/BookPoll';
 import AdminComp from '../../components/AdminComp';
-import {stringToHslColor} from '../../utils/theme';
+import {stringToHslColor, isEmpty} from '../../utils/theme';
 import {fetchClubMembers, createMemberAction, checkMemberClub, getSingleClub} from '../../actions/clubActions';
 import {getFavByUserAndClub} from '../../actions/favActions';
 import {fetchClubCurrentPolls} from '../../actions/pollActions';
@@ -60,7 +60,7 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
     });
 
     return unsubscribe;
-  }, [navigation, clubId]);
+  }, [clubId]);
 
   getClubRatings = async clubid => {
     await getClubRatingsAction(clubid);
@@ -148,14 +148,6 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
   // }else{
   //   currentPoll = {}
   // }
-
-  const isEmpty = (obj) => {
-    for(let key in obj) {
-      if(obj.hasOwnProperty(key))
-          return false;
-        }
-        return true;
-    }
 
   const data = {ratingActual: calRating(), numberOfRev: ratings.length};
 
@@ -536,7 +528,7 @@ const styles = StyleSheet.create({
   },
   clubMembersSingle:{
     height: 40,
-    width: '25%',
+    width: 40,
     borderRadius: 20,
     position: 'absolute',
     overflow: 'hidden',

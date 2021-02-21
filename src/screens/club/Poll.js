@@ -7,10 +7,14 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
-  Alert
+  Alert,
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Loader from '../../components/Loader';
 import AddPoll from '../../components/AddPoll';
 import EditPoll from '../../components/EditPoll';
@@ -19,41 +23,53 @@ import {AuthContext} from '../../utils/context';
 
 const numColumns = 1;
 
-const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
+const Poll = ({route, fetchClubPolls, setPollAction, polls, navigation}) => {
   const {clubid} = route.params;
+  const {dark, colors} = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [addPollShow, setAddPollShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedPollItem, setSelectedPollItem] = useState(null);
 
   const user = useContext(AuthContext);
 
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getClubPolls(clubid);
+  // }, [clubid]);
+
   useEffect(() => {
     setIsLoading(true);
-    getClubPolls(clubid);
-  }, [clubid]);
-
-  getClubPolls = async clubid => {
-    const getPolls = await fetchClubPolls(clubid);
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const getPolls = await fetchClubPolls(clubid);
       if (getPolls !== 'failed') {
         setIsLoading(false);
-    }
-  };
+      }
+    });
+    return unsubscribe;
+  }, [clubid]);
+
+  // getClubPolls = async clubid => {
+  //   const getPolls = await fetchClubPolls(clubid);
+  //     if (getPolls !== 'failed') {
+  //       setIsLoading(false);
+  //   }
+  // };
 
   handleOnCloseModal = () => {
     setAddPollShow(false);
   };
 
-  handleOnSelectItem = item => {
-    setSelectedItem(item);
+  handleOnSelectedItem = it => {
+    setSelectedPollItem(it);
   };
 
   handleOnCloseEditModal = () => {
-    setSelectedItem(null);
+    setSelectedPollItem(null);
   };
 
   showPollBooks = (item, index) => {
-    return <View key={index} style={styles.progressSingle}>
-      <Text numberOfLines={1} ellipsizeMode="tail">{item}</Text>
+    return <View key={index} style={[styles.progressSingle, {backgroundColor: colors.background}]}>
+      <Text style={{color: colors.text}} numberOfLines={1} ellipsizeMode="tail">{item}</Text>
       {/* <Text>10%</Text> */}
     </View>
   };
@@ -71,9 +87,9 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
 
   _renderItem = ({item, index}) => {
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, {backgroundColor: colors.card, borderColor: colors.border}]}>
         <View style={styles.header}>
-          <Text style={styles.title}>{item.pollName}</Text>
+          <Text style={[styles.title, {color: colors.text}]}>{item.pollName}</Text>
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={() => {
@@ -82,23 +98,43 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
             <Ionicons 
             name={item.current ? "ios-checkmark-circle-outline" : "ios-radio-button-off"} 
             size={25} 
-            color={item.current ? "#155724" : "#ccc"} 
+            color={item.current ? dark ? '#90ee90': '#155724' : colors.icon} 
             />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() => {handleOnSelectItem(item)}}>
-            <FontAwesome name="edit" size={25} color="#444444" />
+            onPress={() => handleOnSelectedItem(item)}>
+            <FontAwesome name="edit" size={25} color={colors.icon} />
           </TouchableOpacity>
         </View>
         <View style={styles.pollDetails}>
-          {item.books.map(showPollBooks)}
+
+          {item.books !== null && item.books.map(showPollBooks)}
         </View>
       </View>
     );
   };
 
   return (
+    <SafeAreaView style={{flex: 1}}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+      <View style={[styles.headerBlock, {borderBottomColor: colors.borderBottomColor}]}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack();
+          }}
+          style={{
+            paddingHorizontal: 3,
+            marginRight: 38
+          }}
+            activeOpacity={0.9}>
+            <AntDesign
+              name="left"
+              size={28}
+              color={colors.icon}
+              />
+          </TouchableOpacity>
+          <Text style={[styles.headerText, {color: colors.text}]}>Poll</Text>
+        </View>
     <View style={styles.container}>
         <TouchableOpacity onPress={() => {
             setAddPollShow(true);
@@ -111,14 +147,6 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
               color="#fff"
             />
             </TouchableOpacity>
-        <Modal
-        animationType="fade"
-        transparent={true}
-        visible={addPollShow}>
-        <View style={styles.memberModalView}>
-            <AddPoll closeModal={handleOnCloseModal} clubId={clubid} />
-        </View>
-        </Modal>
         {isLoading ? <Loader 
       style={{
         position: 'absolute',
@@ -129,32 +157,40 @@ const Poll = ({route, fetchClubPolls, setPollAction, polls}) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}/> :
-      <>
       <FlatList
           data={polls}
           renderItem={_renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={numColumns}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom: 50, paddingTop: 12}}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>No poll found</Text>
+            <Text style={[styles.emptyText, {color: colors.text}]}>No poll found</Text>
         )}
         />
-        <Modal
-            animationType="fade"
-            transparent={true}
-            visible={selectedItem ? true : false}>
-            <View style={styles.memberModalView}>
-              <EditPoll
-                closeModal={handleOnCloseEditModal}
-                item={selectedItem}
-                clubId={clubid}
-              />
-            </View>
-          </Modal>
-          </>
           }
+          <Modal
+        animationType="fade"
+        transparent={true}
+        visible={addPollShow}>
+        <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
+            <AddPoll closeModal={handleOnCloseModal} clubId={clubid} />
+        </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={selectedPollItem !== null ? true : false}>
+          <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
+            <EditPoll
+              closeModal={handleOnCloseEditModal}
+              item={selectedPollItem}
+              clubId={clubid}
+            />
+          </View>
+        </Modal>  
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -170,28 +206,21 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingVertical: 10,
-    backgroundColor: '#fff',
     overflow: 'hidden',
   },
   item: {
     flex: 1,
     margin: 10,
-    backgroundColor: '#fff',
     borderRadius: 12,
     overflow: 'hidden',
     padding: 20,
-    borderWidth: 2,
-    borderColor: '#f5f5f5',
+    borderWidth: 1
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%', 
-    backgroundColor: '#fff',
-    //paddingHorizontal: 15,
-    //paddingVertical: 12,
+    width: '100%',
     marginBottom: 5
  },
   title: {
@@ -226,13 +255,12 @@ const styles = StyleSheet.create({
     width: '100%',
     //height: 40,
     borderRadius: 5,
-    backgroundColor: '#ddd',
+    //backgroundColor: '#ddd',
     marginVertical: 5,
     padding: 10,
   },
   memberModalView: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   floatingBtn: {
     position: 'absolute',
@@ -260,4 +288,16 @@ const styles = StyleSheet.create({
       paddingHorizontal: 12,
       marginTop: 15
     },
+    headerBlock: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      paddingVertical: 5,
+      height: 55,
+      borderBottomWidth: 1
+   },
+    headerText: {
+      fontFamily: 'Nunito-Regular',
+      fontSize: 20,
+    }
 });

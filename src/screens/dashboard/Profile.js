@@ -79,7 +79,7 @@ const Profile = () => {
             <TouchableOpacity onPress={() => {
               setModalVisible(true);
             }}>
-              <View style={styles.iconContainer}>
+              <View style={[styles.iconContainer, {borderColor: colors.border}]}>
                 <FontAwesome name="pencil" size={20} color={colors.icon} />
               </View>
             </TouchableOpacity>
@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 20,
-    borderColor: '#00a2cc',
     borderWidth: 2,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -191,7 +190,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 80,
     overflow: 'hidden',
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
