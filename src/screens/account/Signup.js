@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,6 +16,7 @@ import {signup} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
 const Signup = ({signup, navigation}) => {
+  const {colors} = useTheme();
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -78,17 +80,19 @@ const Signup = ({signup, navigation}) => {
       <View style={styles.header}>
         <Text style={styles.textHeader}>Create a free account.</Text>
       </View>
-      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+      <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
         <KeyboardAwareScrollView
           resetScrollToCoords={{x: 0, y: 0}}
           scrollEnabled={true}
           extraHeight={10}
           showsVerticalScrollIndicator={false}>
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your first name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={firstname}
               onChangeText={onChange('firstname')}
             />
@@ -99,10 +103,12 @@ const Signup = ({signup, navigation}) => {
             </Animatable.View>
           )}
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your last name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={lastname}
               onChangeText={onChange('lastname')}
             />
@@ -114,10 +120,12 @@ const Signup = ({signup, navigation}) => {
           )}
 
           <View style={styles.action}>
-            <Ionicons name="ios-mail" color="#333" size={25} />
+            <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your email..."
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={useremail}
               autoCapitalize="none"
               onChangeText={onChange('useremail')}
@@ -130,10 +138,12 @@ const Signup = ({signup, navigation}) => {
           )}
 
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your user name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={userName}
               onChangeText={onChange('userName')}
             />
@@ -144,11 +154,13 @@ const Signup = ({signup, navigation}) => {
             </Animatable.View>
           )}
           <View style={styles.action}>
-            <Ionicons name="ios-lock" color="#333" size={25} />
+            <Ionicons name="ios-lock" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your password..."
               secureTextEntry={secureTextEntry}
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={password}
               minLen
               onChangeText={onChange('password')}
@@ -159,14 +171,14 @@ const Signup = ({signup, navigation}) => {
                 setFormData({...formData, secureTextEntry: !secureTextEntry})
               }>
               {secureTextEntry ? (
-                <Ionicons name="md-eye-off" color="#000" size={25} />
+                <Ionicons name="md-eye-off" color={colors.icon} size={25} />
               ) : (
-                <Ionicons name="md-eye" color="#000" size={25} />
+                <Ionicons name="md-eye" color={colors.icon} size={25} />
               )}
             </TouchableOpacity>
           </View>
           {passwordfield == '' ? 
-          <Text style={styles.fieldMessage}>not less than 6 characters</Text> : (
+          <Text style={[styles.fieldMessage, {color: colors.text}]}>not less than 6 characters</Text> : (
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errorMessage}>{passwordfield}</Text>
             </Animatable.View>
@@ -174,16 +186,16 @@ const Signup = ({signup, navigation}) => {
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={signupAction}>
-              <Text style={styles.textSign}>Sign Up</Text>
+              <Text style={[styles.textSign, {color: colors.text}]}>Sign Up</Text>
             </TouchableOpacity>
             <View style={styles.signUp}>
-              <Text style={styles.textSignUp}> Already have account ?</Text>
+              <Text style={[styles.textSignUp, {color: colors.text}]}> Already have account ?</Text>
               <TouchableOpacity
                 style={styles.signUpBtn}
                 onPress={() => {
                   navigation.navigate('Login');
                 }}>
-                <Text style={styles.signUpBtnText}>Login</Text>
+                <Text style={[styles.signUpBtnText, {color: colors.text}]}>Login</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -222,13 +234,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    //paddingHorizontal: 20,
-    //paddingBottom: 40,
     paddingVertical: 15,
   },
   footer: {
     flex: 4,
-    backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
@@ -256,8 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 17,
-    color: '#333',
+    fontSize: 17
   },
 
   button: {
@@ -284,8 +292,7 @@ const styles = StyleSheet.create({
   },
   textSignUp: {
     fontSize: 15,
-    fontFamily: 'Nunito-Regular',
-    color: 'grey',
+    fontFamily: 'Nunito-Regular'
   },
   signUpBtn: {
     marginLeft: 5,

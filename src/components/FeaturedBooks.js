@@ -42,9 +42,8 @@ const FeaturedBooks = ({closeModal, data}) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#ccc' }}>
-            {/* <StatusBar hidden /> */}
+            <StatusBar hidden />
             <View style={StyleSheet.absoluteFillObject}>
-                
                 {data.map((item, index) => {
                     const inputRange = [
                         (index - 1) * width,
@@ -151,8 +150,6 @@ const FeaturedBooks = ({closeModal, data}) => {
                   }}
                 />
              </View>
-             
-             
         </View>
     );
 };

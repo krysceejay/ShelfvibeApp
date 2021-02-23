@@ -417,7 +417,7 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
                   {user !== null && isMember === true ? 
                   club.details !== null ? club.details : 'No details at the moment.'
                   : 
-                  'Join club to see meeting details.'}
+                  'Login or Join club to see meeting details.'}
                 </Text>
               </View>
               

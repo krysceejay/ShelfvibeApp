@@ -9,12 +9,14 @@ import {
   KeyboardAvoidingView,
   Alert
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {resendVerifyAction} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
 const ResendCode = ({resendVerifyAction, navigation}) => {
+  const {colors} = useTheme();
   const [formData, setFormData] = useState({
     useremail: '',
     isLoading: false,
@@ -43,13 +45,15 @@ const ResendCode = ({resendVerifyAction, navigation}) => {
         <View style={styles.header}>
           <Text style={styles.textHeader}>Please enter your email.</Text>
         </View>
-        <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+        <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.action}>
-              <Ionicons name="ios-mail" color="#333" size={25} />
+              <Ionicons name="ios-mail" color={colors.icon} size={25} />
               <TextInput
                 placeholder="Your email..."
-                style={styles.textInput}
+                placeholderTextColor={colors.borderBottomColor}
+                selectionColor={colors.text}
+                style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                 value={useremail}
                 autoCapitalize="none"
                 onChangeText={onChange('useremail')}
@@ -59,7 +63,7 @@ const ResendCode = ({resendVerifyAction, navigation}) => {
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={resendCodeAction}>
-              <Text style={styles.textSign}>Resend Code</Text>
+              <Text style={[styles.textSign, {color: colors.text}]}>Resend Code</Text>
             </TouchableOpacity>
           </View>
         </Animatable.View>
@@ -102,7 +106,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 3,
-    backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,

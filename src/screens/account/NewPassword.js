@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Alert
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {enterNewpasswordAction} from '../../actions/authActions';
@@ -16,6 +17,7 @@ import Loader from '../../components/Loader';
 
 const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
     const {useremail} = route.params;
+    const {colors} = useTheme();
   const [formData, setFormData] = useState({
     password: '',
     secureTextEntry: true,
@@ -61,14 +63,16 @@ const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
         <View style={styles.header}>
           <Text style={styles.textHeader}>Kindly choose a new password.</Text>
         </View>
-        <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+        <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
           <KeyboardAvoidingView behavior="padding">
           <View style={styles.action}>
-            <Ionicons name="ios-lock" color="#333" size={25} />
+            <Ionicons name="ios-lock" color={colors.icon} size={25} />
             <TextInput
-              placeholder="Your password..."
+              placeholder="New password..."
               secureTextEntry={secureTextEntry}
-              style={styles.textInput}
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={password}
               minLen
               onChangeText={onChange('password')}
@@ -79,14 +83,14 @@ const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
                 setFormData({...formData, secureTextEntry: !secureTextEntry})
               }>
               {secureTextEntry ? (
-                <Ionicons name="md-eye-off" color="#000" size={25} />
+                <Ionicons name="md-eye-off" color={colors.icon} size={25} />
               ) : (
-                <Ionicons name="md-eye" color="#000" size={25} />
+                <Ionicons name="md-eye" color={colors.icon} size={25} />
               )}
             </TouchableOpacity>
           </View>
           {passwordfield == '' ? 
-           <Text style={styles.fieldMessage}>not less than 6 characters</Text> : (
+           <Text style={[styles.fieldMessage, {color: colors.text}]}>not less than 6 characters</Text> : (
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errorMessage}>{passwordfield}</Text>
             </Animatable.View>
@@ -95,7 +99,17 @@ const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
 
           <View style={styles.button}>
             <TouchableOpacity style={styles.signIn} onPress={newPasswordAction}>
-              <Text style={styles.textSign}>Submit</Text>
+              <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.verify}>
+            <TouchableOpacity
+              style={styles.verifyBtn}
+              activeOpacity={0.6}
+              onPress={() => {
+                navigation.navigate('Login');
+              }}>
+              <Text style={[styles.verifyBtnText, {color: colors.text}]}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </Animatable.View>
@@ -132,13 +146,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    //paddingHorizontal: 20,
-    //paddingBottom: 40,
     paddingVertical: 15,
   },
   footer: {
     flex: 3,
-    backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
@@ -166,8 +177,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 18,
-    color: '#333',
+    fontSize: 18
   },
 
   button: {
@@ -215,5 +225,17 @@ const styles = StyleSheet.create({
   },
   fieldMessage: {
     fontSize: 13,
+  },
+  verify: {
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  verifyBtn: {
+    marginLeft: 5,
+  },
+  verifyBtnText: {
+    fontFamily: 'Nunito-Bold',
+    fontSize: 18,
   },
 });

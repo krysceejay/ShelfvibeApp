@@ -37,7 +37,8 @@ const DashDrawer = () => {
         headerShown: true,
         headerTitleAlign: 'left',
         headerStyle: {
-          backgroundColor: colors.background
+          backgroundColor: colors.background,
+          borderBottomColor: colors.border
         },
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',

@@ -92,7 +92,7 @@ const {toggleTheme} = useContext(ThemeContext);
               labelStyle={{
                 fontSize: 16,
                 fontFamily: 'Nunito-Regular',
-                color: colors.text
+                color: colors.text,
               }}
               icon={() => <Icon color={colors.icon} size={20} name="dashboard" />}
               onPress={() => {
@@ -131,7 +131,7 @@ const {toggleTheme} = useContext(ThemeContext);
                 fontFamily: 'Nunito-Regular',
                 color: colors.text
               }}
-              icon={() => <Icon color={colors.icon} size={20} name="handshake-o" />}
+              icon={() => <Icon color={colors.icon} size={18} name="handshake-o" />}
               onPress={() => {
                 props.navigation.navigate('JoinedList');
               }}
@@ -202,10 +202,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   userInfoSection: {
-    paddingLeft: 20,
+    paddingLeft: 15,
     flexDirection: 'row',
     marginTop: 5,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   avatar: {
     height: 50,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     marginTop: 3
   },
   drawerSection: {
-    marginTop: 15,
+    marginTop: 15
   },
   bottomDrawerSection: {
     marginBottom: 15,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   preferenceTitle: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
   },
   titleText: {
     fontFamily: 'Nunito-SemiBold',
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   titleAndSwitch: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',

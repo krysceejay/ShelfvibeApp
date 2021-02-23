@@ -16,7 +16,8 @@ const NotificationStack = () => {
     <Stack.Navigator initialRouteName="Notification"
       screenOptions={() => ({
         headerStyle: {
-          backgroundColor: colors.background
+          backgroundColor: colors.background,
+          borderBottomColor: colors.border
         },
         headerTitleStyle: {
           fontFamily: 'Nunito-Regular',

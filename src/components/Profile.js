@@ -29,7 +29,7 @@ const Profile = ({user, closeModal}) => {
             style={{
               //paddingHorizontal: 12,
               position: 'absolute',
-              top: 25,
+              top: 20,
               left: 15,
               zIndex: 2,
               backgroundColor: '#fff',

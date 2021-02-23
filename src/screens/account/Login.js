@@ -10,12 +10,14 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {login} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
 const Login = ({login, navigation}) => {
+  const {colors} = useTheme();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -43,15 +45,17 @@ const Login = ({login, navigation}) => {
         </Text>
       </View>
 
-      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+      <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
         {/* <Text style={styles.textFooter}>E-Mail</Text> */}
         <KeyboardAvoidingView behavior="padding">
           <View style={styles.action}>
-            <Ionicons name="ios-mail" color="#333" size={25} />
+            <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your email..."
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
               autoCapitalize="none"
-              style={styles.textInput}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={email}
               onChangeText={onChange('email')}
             />
@@ -59,11 +63,13 @@ const Login = ({login, navigation}) => {
 
           {/* <Text style={styles.textFooter}>Password</Text> */}
           <View style={styles.action}>
-            <Ionicons name="ios-lock" color="#333" size={25} />
+            <Ionicons name="ios-lock" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your password..."
+              placeholderTextColor={colors.borderBottomColor}
+              selectionColor={colors.text}
               secureTextEntry={secureTextEntry}
-              style={styles.textInput}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={password}
               onChangeText={onChange('password')}
             />
@@ -73,9 +79,9 @@ const Login = ({login, navigation}) => {
                 setFormData({...formData, secureTextEntry: !secureTextEntry})
               }>
               {secureTextEntry ? (
-                <Ionicons name="md-eye-off" color="#000" size={25} />
+                <Ionicons name="md-eye-off" color={colors.icon} size={25} />
               ) : (
-                <Ionicons name="md-eye" color="#000" size={25} />
+                <Ionicons name="md-eye" color={colors.icon} size={25} />
               )}
             </TouchableOpacity>
           </View>
@@ -97,16 +103,16 @@ const Login = ({login, navigation}) => {
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={styles.signIn} onPress={loginAction}>
-            <Text style={styles.textSign}>Sign In</Text>
+            <Text style={[styles.textSign, {color: colors.text}]}>Sign In</Text>
           </TouchableOpacity>
           <View style={styles.signUp}>
-            <Text style={styles.textSignUp}> Don't have account ?</Text>
+            <Text style={[styles.textSignUp, {color: colors.text}]}> Don't have account ?</Text>
             <TouchableOpacity
               style={styles.signUpBtn}
               onPress={() => {
                 navigation.navigate('Signup');
               }}>
-              <Text style={styles.signUpBtnText}>Sign Up</Text>
+              <Text style={[styles.signUpBtnText, {color: colors.text}]}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -150,7 +156,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 3,
-    backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
@@ -178,8 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontFamily: 'Nunito-Regular',
-    fontSize: 17,
-    color: '#333',
+    fontSize: 17
   },
 
   button: {
@@ -211,8 +215,7 @@ const styles = StyleSheet.create({
   },
   textSignUp: {
     fontSize: 15,
-    fontFamily: 'Nunito-Regular',
-    color: 'grey',
+    fontFamily: 'Nunito-Regular'
   },
   signUpBtn: {
     marginLeft: 5,

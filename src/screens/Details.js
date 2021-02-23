@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, StatusBar } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -8,9 +9,11 @@ import Config from 'react-native-config';
 const imgURL = Config.IMAGE_URL;
 
 const Details = ({navigation, route}) => {
+  const {dark} = useTheme();
   const {item} = route.params;
   return (
       <View style={styles.container}>
+        <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
         <ImageBackground 
         source={{uri: `${imgURL}/featured/${item.displayimg}`}}
         style={styles.image}>
