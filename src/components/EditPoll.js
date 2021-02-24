@@ -1,19 +1,22 @@
 import React,{useState} from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Alert} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import {editPoll, removePollAction} from '../actions/pollActions';
+import {isEmpty} from '../utils/theme';
 
 const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
+  const {colors} = useTheme();
   const [formData, setFormData] = useState({
     pollname: item.pollName,
     pollbooks: [],
-    book1: item.books[0],
-    book2: item.books[1],
-    book3: item.books[2],
-    book4: item.books[3],
+    book1: isEmpty(item.books) ? '' : item.books[0],
+    book2: isEmpty(item.books) ? '' : item.books[1],
+    book3: isEmpty(item.books) ? '' : item.books[2],
+    book4: isEmpty(item.books) ? '' : item.books[3],
    });
 
    const {
@@ -59,13 +62,13 @@ const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
             setErrorMsg(errMsges);
           }
         } else {
-          onClosePress();
+          closeModal();
         }
       };
 
       removePoll = async () => {
         await removePollAction(item.id);
-        onClosePress();
+        closeModal();
       } 
 
       const deletePollBtn = () =>
@@ -86,7 +89,7 @@ const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
     return (
         <SafeAreaView style={styles.container}>
         <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+        <Text style={[styles.title, {color: colors.text}]}>
             Edit Poll
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -114,12 +117,14 @@ const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
           extraHeight={10}>
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Poll Name</Text>
+                <Text style={[styles.textLabel, {color: colors.text}]}>Poll Name</Text>
                   <TextInput 
                   placeholder="Enter poll name" 
                   value={pollname} 
                   onChangeText={onChange('pollname')}
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   />
                   {pollName !== '' && (
                     <Animatable.View animation="fadeInLeft" duration={500}>
@@ -128,47 +133,55 @@ const EditPoll = ({closeModal, item, editPoll, removePollAction, clubId}) => {
                   )}
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 1</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 1</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
                   value={book1}
                   onChangeText={onChange('book1')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 2</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 2</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book2}
                   onChangeText={onChange('book2')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 3</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 3</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book3}
                   onChangeText={onChange('book3')}
                   />
                 </View>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book 4</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book 4</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  style={styles.textInput} 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book4}
                   onChangeText={onChange('book4')}
                   />
                 </View>
                 <View style={styles.singleInput}>
                   <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={editPollAction}>
-                    <Text style={styles.textSign}>Submit</Text>
+                    <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.orText}>OR</Text>
+                <Text style={[styles.orText, {color: colors.text}]}>OR</Text>
                 <View style={styles.singleInput}>
                   <TouchableOpacity style={styles.delete} activeOpacity={0.6} onPress={deletePollBtn}>
                     <Text style={styles.deleteSign}>Delete</Text>
@@ -215,11 +228,8 @@ const styles = StyleSheet.create({
       textInput: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
-        backgroundColor: '#eee',
         height: 50,
         paddingHorizontal: 10,
-        borderColor: '#ddd', 
         borderWidth: 1 
       },
       signIn: {

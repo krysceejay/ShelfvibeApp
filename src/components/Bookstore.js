@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Config from 'react-native-config';
 
 const imgURL = Config.IMAGE_URL;
 
 const Bookstore = ({navigation, data}) => {
+  const {colors} = useTheme();
     _renderItem = ({item, index}) => {
         return (
           <TouchableOpacity activeOpacity={0.6} onPress={() => {
@@ -25,24 +27,24 @@ const Bookstore = ({navigation, data}) => {
              style={{width: 150, height: 100, resizeMode: 'cover', borderRadius: 5}}
             />
           </View>
-          <Text style={styles.featName} numberOfLines={1}>{item.name}</Text>
+          <Text style={[styles.featName, {color: colors.text}]} numberOfLines={1}>{item.name}</Text>
           </TouchableOpacity>
         );
       };
 
     return (
         <View style={styles.container}>
-          <Text style={styles.listTitle}>Features</Text>
+          <Text style={[styles.listTitle, {color: colors.text}]}>Features</Text>
           <FlatList
-          data={data}
-           keyExtractor={(item, index) => index.toString()}
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={_renderItem}
             contentContainerStyle={{paddingLeft: 12}}
             ListEmptyComponent={() => (
               <Text style={styles.emptyText}>No store found</Text>
-          )}
+            )}
           />
         </View>
     )
@@ -68,7 +70,8 @@ const styles = StyleSheet.create({
     },
     emptyText: {
       fontFamily: 'Nunito-Regular',
-      fontSize: 15,
+      fontSize: 20,
+      color: '#bbb'
     },
     listTitle: {
       fontFamily: 'Nunito-Bold',

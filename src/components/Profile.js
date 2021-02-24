@@ -9,27 +9,27 @@ import {
   SafeAreaView
 } from 'react-native';
 import Config from 'react-native-config';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import {stringToHslColor} from '../utils/theme';
 
 const proURL = Config.IMAGE_URL;
-const Profile = ({user, closeModal}) => {
 
+const Profile = ({user, closeModal}) => {
+  const {colors} = useTheme();
     const onClosePress = () => {
         closeModal();
       };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
       <ScrollView showsVerticalScrollIndicator={false}>
       <TouchableOpacity
             style={{
               //paddingHorizontal: 12,
               position: 'absolute',
-              top: 25,
+              top: 20,
               left: 15,
               zIndex: 2,
               backgroundColor: '#fff',
@@ -43,8 +43,8 @@ const Profile = ({user, closeModal}) => {
             onPress={onClosePress}>
             <Ionicons name="md-arrow-back" size={22} color="#444444" />
           </TouchableOpacity>
-        <View style={styles.body}>
-          <View style={styles.avatarContainer}>
+        <View style={[styles.body, {backgroundColor: colors.profileCard}]}>
+          <View style={[styles.avatarContainer, {borderColor: colors.profileCard}]}>
           {user.propix !== "noimage.png" ?
             <Image
               style={styles.avatar}
@@ -58,14 +58,14 @@ const Profile = ({user, closeModal}) => {
           </View>
 
           <View style={styles.row}>
-            <View>
-              <Text style={styles.fullName}>{`${user.firstName} ${user.lastName}`}</Text>
-              <Text style={styles.userName}>{user.username}</Text>
-              <Text style={styles.userName}>Member Since: {moment(user.insertedAt).format("Do MMM YYYY")}</Text>
+          <View>
+              <Text style={[styles.fullName, {color: colors.text}]}>{`${user.firstName} ${user.lastName}`}</Text>
+              <Text style={[styles.userName, {color: colors.text}]}>{user.username}</Text>
+              <Text style={[styles.userName, {color: colors.text}]}>Member Since: {moment(user.insertedAt).format("Do MMM YYYY")}</Text>
             </View>
           </View>
           <View style={styles.aboutContainer}>
-            <Text style={styles.aboutHeader}>ABOUT</Text>
+            <Text style={[styles.aboutHeader, {color: colors.text}]}>ABOUT</Text>
             <Text style={styles.aboutBodyText}>
               {user.about}
             </Text>
@@ -82,11 +82,9 @@ export default Profile;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    backgroundColor: '#fff',
     },
 
   body: {
-    backgroundColor: '#fafafa',
     marginHorizontal: 12,
     marginTop: 100,
     marginBottom: 20,
@@ -94,7 +92,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 15,
     borderRadius: 12,
-    //minHeight: 600,
   },
   row: {
     flexDirection: 'row',
@@ -122,16 +119,8 @@ const styles = StyleSheet.create({
   avatarContainer: {
     height: 160,
     width: 160,
-    //backgroundColor: 'red',
-    // position: 'absolute',
-    // top: -50,
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
-    // justifyContent: 'center',
     alignSelf: 'center',
     marginTop: -90,
-    borderColor: '#fafafa',
     borderWidth: 15,
     borderRadius: 80,
   },
@@ -147,8 +136,7 @@ const styles = StyleSheet.create({
   aboutHeader: {
     fontFamily: 'Nunito-SemiBold',
     fontSize: 16,
-    letterSpacing: 5,
-    color: '#00a2cc',
+    letterSpacing: 3,
     marginVertical: 5,
   },
   aboutBodyText: {
@@ -161,8 +149,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 80,
     overflow: 'hidden',
-    borderColor: '#f3fbfd',
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },

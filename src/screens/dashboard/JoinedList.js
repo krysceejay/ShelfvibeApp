@@ -12,6 +12,7 @@ import {
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 import {getUserJoinedClubs, leaveClubAction} from '../../actions/clubActions';
 import Skeleton from '../../components/Skeleton';
 import {AuthContext} from '../../utils/context';
@@ -24,6 +25,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
 
   const [isLoading, setIsLoading] = useState(false);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,12 +60,12 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <View style={styles.itemContain}>
+        <View style={[styles.itemContain, {borderColor: colors.border}]}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
-                item: item.club
+                clubId: item.club.id
               });
             }}
             activeOpacity={0.9}>
@@ -77,9 +79,9 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
           </TouchableOpacity>
         </View>
         
-        <View style={styles.bookDetails}>
+        <View style={[styles.bookDetails, {backgroundColor: colors.background}]}>
           <View style={styles.nameAndEdit}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>
             {item.club.name}
             </Text>
             {user !== null && user.id !== item.club.user.id && <TouchableOpacity
@@ -88,10 +90,10 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
             }}
             onPress={() => leaveClubBtn(item.club.id)}
             activeOpacity={0.9}>
-              <Ionicons name="md-remove-circle-outline" size={22} color="#444444" />
+              <Ionicons name="md-remove-circle-outline" size={22} color={colors.icon} />
           </TouchableOpacity> }
           </View>
-            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
              {item.club.members.length} {item.club.members.length > 1 ? 'members' : 'member'}
             </Text>
         </View>
@@ -102,7 +104,7 @@ const JoinedList = ({getUserJoinedClubs, leaveClubAction, joinedClub, navigation
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       {isLoading ? <Skeleton /> :
       <FlatList
         data={joinedClub}
@@ -133,9 +135,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //paddingVertical: 15,
-    backgroundColor: '#fff',
+    flex: 1
   },
   item: {
     marginBottom: 12,
@@ -145,9 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#f5f5f5',
-    overflow: 'hidden',
-    //backgroundColor: 'red',
+    overflow: 'hidden'
   },
   bookCoverContain: {
     width: '100%',
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
   },
   nameAndEdit: {
     flex: 1,
@@ -174,7 +172,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
     maxWidth: '90%'
-    //textAlign: 'center',
   },
   members: {
     fontFamily: 'Nunito-Regular',

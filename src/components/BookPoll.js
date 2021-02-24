@@ -1,13 +1,14 @@
 import React, {useEffect, useContext} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity,Alert } from 'react-native';
 import {connect} from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '@react-navigation/native';
 import {fetchPollVotes, pollVoteAction, removeVoteAction} from '../actions/pollActions';
 import {fetchClubMembers} from '../actions/clubActions';
 import {AuthContext} from '../utils/context';
 
 const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, removeVoteAction, fetchClubMembers, votes, clubId, members}) => {
   const user = useContext(AuthContext);
+  const {dark, colors} = useTheme();
   useEffect(() => {
     getClubMembers(clubId);
     getPollVotes(currentPoll.id);
@@ -111,8 +112,8 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, remo
                 </View>
             </View>
           {user !== null && getUserVote(user.username).pollIndex === (index + 1) ? 
-            <Text style={[styles.pollText, {color: 'red'}]}>{item}</Text> :
-            <Text style={[styles.pollText, {color: '#444444'}]}>{item}</Text>
+            <Text style={[styles.pollText, {color: dark ? '#ff1a1a' : '#721c24'}]}>{item}</Text> :
+            <Text style={[styles.pollText, {color: colors.text}]}>{item}</Text>
           }
         </View>
       </TouchableOpacity>
@@ -120,15 +121,15 @@ const BookPoll = ({currentPoll, closeModal, fetchPollVotes, pollVoteAction, remo
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.body}>
-                <Text style={styles.title}>{currentPoll.pollName}</Text>
-                <Text style={styles.shortText}>Decide an addition to our reading list. Please vote for the book you would like us to read.</Text>
+            <View style={[styles.body, {backgroundColor: colors.background}]}>
+                <Text style={[styles.title, {color: colors.text}]}>{currentPoll.pollName}</Text>
+                <Text style={[styles.shortText, {color: colors.text}]}>Decide an addition to our reading list. Please vote for the book you would like us to read.</Text>
                 <View style={styles.progressContainer}>
                   {currentPoll.books.map(showPollBooks)}
                 </View>
             </View>
-            <TouchableOpacity activeOpacity={0.6} style={styles.join} onPress={onClosePress}>
-            <Text style={styles.joinText}>Cancel</Text>
+            <TouchableOpacity activeOpacity={0.6} style={[styles.join, {backgroundColor: colors.background}]} onPress={onClosePress}>
+            <Text style={[styles.joinText, {color: colors.text}]}>Cancel</Text>
           </TouchableOpacity>
             
         </SafeAreaView>
@@ -147,18 +148,10 @@ export default connect(
 
 const styles = StyleSheet.create({
     container: {
-        //flex: 1,
         marginHorizontal: 20,
-        //height: '50%',
         width: '95%',
-        
-        
-        //justifyContent: 'center',
-        //alignItems: 'center'
       },
       body: {
-        backgroundColor: '#fff',
-        //marginTop: 2,
         borderRadius: 15,
         padding: 20
       },
@@ -173,20 +166,16 @@ const styles = StyleSheet.create({
         marginTop: 10
       },
       join: {
-        //width: '100%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
         marginTop: 25,
         marginBottom: 10,
-        backgroundColor: '#fff',
-        //marginHorizontal: 20,
       },
       joinText: {
         fontSize: 16,
         fontFamily: 'Nunito-SemiBold',
-        color: '#000'
       },
       progressContainer: {
           marginTop: 15
@@ -194,9 +183,6 @@ const styles = StyleSheet.create({
       progressSingle: {
         width: '100%',
         height: 40,
-        //padding: 3,
-        //borderColor: '#aaa',
-        //borderWidth: 3,
         borderRadius: 15,
         justifyContent: 'center',
         backgroundColor: '#ddd',

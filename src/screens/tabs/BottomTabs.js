@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import { Text, View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,6 +18,8 @@ import {userNotSeenNoteAction} from '../../actions/notificationActions';
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteAction, notSeenNote}) => {
+
+  const {colors} = useTheme();
   //console.log('user from bottom tab: ' + token);
   useEffect(() => {
     setToken(token);
@@ -33,7 +36,6 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
 
   notSeenNotify = async () => {
     await userNotSeenNoteAction();
-    //console.log('yes sir');
   };
 
   getTabBarVisibility = route => {
@@ -83,7 +85,6 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
     }else{
       count = notSeenNote.length;
     }
-
     return <IconWithBadge {...props} badgeCount={count} />
   }
 
@@ -124,10 +125,10 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#00a2cc',
+          activeTintColor: colors.text,
           inactiveTintColor: 'gray',
           style: {
-            //backgroundColor: '#242c42',
+            backgroundColor: colors.background
           },
           showLabel: false,
           keyboardHidesTabBar: true,
@@ -138,10 +139,7 @@ const BottomTabs = ({isLoggedIn, token, user, getLoginLocal, userNotSeenNoteActi
         //  })} 
         />
         <Tab.Screen name="Club" component={ShelfStack} />
-        <Tab.Screen name="Notification" component={NotificationStack} options={{
-          tabBarBadge: '3',
-          tabBarBadgeStyle: {backgroundColor: 'red', width: 20, height: 20}
-        }} />
+        <Tab.Screen name="Notification" component={NotificationStack} />
         {isLoggedIn ? (
           <Tab.Screen name="Dashboard" component={DashDrawer} />
         ) : (

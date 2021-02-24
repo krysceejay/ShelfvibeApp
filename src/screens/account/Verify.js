@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {Text, StyleSheet, View, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux';
+import { useTheme } from '@react-navigation/native';
 import Svg, {
   Defs,
   LinearGradient,
@@ -14,6 +15,7 @@ import Loader from '../../components/Loader';
 
 const Verify = ({route, navigation, resendVerifyAction, checkVerifyAction}) => {
   const {useremail, screen} = route.params;
+  const {colors} = useTheme();
   const [pincode, setPincode] = useState({
     pin1: '',
     pin2: '',
@@ -82,7 +84,7 @@ const Verify = ({route, navigation, resendVerifyAction, checkVerifyAction}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Svg
@@ -410,7 +412,7 @@ const Verify = ({route, navigation, resendVerifyAction, checkVerifyAction}) => {
           </Svg>
         </View>
         {/* <Text style={styles.textHeader}>Sign-up Successful</Text> */}
-        <Text style={styles.textBody}>
+        <Text style={[styles.textBody, {color: colors.text}]}>
           Enter the verification code we just sent to your email address.
         </Text>
         <View style={styles.inputContainer}>
@@ -452,26 +454,26 @@ const Verify = ({route, navigation, resendVerifyAction, checkVerifyAction}) => {
           />
         </View>
         <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={checkCodeAction}>
-            <Text style={styles.textSign}>Verify</Text>
+            <Text style={[styles.textSign, {color: colors.text}]}>Verify</Text>
         </TouchableOpacity>
         <View style={styles.verify}>
-          <Text style={styles.textVerify}> If you didn't receive a code!</Text>
+          <Text style={[styles.textVerify, {color: colors.text}]}> If you didn't receive a code!</Text>
           <TouchableOpacity
             style={styles.verifyBtn}
             activeOpacity={0.6}
             onPress={resendCodeAction}>
-            <Text style={styles.verifyBtnText}>Resend</Text>
+            <Text style={[styles.verifyBtnText, {color: colors.text}]}>Resend</Text>
           </TouchableOpacity>
           </View>
         <View style={styles.verify}>
-          <Text style={styles.textVerify}> Already verified?</Text>
+          <Text style={[styles.textVerify, {color: colors.text}]}> Already verified?</Text>
           <TouchableOpacity
             style={styles.verifyBtn}
             activeOpacity={0.6}
             onPress={() => {
               navigation.navigate('Login');
             }}>
-            <Text style={styles.verifyBtnText}>Login</Text>
+            <Text style={[styles.verifyBtnText, {color: colors.text}]}>Login</Text>
           </TouchableOpacity>
           </View>
       </View>
@@ -502,8 +504,6 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#f3fbfd',
-    backgroundColor: '#fff'
   },
   header: {
     alignItems: 'center',
@@ -564,8 +564,7 @@ const styles = StyleSheet.create({
   },
   textVerify: {
     fontSize: 18,
-    fontFamily: 'Nunito-Regular',
-    color: 'grey',
+    fontFamily: 'Nunito-Regular'
   },
   verifyBtn: {
     marginLeft: 5,

@@ -1,29 +1,51 @@
 import React from 'react';
-import {Text, StyleSheet, View, FlatList} from 'react-native';
+import {Text, StyleSheet, View, FlatList, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarGroup from '../../components/StarGroup';
 
 const numColumns = 1;
 
-const AllRatings = ({route}) => {
+const AllRatings = ({route, navigation}) => {
   const {rating} = route.params;
+  const {dark, colors} = useTheme();
 
   _renderItem = ({item, index}) => {
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, {backgroundColor: colors.card}]}>
         <View style={styles.reviewTop}>
           <StarGroup rating={item.rating.toString()} />
-          <Text style={styles.reviewDate}>{item.updatedAt}</Text>
+          <Text style={[styles.reviewDate, {color: colors.text}]}>{item.updatedAt}</Text>
         </View>
         <View>
-          <Text style={styles.reviewText}>{item.comment}</Text>
+          <Text style={[styles.reviewText, {color: colors.text}]}>{item.comment}</Text>
         </View>
-        <Text style={styles.reviewUser}>By {item.user.username}</Text>
+        <Text style={[styles.reviewUser, {color: colors.text}]}>By {item.user.username}</Text>
       </View>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{flex: 1,}}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
+      <View style={[styles.header, {borderBottomColor: colors.borderBottomColor}]}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack();
+          }}
+          style={{
+            paddingHorizontal: 3,
+            marginRight: 38
+          }}
+            activeOpacity={0.9}>
+            <AntDesign
+              name="left"
+              size={28}
+              color={colors.icon}
+              />
+          </TouchableOpacity>
+          <Text style={[styles.headerText, {color: colors.text}]}>All Ratings</Text>
+        </View>
+      <View style={[styles.container, {backgroundColor: colors.background}]}>
       <FlatList
         data={rating}
         renderItem={_renderItem}
@@ -32,7 +54,8 @@ const AllRatings = ({route}) => {
         contentContainerStyle={{paddingVertical: 15}}
         //showsVerticalScrollIndicator={false}
       />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -43,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 12,
     //marginVertical: 15,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
   },
   reviewTitle: {
     fontFamily: 'Nunito-SemiBold',
@@ -79,4 +102,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 5,
+    //marginBottom: 5,
+    height: 55,
+    borderBottomWidth: 1
+ },
+  headerText: {
+    fontFamily: 'Nunito-Regular',
+    fontSize: 20,
+  }
 });

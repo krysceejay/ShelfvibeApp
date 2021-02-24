@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, ScrollView, Modal } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, ScrollView, Modal, StatusBar } from 'react-native'
 import {connect} from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Bookstore from '../components/Bookstore';
@@ -32,6 +32,7 @@ const Home = ({navigation, featBookstore, featBooks, fetchFeaturedClubs, books, 
 
   return (
       <ScrollView showsVerticalScrollIndicator={false}>
+        <StatusBar barStyle='dark-content' />
         <ImageBackground
         source={require('../assets/img/banner.jpg')}
         style={styles.image}
@@ -58,16 +59,16 @@ const Home = ({navigation, featBookstore, featBooks, fetchFeaturedClubs, books, 
             </TouchableOpacity> 
             }
             <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}>
-                <View style={styles.memberModalView}>
-                  <FeaturedBooks
-                    closeModal={handleOnCloseModal}
-                    data={books}
-                  />
-                </View>
-              </Modal>
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}>
+              <View style={styles.memberModalView}>
+                <FeaturedBooks
+                  closeModal={handleOnCloseModal}
+                  data={books}
+                />
+              </View>
+            </Modal>
          </View> 
         </ImageBackground>
         <View style={styles.bottomView}>

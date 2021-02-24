@@ -24,35 +24,10 @@ const ShelfStack = () => {
         headerTitleAlign: 'center',
         headerTintColor: '#000',
         headerTitleAlign: 'left',
-      })}>
-      <Stack.Screen name="Club" component={Club}
-      options={{
         headerShown: false,
-      }}
-      />
-      <Stack.Screen
-        name="Details"
-        component={Details}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {/* <Stack.Screen name="Poll" component={Poll} options={{
-        headerRight: () => {
-          return (
-              <TouchableOpacity onPress={() => {
-                
-              }}
-              activeOpacity={0.9}>
-                  <Ionicons
-                name="ios-add"
-                size={30}
-                style={{paddingRight: 20, color: '#000'}}
-              />
-              </TouchableOpacity>
-          );
-        },
-      }}/> */}
+      })}>
+      <Stack.Screen name="Club" component={Club} />
+      <Stack.Screen name="Details" component={Details} />
       <Stack.Screen name="Rating" component={Rating} />
       <Stack.Screen name="All Ratings" component={AllRatings} />
       <Stack.Screen name="Report" component={Report} />

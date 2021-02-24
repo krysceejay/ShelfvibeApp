@@ -5,7 +5,7 @@ import {FETCH_CLUBS, USER_CLUBS, CREATE_CLUB, FILTER_CLUB,
 
 const initialState = {
   clubs: [],
-  club: {},
+  club: null,
   userClubs: [],
   joinedClub: [],
   filterClub: [],

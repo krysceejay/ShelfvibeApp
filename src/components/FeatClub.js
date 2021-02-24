@@ -1,18 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Config from 'react-native-config';
 
 const imgURL = Config.IMAGE_URL;
 
 const FeatClub = ({data, navigation}) => {
+  const {colors} = useTheme();
     _renderItem = ({item, index}) => {
         return (
             <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
             navigation.navigate('Details', {
-                item
-                });
+              clubId: item.id
+              });
             }}
             style={{
               width: 150,
@@ -29,8 +31,8 @@ const FeatClub = ({data, navigation}) => {
                 style={{width: '100%', height: 120, resizeMode: 'cover'}}
             />
               <View style={styles.textContainer}>
-              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>{item.name}</Text>
-              <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>{item.name}</Text>
+              <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
               {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
               </Text>
             </View>
@@ -42,12 +44,12 @@ const FeatClub = ({data, navigation}) => {
     return (
         <View style={styles.container}>
             <View style={styles.featuredHead}>
-              <Text style={styles.listTitle}>Top Clubs</Text>
+              <Text style={[styles.listTitle, {color: colors.text}]}>Top Clubs</Text>
               {data.length > 1 &&
                 <TouchableOpacity activeOpacity={0.6} onPress={() => {
                     navigation.navigate('Club');
                   }}>
-                <Text style={styles.seeAll}>See all</Text>
+                <Text style={[styles.seeAll, {color: colors.text}]}>See all</Text>
                 </TouchableOpacity>
               }
             </View>
@@ -89,8 +91,7 @@ const styles = StyleSheet.create({
     },
     members: {
       fontFamily: 'Nunito-Regular',
-      fontSize: 13,
-      color: '#444444',
+      fontSize: 13
     },
     clubNoImage:{
       height: 120,

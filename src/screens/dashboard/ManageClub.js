@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Config from 'react-native-config';
+import { useTheme } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
@@ -28,8 +29,9 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [addClubShow, setAddClubShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedClubItem, setSelectedClubItem] = useState(null);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   useEffect(() => {
     setIsLoading(true);
@@ -46,23 +48,23 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
     setAddClubShow(false);
   };
 
-  handleOnSelectItem = item => {
-    setSelectedItem(item);
+  handleOnSelectItem = it => {
+    setSelectedClubItem(it);
   };
 
   handleOnCloseEditModal = () => {
-    setSelectedItem(null);
+    setSelectedClubItem(null);
   };
 
   _renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <View style={styles.itemContain}>
+        <View style={[styles.itemContain, {borderColor: colors.border}]}>
         <View style={styles.bookCoverContain}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Details', {
-                item
+                clubId: item.id
               });
             }}
             activeOpacity={0.9}>
@@ -75,21 +77,21 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           </TouchableOpacity>
         </View>
         
-        <View style={styles.bookDetails}>
+        <View style={[styles.bookDetails, {backgroundColor: colors.background}]}>
           <View style={styles.nameAndEdit}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.bookTitle}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.bookTitle, {color: colors.text}]}>
               {item.name}
             </Text>
             <TouchableOpacity
             style={{
               justifyContent: 'flex-end'
             }}
-            activeOpacity={0.9}
-            onPress={() => {handleOnSelectItem(item)}}>
-            <MaterialCommunityIcons name="dots-vertical" size={22} color="#444444" />
+            
+            onPress={() => handleOnSelectItem(item)}>
+            <MaterialCommunityIcons name="dots-vertical" size={22} color={colors.icon} />
           </TouchableOpacity>
           </View>
-            <Text style={styles.members} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={[styles.members, {color: colors.text}]} numberOfLines={1} ellipsizeMode="tail">
             {item.members.length} {item.members.length > 1 ? 'members' : 'member'}
             </Text>
         </View>
@@ -100,7 +102,7 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       {isLoading ? <Skeleton /> :
       <>
       <TouchableOpacity onPress={() => {
@@ -114,14 +116,6 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           color="#fff"
         />
       </TouchableOpacity>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={addClubShow}>
-        <View style={styles.memberModalView}>
-            <AddClub closeModal={handleOnCloseModal} />
-        </View>
-        </Modal>
       <FlatList
         data={userClubs}
         renderItem={_renderItem}
@@ -135,31 +129,28 @@ const ManageClub = ({getUserClubs, userClubs, navigation}) => {
           </View>
       )}
       />
-      {/* <Modal
-        animationType="fade"
-        transparent={true}
-        visible={selectedItem ? true : false}>
-        <View style={styles.memberModalView}>
-          <EditClub
-            closeModal={handleOnCloseEditModal}
-            item={selectedItem}
-          />
-        </View>
-      </Modal> */}
+      </>
+      }
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={addClubShow}>
+          <View style={[styles.memberModalView, {backgroundColor: colors.background}]}>
+              <AddClub closeModal={handleOnCloseModal} />
+          </View>
+        </Modal>
       <Modal
         animationType="fade"
         transparent={true}
-        visible={selectedItem ? true : false}>
-          <TouchableOpacity onPress={handleOnCloseEditModal} activeOpacity={1} style={styles.modalView}>
-            <Manage
-            closeModal = {handleOnCloseEditModal}
-            item={selectedItem}
-            navigation={navigation}
-            />
-          </TouchableOpacity>
+        visible={selectedClubItem !== null ? true : false}>
+        <TouchableOpacity onPress={handleOnCloseEditModal} activeOpacity={1} style={styles.modalView}>
+          <Manage
+          closeModal={handleOnCloseEditModal}
+          item={selectedClubItem}
+          navigation={navigation}
+          />
+        </TouchableOpacity>
       </Modal>
-      </>
-      }
     </View>
   );
 };
@@ -175,9 +166,7 @@ export default connect(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //paddingVertical: 15,
-    backgroundColor: '#fff',
+    flex: 1
   },
   item: {
     marginBottom: 12,
@@ -187,7 +176,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#f5f5f5',
     overflow: 'hidden',
     //backgroundColor: 'red',
   },
@@ -204,7 +192,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     //marginBottom: 12
   },
   nameAndEdit: {
@@ -264,8 +252,7 @@ const styles = StyleSheet.create({
       },
       memberModalView: {
         flex: 1,
-        backgroundColor: '#fff',
-    },
+      },
     clubNoImage:{
       height: '100%',
     width: '100%',

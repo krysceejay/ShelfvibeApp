@@ -23,3 +23,22 @@ export const stringToHslColor = (str) => {
   const h = hash % 360;
   return `hsl(${h}, 50%, 70%)`;
 }
+
+export const random = (length = 8) => {
+  let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  // Pick characers randomly
+  let str = '';
+  for (let i = 0; i < length; i++) {
+      str += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return str;
+};
+
+export const isEmpty = obj => {
+  for (let key in obj) {
+    if(obj.hasOwnProperty(key))
+        return false;
+      }
+      return true;
+  }

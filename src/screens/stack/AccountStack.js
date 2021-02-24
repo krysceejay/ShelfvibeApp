@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Login from '../account/Login';
@@ -13,6 +14,7 @@ import NewPassword from '../account/NewPassword';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
+  const {colors} = useTheme();
   return (
     <Stack.Navigator
       initialRouteName="Login"
@@ -23,7 +25,7 @@ const AccountStack = () => {
         },
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
-        headerTintColor: '#000',
+        headerTintColor: colors.text
         //headerLeft: null,
       })}>
       <Stack.Screen name="Login" component={Login} />

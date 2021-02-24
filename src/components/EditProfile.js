@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, StatusBar } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import {updateUserAction} from '../actions/authActions';
 
 const EditProfile = ({closeModal, user, updateUserAction}) => {
+  const {dark, colors} = useTheme();
     const [formData, setFormData] = useState({
         firstname: user.firstName,
         lastname: user.lastName,
@@ -60,9 +62,10 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
          }
       }  
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
+          <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
             <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, {color: colors.text}]}>
             Edit Profile
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -90,10 +93,12 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
           extraHeight={10}
           showsVerticalScrollIndicator={false}>
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your first name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.placeholder}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={firstname}
               onChangeText={onChange('firstname')}
             />
@@ -104,10 +109,12 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             </Animatable.View>
           )}
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your last name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.placeholder}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={lastname}
               onChangeText={onChange('lastname')}
             />
@@ -119,9 +126,9 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
           )}
 
           <View style={styles.action}>
-            <Ionicons name="ios-mail" color="#333" size={25} />
+            <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput
-              style={styles.textInput}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={user.email}
               autoCapitalize="none"
               editable={false}
@@ -129,10 +136,12 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
           </View>
 
           <View style={styles.action}>
-            <Ionicons name="ios-person" color="#333" size={25} />
+            <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your user name..."
-              style={styles.textInput}
+              placeholderTextColor={colors.placeholder}
+              selectionColor={colors.text}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={userName}
               onChangeText={onChange('userName')}
             />
@@ -143,22 +152,24 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             </Animatable.View>
           )}
           <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>About <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>About <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
               <View>
                 <TextInput
                   multiline
                   numberOfLines={4}
                   editable
                   placeholder="Brief gist about you"
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
                   maxLength={300}
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
-                    borderColor: '#eee',
-                    borderWidth: 2
+                    color: colors.text,
                   }}
                   value={aboutMe}
                 onChangeText={onChange('aboutMe')}
@@ -172,7 +183,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             </View>
             <View style={styles.singleInput}>
               <TouchableOpacity style={styles.signIn} onPress={updateProfile}>
-                <Text style={styles.textSign}>Update</Text>
+                <Text style={[styles.textSign, {color: colors.text}]}>Update</Text>
               </TouchableOpacity>
             </View>
         </KeyboardAwareScrollView>
@@ -212,8 +223,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 10,
         fontFamily: 'Nunito-Regular',
-        fontSize: 17,
-        color: '#333',
+        fontSize: 17
       },
       button: {
         alignItems: 'center',

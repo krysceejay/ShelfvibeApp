@@ -4,11 +4,13 @@ import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, Imag
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useTheme } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-picker';
 import * as Animatable from 'react-native-animatable';
 import {addBookToList} from '../actions/bookListActions';
 
 const AddBook = ({closeModal, clubId, addBookToList}) => {
+  const {colors} = useTheme();
     const [formData, setFormData] = useState({
        booktitle: '',
        bookcover: null
@@ -81,7 +83,7 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
     return (
         <SafeAreaView style={styles.container}>
         <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, {color: colors.text}]}>
             Add Book
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -109,8 +111,13 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
           extraHeight={10}>
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
-                  <Text style={styles.textLabel}>Book Title</Text>
-                  <TextInput placeholder="Enter title" style={styles.textInput} value={booktitle}
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Book Title</Text>
+                  <TextInput 
+                  placeholder="Enter title" 
+                  placeholderTextColor={colors.placeholder}
+                  selectionColor={colors.text}
+                  style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
+                  value={booktitle}
               onChangeText={onChange('booktitle')} />
                 {title !== '' && (
                   <Animatable.View animation="fadeInLeft" duration={500}>
@@ -119,7 +126,7 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
                 )}
                 </View>
                 <View style={styles.singleInput}>
-                    <Text style={styles.textLabel}>Book cover</Text>
+                    <Text style={[styles.textLabel, {color: colors.text}]}>Book cover</Text>
                     <View
                         style={{
                         flexDirection: 'row',
@@ -127,8 +134,8 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
                         }}>
                         <TouchableOpacity onPress={handleChoosePhoto}>
                         <View style={styles.iconContainer}>
-                            <Text style={styles.textStyle}>Upload</Text>
-                            <FontAwesome name="upload" size={20} color="#3a4155" />
+                            <Text style={[styles.textStyle, {color: colors.text}]}>Upload</Text>
+                            <FontAwesome name="upload" size={20} color={colors.icon} />
                         </View>
                         </TouchableOpacity>
                         <View style={styles.showImage}>
@@ -141,7 +148,7 @@ const AddBook = ({closeModal, clubId, addBookToList}) => {
                 </View>
                 <View style={styles.singleInput}>
                   <TouchableOpacity style={styles.signIn} activeOpacity={0.6} onPress={addBookListAction}>
-                    <Text style={styles.textSign}>Submit</Text>
+                    <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -185,11 +192,8 @@ const styles = StyleSheet.create({
       textInput: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
-        backgroundColor: '#eee',
         height: 50,
         paddingHorizontal: 10,
-        borderColor: '#ddd', 
         borderWidth: 1 
       },
       signIn: {
@@ -216,10 +220,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
       },
       textStyle: {
-        //textAlign: 'center',
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
         paddingHorizontal: 10,
       },
       showImage: {

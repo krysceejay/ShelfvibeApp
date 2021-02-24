@@ -13,6 +13,7 @@ import {
     Switch,
     Alert
   } from 'react-native';
+  import { useTheme } from '@react-navigation/native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
   import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -26,6 +27,7 @@ import {
   const imgURL = Config.IMAGE_URL;
 
 const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
+    const {colors} = useTheme();
     const [formData, setFormData] = useState({
         clubname: item.name,
         clubgenre: item.genre,
@@ -191,7 +193,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
         />
       ) : null}
         <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, {color: colors.text}]}>
             Edit Club
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -219,9 +221,13 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
           extraHeight={10}>
           <View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Club Name</Text>
-              <TextInput placeholder="Enter club name" style={styles.textInput} value={clubname}
-              onChangeText={onChange('clubname')} />
+              <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
+              <TextInput placeholder="Enter club name" value={clubname}
+              placeholderTextColor={colors.placeholder}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
+              onChangeText={onChange('clubname')}
+              selectionColor={colors.text}
+               />
               {name !== '' && (
                 <Animatable.View animation="fadeInLeft" duration={500}>
                   <Text style={styles.errorMessage}>{name}</Text>
@@ -229,12 +235,12 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               )}
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Genre <Text style={styles.lilinfo}>(select genre)</Text></Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Genre <Text style={styles.lilinfo}>(select genre)</Text></Text>
               <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}>
-                <View style={styles.modalView}>
+                <View style={[styles.modalView, {backgroundColor: colors.background}]}>
                   <ListGenre
                     closeModal={() => {
                       setFormData({...formData, modalVisible: !modalVisible})
@@ -245,12 +251,12 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                 </View>
               </Modal>
               <TouchableHighlight
-                underlayColor="#ddd"
-                style={styles.openButton}
+                underlayColor={colors.dashStats}
+                style={[styles.openButton, {backgroundColor: colors.background, borderColor: colors.border}]}
                 onPress={() => {
                   setFormData({...formData, modalVisible: true})
                 }}>
-                <Text style={styles.textStyle}>
+                <Text style={[styles.textStyle, {color: colors.text}]}>
                     {clubgenre.map(formatGenre)}
                 </Text>
               </TouchableHighlight>
@@ -261,7 +267,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               )}
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Club cover</Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Club cover</Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -269,8 +275,8 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                 }}>
                 <TouchableOpacity onPress={handleChoosePhoto}>
                   <View style={styles.iconContainer}>
-                    <Text style={styles.textStyle}>Upload</Text>
-                    <FontAwesome name="upload" size={20} color="#3a4155" />
+                    <Text style={[styles.textStyle, {color: colors.text}]}>Upload</Text>
+                    <FontAwesome name="upload" size={20} color={colors.icon} />
                   </View>
                 </TouchableOpacity>
                 <View style={styles.showImage}>
@@ -289,7 +295,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               <View
                 style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{marginRight: 50}}>
-                  <Text style={styles.textLabel}>Publish</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Show Club</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}
@@ -300,7 +306,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                   />
                 </View>
                 <View>
-                  <Text style={styles.textLabel}>Public</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Public</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublic ? '#d1ecf1' : '#f4f3f4'}
@@ -314,23 +320,24 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
             </View>
 
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Description <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                }}>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Description <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
+              <View>
                 <TextInput
                   multiline
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
+                  selectionColor={colors.text}
                   style={{
-                    backgroundColor: '#eee',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
+                    color: colors.text,
                   }}
                   value={clubdescription}
                 onChangeText={onChange('clubdescription')}
@@ -343,7 +350,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
               )}
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
               <View
                 style={{
                   backgroundColor: '#fff',
@@ -353,13 +360,17 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
+                  selectionColor={colors.text}
                   style={{
-                    backgroundColor: '#eee',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
+                    color: colors.text,
                   }}
                   value={meetingDetails}
                 onChangeText={onChange('meetingDetails')}
@@ -373,7 +384,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
             </View>
             <View style={styles.singleInput}>
               <TouchableOpacity style={styles.signIn} onPress={updateClub}>
-                <Text style={styles.textSign}>Submit</Text>
+                <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.orText}>OR</Text>
@@ -422,8 +433,7 @@ const styles = StyleSheet.create({
       textInput: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
-        backgroundColor: '#eee',
+        borderWidth: 1,
         height: 50,
         paddingHorizontal: 10,
       },
@@ -442,11 +452,6 @@ const styles = StyleSheet.create({
       },
       modalView: {
         flex: 1,
-        //marginVertical: 20,
-        backgroundColor: '#fff',
-        //borderRadius: 20,
-        //padding: 35,
-        //alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
@@ -457,20 +462,15 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
       openButton: {
-        backgroundColor: '#eee',
-        //borderRadius: 20,
         paddingVertical: 10,
-        //elevation: 2,
-        //height: 80,
+        borderWidth: 1,
         minHeight: 50,
         flexDirection: 'row',
         flexWrap: 'wrap',
       },
       textStyle: {
-        //textAlign: 'center',
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
         paddingHorizontal: 10,
       },
       uploadImage: {

@@ -12,6 +12,7 @@ import {
     SafeAreaView,
     Switch
   } from 'react-native';
+  import { useTheme } from '@react-navigation/native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
   import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -20,8 +21,10 @@ import {
   import ListGenre from './ListGenre';
   import Loader from './Loader';
   import {createClub, createMemberAction} from '../actions/clubActions';
+import { color } from 'react-native-reanimated';
 
 const AddClub = ({createClub, createMemberAction, closeModal}) => {
+  const {colors} = useTheme();
     const [formData, setFormData] = useState({
         clubname: '',
         clubgenre: [],
@@ -173,7 +176,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
         />
       ) : null}
         <View style={styles.closeBtn}>
-            <Text style={styles.title}>
+            <Text style={[styles.title, {color: colors.text}]}>
             Add Club
             </Text>
             <TouchableOpacity onPress={onClosePress}
@@ -201,8 +204,12 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
           extraHeight={10}>
           <View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Club Name</Text>
-              <TextInput placeholder="Enter club name" style={styles.textInput} value={clubname}
+              <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
+              <TextInput placeholder="Enter club name" 
+              placeholderTextColor={colors.placeholder}
+              style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
+              value={clubname}
+              selectionColor={colors.text}
               onChangeText={onChange('clubname')} />
               {name !== '' && (
                 <Animatable.View animation="fadeInLeft" duration={500}>
@@ -211,12 +218,12 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
               )}
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Genre <Text style={styles.lilinfo}>(select genre)</Text></Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Genre <Text style={styles.lilinfo}>(select genre)</Text></Text>
               <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}>
-                <View style={styles.modalView}>
+                <View style={[styles.modalView, {backgroundColor: colors.background}]}>
                   <ListGenre
                     closeModal={handleCloseGenreModal}
                     item={getGenre}
@@ -225,12 +232,12 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                 </View>
               </Modal>
               <TouchableHighlight
-                underlayColor="#ddd"
-                style={styles.openButton}
+                underlayColor={colors.dashStats}
+                style={[styles.openButton, {backgroundColor: colors.background, borderColor: colors.border}]}
                 onPress={() => {
                   setFormData({...formData, modalVisible: true})
                 }}>
-                <Text style={styles.textStyle}>
+                <Text style={[styles.textStyle, {color: colors.text}]}>
                     {clubgenre.map(formatGenre)}
                 </Text>
               </TouchableHighlight>
@@ -241,7 +248,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
               )}
             </View>
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Club cover</Text>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Club cover</Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -249,8 +256,8 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                 }}>
                 <TouchableOpacity onPress={handleChoosePhoto}>
                   <View style={styles.iconContainer}>
-                    <Text style={styles.textStyle}>Upload</Text>
-                    <FontAwesome name="upload" size={20} color="#3a4155" />
+                    <Text style={[styles.textStyle, {color: colors.text}]}>Upload</Text>
+                    <FontAwesome name="upload" size={20} color={colors.icon} />
                   </View>
                 </TouchableOpacity>
                 <View style={styles.showImage}>
@@ -264,7 +271,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
               <View
                 style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{marginRight: 50}}>
-                  <Text style={styles.textLabel}>Show Club</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Show Club</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublish ? '#d1ecf1' : '#f4f3f4'}
@@ -275,7 +282,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                   />
                 </View>
                 <View>
-                  <Text style={styles.textLabel}>Public</Text>
+                  <Text style={[styles.textLabel, {color: colors.text}]}>Public</Text>
                   <Switch
                     trackColor={{false: '#767577', true: '#6ad83c'}}
                     thumbColor={isPublic ? '#d1ecf1' : '#f4f3f4'}
@@ -289,23 +296,24 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             </View>
 
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Description <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                }}>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Description <Text style={styles.lilinfo}>(not more than 300 characters)</Text></Text>
+              <View>
                 <TextInput
                   multiline
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
+                  selectionColor={colors.text}
                   style={{
-                    backgroundColor: '#eee',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
+                    color: colors.text,
                   }}
                   value={clubdescription}
                 onChangeText={onChange('clubdescription')}
@@ -319,23 +327,24 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             </View>
 
             <View style={styles.singleInput}>
-              <Text style={styles.textLabel}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                }}>
+              <Text style={[styles.textLabel, {color: colors.text}]}>Meeting Details <Text style={styles.lilinfo}>(e.g audio/video link, meeting time, e.t.c)</Text></Text>
+              <View>
                 <TextInput
                   multiline
                   numberOfLines={4}
                   editable
                   placeholder="Enter meeting details"
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
+                  selectionColor={colors.text}
                   style={{
-                    backgroundColor: '#eee',
+                    backgroundColor: colors.background,
+                    borderWidth: 1,
+                    borderColor: colors.border,
                     paddingHorizontal: 10,
                     paddingVertical: 10,
                     fontSize: 14,
-                    color: '#333',
+                    color: colors.text,
                   }}
                   value={meetingDetails}
                 onChangeText={onChange('meetingDetails')}
@@ -349,7 +358,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             </View>
             <View style={styles.singleInput}>
               <TouchableOpacity style={styles.signIn} onPress={createClubAction}>
-                <Text style={styles.textSign}>Submit</Text>
+                <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -392,10 +401,11 @@ const styles = StyleSheet.create({
       textInput: {
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
-        backgroundColor: '#eee',
+        // color: '#333',
+        // backgroundColor: '#eee',
         height: 50,
         paddingHorizontal: 10,
+        borderWidth: 1
       },
       textArea: {
         fontFamily: 'Nunito-Regular',
@@ -412,11 +422,6 @@ const styles = StyleSheet.create({
       },
       modalView: {
         flex: 1,
-        //marginVertical: 20,
-        backgroundColor: '#fff',
-        //borderRadius: 20,
-        //padding: 35,
-        //alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
@@ -427,11 +432,8 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
       openButton: {
-        backgroundColor: '#eee',
-        //borderRadius: 20,
         paddingVertical: 10,
-        //elevation: 2,
-        //height: 80,
+        borderWidth: 1,
         minHeight: 50,
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -440,7 +442,6 @@ const styles = StyleSheet.create({
         //textAlign: 'center',
         fontFamily: 'Nunito-Regular',
         fontSize: 14,
-        color: '#333',
         paddingHorizontal: 10,
       },
       uploadImage: {

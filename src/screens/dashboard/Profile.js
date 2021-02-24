@@ -11,6 +11,7 @@ import {
 import Config from 'react-native-config';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from '@react-navigation/native';
 import moment from "moment";
 import {AuthContext} from '../../utils/context';
 import {stringToHslColor} from '../../utils/theme';
@@ -18,10 +19,12 @@ import EditProfile from '../../components/EditProfile';
 import ProImage from '../../components/ProImage';
 
 const proURL = Config.IMAGE_URL;
+
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editImg, setEditImg] = useState(false);
   const user = useContext(AuthContext);
+  const {colors} = useTheme();
 
   handleOnCloseModal = () => {
     setModalVisible(false);
@@ -32,9 +35,9 @@ const Profile = () => {
   };
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: '#fff'}}>
-        <View style={styles.container}>
-          <View style={styles.avatarContainer}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={[styles.container, {backgroundColor: colors.profileCard}]}>
+          <View style={[styles.avatarContainer, {borderColor: colors.profileCard}]}>
           {user.propix !== "noimage.png" ?
             <Image
               style={styles.avatar}
@@ -69,21 +72,21 @@ const Profile = () => {
 
           <View style={styles.row}>
             <View>
-              <Text style={styles.fullName}>{`${user.firstName} ${user.lastName}`}</Text>
-              <Text style={styles.userName}>{user.username}</Text>
-              <Text style={styles.userName}>Member Since: {moment(user.insertedAt).format("Do MMM YYYY")}</Text>
+              <Text style={[styles.fullName, {color: colors.text}]}>{`${user.firstName} ${user.lastName}`}</Text>
+              <Text style={[styles.userName, {color: colors.text}]}>{user.username}</Text>
+              <Text style={[styles.userName, {color: colors.text}]}>Member Since: {moment(user.insertedAt).format("Do MMM YYYY")}</Text>
             </View>
             <TouchableOpacity onPress={() => {
               setModalVisible(true);
             }}>
-              <View style={styles.iconContainer}>
-                <FontAwesome name="pencil" size={20} color="#3a4155" />
+              <View style={[styles.iconContainer, {borderColor: colors.border}]}>
+                <FontAwesome name="pencil" size={20} color={colors.icon} />
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.aboutContainer}>
-            <Text style={styles.aboutHeader}>ABOUT</Text>
-            <Text style={styles.aboutBodyText}>
+            <Text style={[styles.aboutHeader, {color: colors.text}]}>ABOUT</Text>
+            <Text style={[styles.aboutBodyText, {color: colors.text}]}>
               {user.about}
             </Text>
           </View>
@@ -123,7 +126,6 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
     marginHorizontal: 12,
     marginTop: 90,
     marginBottom: 20,
@@ -151,7 +153,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 20,
-    borderColor: '#00a2cc',
     borderWidth: 2,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -159,16 +160,8 @@ const styles = StyleSheet.create({
   avatarContainer: {
     height: 160,
     width: 160,
-    //backgroundColor: 'red',
-    // position: 'absolute',
-    // top: -50,
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
-    // justifyContent: 'center',
     alignSelf: 'center',
     marginTop: -90,
-    borderColor: '#fafafa',
     borderWidth: 15,
     borderRadius: 80,
   },
@@ -184,8 +177,7 @@ const styles = StyleSheet.create({
   aboutHeader: {
     fontFamily: 'Nunito-SemiBold',
     fontSize: 16,
-    letterSpacing: 5,
-    color: '#00a2cc',
+    letterSpacing: 3,
     marginVertical: 5,
   },
   aboutBodyText: {
@@ -198,8 +190,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 80,
     overflow: 'hidden',
-    borderColor: '#f3fbfd',
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
