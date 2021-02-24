@@ -70,7 +70,7 @@ const NewPassword = ({enterNewpasswordAction, navigation, route}) => {
             <TextInput
               placeholder="New password..."
               secureTextEntry={secureTextEntry}
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={password}

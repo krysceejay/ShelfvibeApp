@@ -98,7 +98,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   <Text style={[styles.textLabel, {color: colors.text}]}>Poll Name</Text>
                   <TextInput 
                   placeholder="Enter poll name" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={pollname}
@@ -114,7 +114,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   <Text style={[styles.textLabel, {color: colors.text}]}>Book 1</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book1}
@@ -125,7 +125,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   <Text style={[styles.textLabel, {color: colors.text}]}>Book 2</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
                   value={book2}
@@ -136,7 +136,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   <Text style={[styles.textLabel, {color: colors.text}]}>Book 3</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
                   value={book3}
@@ -147,7 +147,7 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   <Text style={[styles.textLabel, {color: colors.text}]}>Book 4</Text>
                   <TextInput 
                   placeholder="Enter book title" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={book4}

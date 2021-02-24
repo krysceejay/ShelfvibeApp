@@ -206,7 +206,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             <View style={styles.singleInput}>
               <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
               <TextInput placeholder="Enter club name" 
-              placeholderTextColor={colors.text}
+              placeholderTextColor={colors.placeholder}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]} 
               value={clubname}
               selectionColor={colors.text}
@@ -303,7 +303,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
                   selectionColor={colors.text}
                   style={{
@@ -334,7 +334,7 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Enter meeting details"
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
                   selectionColor={colors.text}
                   style={{

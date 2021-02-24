@@ -38,7 +38,8 @@ const MyTheme = {
     icon: '#242c42',
     dashStats: 'rgba(0,0,0,0.1)',
     profileCard: '#fafafa',
-    borderBottomColor: '#eee'
+    borderBottomColor: '#eee',
+    placeholder: '#444444'
   },
 };
 
@@ -54,7 +55,8 @@ const MyDarkTheme = {
     icon: 'rgb(242, 242, 242)',
     dashStats: 'rgba(255,255,255,0.1)',
     profileCard: '#222',
-    borderBottomColor: '#777'
+    borderBottomColor: '#777',
+    placeholder: '#777'
   },
 };
 
@@ -72,7 +74,7 @@ const App = () => {
         setIsDarkTheme(isDarkTheme => !isDarkTheme);
         setIsDarkInStorage(!isDarkTheme);
       }
-     }), [])
+     }), [isDarkTheme])
 
   const setIsDarkInStorage = async theme => {
     try {

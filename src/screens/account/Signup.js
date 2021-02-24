@@ -90,7 +90,7 @@ const Signup = ({signup, navigation}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your first name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={firstname}
@@ -106,7 +106,7 @@ const Signup = ({signup, navigation}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your last name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={lastname}
@@ -123,7 +123,7 @@ const Signup = ({signup, navigation}) => {
             <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your email..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={useremail}
@@ -141,7 +141,7 @@ const Signup = ({signup, navigation}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your user name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={userName}
@@ -158,7 +158,7 @@ const Signup = ({signup, navigation}) => {
             <TextInput
               placeholder="Your password..."
               secureTextEntry={secureTextEntry}
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={password}

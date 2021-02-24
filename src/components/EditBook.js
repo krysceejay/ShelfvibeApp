@@ -142,7 +142,7 @@ const EditBook = ({closeModal, item, editBookToList, removeListAction, clubId}) 
                   <Text style={[styles.textLabel, {color: colors.text}]}>Book Title</Text>
                   <TextInput 
                   placeholder="Enter title" 
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
                   value={booktitle}

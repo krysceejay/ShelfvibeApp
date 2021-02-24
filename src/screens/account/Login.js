@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
@@ -17,7 +17,7 @@ import {login} from '../../actions/authActions';
 import Loader from '../../components/Loader';
 
 const Login = ({login, navigation}) => {
-  const {colors} = useTheme();
+  const {dark, colors} = useTheme();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -39,6 +39,7 @@ const Login = ({login, navigation}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={dark ? 'light-content' : 'dark-content'} />
       <View style={styles.header}>
         <Text style={styles.textHeader}>
           Please enter your credentials to login.
@@ -52,7 +53,7 @@ const Login = ({login, navigation}) => {
             <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your email..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               autoCapitalize="none"
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
@@ -66,7 +67,7 @@ const Login = ({login, navigation}) => {
             <Ionicons name="ios-lock" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your password..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               secureTextEntry={secureTextEntry}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}

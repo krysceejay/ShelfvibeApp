@@ -96,7 +96,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your first name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={firstname}
@@ -112,7 +112,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your last name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={lastname}
@@ -139,7 +139,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your user name..."
-              placeholderTextColor={colors.borderBottomColor}
+              placeholderTextColor={colors.placeholder}
               selectionColor={colors.text}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               value={userName}
@@ -159,7 +159,7 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Brief gist about you"
-                  placeholderTextColor={colors.borderBottomColor}
+                  placeholderTextColor={colors.placeholder}
                   selectionColor={colors.text}
                   maxLength={300}
                   style={{

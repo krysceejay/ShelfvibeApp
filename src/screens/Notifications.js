@@ -149,7 +149,7 @@ const Notifications = ({userNotificationAction, userSeenNoteAction, notification
               height: 500
               }}>
               <Empty />
-              <Text style={styles.textBody}>No notifications yet</Text>
+              <Text style={[styles.textBody, {color: colors.text}]}>No notification yet</Text>
             </View>
           )}
         /> 

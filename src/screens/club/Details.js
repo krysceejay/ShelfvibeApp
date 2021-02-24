@@ -102,8 +102,8 @@ const Details = ({route, navigation, fetchClubMembers, getSingleClub, club, fetc
   };
 
   formatGenre = (item, index) => {
-    return <View key={index} style={styles.singleGenre}>
-    <Text style={styles.genreText}>{item}</Text>
+    return <View key={index} style={[styles.singleGenre, {backgroundColor: colors.card}]}>
+    <Text style={[styles.genreText, {color: colors.text}]}>{item}</Text>
   </View>
   };
 
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   singleGenre: {
-    backgroundColor: '#f0f1f3',
+    //backgroundColor: '#f0f1f3',
     padding: 5,
     marginVertical: 5,
     marginLeft: 0,

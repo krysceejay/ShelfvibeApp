@@ -223,7 +223,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
             <View style={styles.singleInput}>
               <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
               <TextInput placeholder="Enter club name" value={clubname}
-              placeholderTextColor={colors.text}
+              placeholderTextColor={colors.placeholder}
               style={[styles.textInput, {color: colors.text, backgroundColor: colors.background, borderColor: colors.border}]}
               onChangeText={onChange('clubname')}
               selectionColor={colors.text}
@@ -327,7 +327,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
                   selectionColor={colors.text}
                   style={{
@@ -360,7 +360,7 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                   numberOfLines={4}
                   editable
                   placeholder="Enter description"
-                  placeholderTextColor={colors.text}
+                  placeholderTextColor={colors.placeholder}
                   maxLength={300}
                   selectionColor={colors.text}
                   style={{
