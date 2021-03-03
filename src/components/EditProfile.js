@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, StatusBar, KeyboardAvoidingView,
+  Platform,
+  ScrollView } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Animatable from 'react-native-animatable';
 import {updateUserAction} from '../actions/authActions';
 
@@ -87,11 +88,9 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
             />
             </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView
-          resetScrollToCoords={{x: 0, y: 0}}
-          scrollEnabled={true}
-          extraHeight={10}
-          showsVerticalScrollIndicator={false}>
+        <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, paddingBottom: 30}}>
+          <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={styles.action}>
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
@@ -186,7 +185,8 @@ const EditProfile = ({closeModal, user, updateUserAction}) => {
                 <Text style={[styles.textSign, {color: colors.text}]}>Update</Text>
               </TouchableOpacity>
             </View>
-        </KeyboardAwareScrollView>
+            </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }

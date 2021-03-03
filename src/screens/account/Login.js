@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   StatusBar,
+  Platform
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
@@ -48,7 +49,7 @@ const Login = ({login, navigation}) => {
 
       <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
         {/* <Text style={styles.textFooter}>E-Mail</Text> */}
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
           <View style={styles.action}>
             <Ionicons name="ios-mail" color={colors.icon} size={25} />
             <TextInput

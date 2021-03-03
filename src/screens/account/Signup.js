@@ -6,6 +6,9 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -81,12 +84,17 @@ const Signup = ({signup, navigation}) => {
         <Text style={styles.textHeader}>Create a free account.</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={[styles.footer, {backgroundColor: colors.background}]}>
-        <KeyboardAwareScrollView
+        {/* <KeyboardAwareScrollView
           resetScrollToCoords={{x: 0, y: 0}}
           scrollEnabled={true}
           extraHeight={10}
           showsVerticalScrollIndicator={false}>
-          <View style={styles.action}>
+          
+        </KeyboardAwareScrollView> */}
+        <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}>
+        <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <View style={styles.action}>
             <Ionicons name="ios-person" color={colors.icon} size={25} />
             <TextInput
               placeholder="Your first name..."
@@ -199,7 +207,8 @@ const Signup = ({signup, navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
       </Animatable.View>
       {isLoading ? (
         <Loader

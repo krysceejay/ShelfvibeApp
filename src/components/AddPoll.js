@@ -1,8 +1,9 @@
 import React,{useState} from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, TextInput, KeyboardAvoidingView,
+  Platform,
+  ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import {addPoll} from '../actions/pollActions';
@@ -89,10 +90,9 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
             />
             </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView
-          resetScrollToCoords={{x: 0, y: 0}}
-          scrollEnabled={true}
-          extraHeight={10}>
+        <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, paddingBottom: 30}}>
+          <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
               <View style={styles.inputContainer}>
                 <View style={styles.singleInput}>
                   <Text style={[styles.textLabel, {color: colors.text}]}>Poll Name</Text>
@@ -160,7 +160,8 @@ const AddPoll = ({closeModal, addPoll, clubId}) => {
                   </TouchableOpacity>
                 </View>
               </View>
-          </KeyboardAwareScrollView>
+              </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     
     )

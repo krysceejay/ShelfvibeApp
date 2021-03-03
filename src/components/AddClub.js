@@ -10,18 +10,19 @@ import {
     TouchableOpacity,
     Image,
     SafeAreaView,
-    Switch
+    Switch,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView
   } from 'react-native';
   import { useTheme } from '@react-navigation/native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
-  import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
   import ImagePicker from 'react-native-image-picker';
   import * as Animatable from 'react-native-animatable';
   import ListGenre from './ListGenre';
   import Loader from './Loader';
   import {createClub, createMemberAction} from '../actions/clubActions';
-import { color } from 'react-native-reanimated';
 
 const AddClub = ({createClub, createMemberAction, closeModal}) => {
   const {colors} = useTheme();
@@ -198,11 +199,9 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
             />
             </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView
-          resetScrollToCoords={{x: 0, y: 0}}
-          scrollEnabled={true}
-          extraHeight={10}>
-          <View>
+        <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, paddingBottom: 30}}>
+          <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             <View style={styles.singleInput}>
               <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
               <TextInput placeholder="Enter club name" 
@@ -361,8 +360,8 @@ const AddClub = ({createClub, createMemberAction, closeModal}) => {
                 <Text style={[styles.textSign, {color: colors.text}]}>Submit</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        </KeyboardAwareScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
         </SafeAreaView>
     
     )

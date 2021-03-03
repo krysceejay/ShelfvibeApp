@@ -11,12 +11,14 @@ import {
     Image,
     SafeAreaView,
     Switch,
-    Alert
+    Alert,
+    KeyboardAvoidingView,
+  Platform,
+  ScrollView
   } from 'react-native';
   import { useTheme } from '@react-navigation/native';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import FontAwesome from 'react-native-vector-icons/FontAwesome';
-  import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
   import ImagePicker from 'react-native-image-picker';
   import * as Animatable from 'react-native-animatable';
   import Config from 'react-native-config';
@@ -215,11 +217,9 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
             />
             </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView
-          resetScrollToCoords={{x: 0, y: 0}}
-          scrollEnabled={true}
-          extraHeight={10}>
-          <View>
+        <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, paddingBottom: 30}}>
+          <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             <View style={styles.singleInput}>
               <Text style={[styles.textLabel, {color: colors.text}]}>Club Name</Text>
               <TextInput placeholder="Enter club name" value={clubname}
@@ -393,8 +393,8 @@ const EditClub = ({updateClubAction, deleteClubAction, closeModal, item}) => {
                 <Text style={styles.deleteSign}>Delete</Text>
                 </TouchableOpacity>
             </View>
-          </View>
-        </KeyboardAwareScrollView>
+            </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     
     )
